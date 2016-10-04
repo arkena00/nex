@@ -1,7 +1,7 @@
 #ifndef NETWORK_PROTOCOL_H_NXS
 #define NETWORK_PROTOCOL_H_NXS
 
-#include <nxs/core/nex.hpp>
+#include <nxs/core.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/setup/connexion.hpp>
 

@@ -2,7 +2,7 @@
 #define CORE_ERROR_H_NXS
 
 #include <nxs/os/share.hpp>
-#include <nxs/core/log.hpp>
+#include <nxs/log.hpp>
 
 #include <exception>
 #include <string>

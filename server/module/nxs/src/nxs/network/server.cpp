@@ -1,5 +1,5 @@
 #include <nxs/network/server.hpp>
-#include <nxs/core/nxs.hpp>
+#include <nxs/core.hpp>
 
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>

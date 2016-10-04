@@ -1,5 +1,5 @@
-#include <nxs/core/config.hpp>
-#include <nxs/core/log.hpp>
+#include <nxs/config.hpp>
+#include <nxs/log.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 

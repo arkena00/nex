@@ -1,7 +1,7 @@
 #include <nxs/network/protocol/http.hpp>
 #include <nxs/network/connexion.hpp>
 #include <nxs/network/buffer.hpp>
-#include <nxs/core/error.hpp>
+#include <nxs/error.hpp>
 #include <fstream>
 #include <boost/filesystem.hpp>
 

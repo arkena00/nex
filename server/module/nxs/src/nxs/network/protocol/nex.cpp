@@ -10,8 +10,8 @@
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/connexion.hpp>
 #include <nxs/network/buffer.hpp>
-#include <nxs/core/nxs.hpp>
-#include <nxs/core/error.hpp>
+#include <nxs/core.hpp>
+#include <nxs/error.hpp>
 #include <fstream>
 
 namespace nxs{namespace network

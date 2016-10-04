@@ -1,6 +1,5 @@
-#include <nxs/core/nxs.hpp>
-#include <nxs/core/nex.hpp>
-#include <nxs/core/config.hpp>
+#include <nxs/core.hpp>
+#include <nxs/config.hpp>
 #include <nxs/command.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/utility/file.hpp>

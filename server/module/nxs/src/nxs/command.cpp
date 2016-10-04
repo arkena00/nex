@@ -1,7 +1,7 @@
 #include <nxs/command.hpp>
-#include <nxs/core/constant.hpp>
-#include <nxs/core/error.hpp>
-#include <nxs/core/nex.hpp>
+#include <nxs/core.hpp>
+#include <nxs/constant.hpp>
+#include <nxs/error.hpp>
 #include <nxs/network/request.hpp>
 
 namespace nxs

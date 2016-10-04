@@ -1,6 +1,6 @@
 #include <nxs/network/connexion/input.hpp>
 #include <nxs/network/protocol.hpp>
-#include <nxs/core/log.hpp>
+#include <nxs/log.hpp>
 
 using namespace std;
 using boost::asio::ip::tcp;

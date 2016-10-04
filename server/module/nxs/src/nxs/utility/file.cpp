@@ -1,5 +1,5 @@
 #include <nxs/utility/file.hpp>
-#include <nxs/core/error.hpp>
+#include <nxs/error.hpp>
 #include <boost/filesystem.hpp>
 #include <iostream>
 namespace nxs

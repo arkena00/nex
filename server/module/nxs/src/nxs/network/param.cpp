@@ -1,5 +1,5 @@
 #include <nxs/network/param.hpp>
-#include <nxs/core/error.hpp>
+#include <nxs/error.hpp>
 #include <regex>
 #include <iostream>
 

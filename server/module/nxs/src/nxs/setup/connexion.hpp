@@ -1,7 +1,7 @@
 #ifndef NETWORK_CONNEXION_SETUP_H_NXS
 #define NETWORK_CONNEXION_SETUP_H_NXS
 
-#include <nxs/core/setup.hpp>
+#include <nxs/setup.hpp>
 #include <cstddef>
 
 namespace nxs

@@ -1,11 +1,11 @@
 //! \file nxs.cpp
 //! \brief process requested commands
 
-#include <nxs/core/nxs.hpp>
-#include <nxs/core/nex.hpp>
-#include <nxs/core/config.hpp>
-#include <nxs/core/version.hpp>
-#include <nxs/core/log.hpp>
+#include <nxs/core.hpp>
+
+#include <nxs/config.hpp>
+#include <nxs/version.hpp>
+#include <nxs/log.hpp>
 #include <nxs/network/server.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/command.hpp>

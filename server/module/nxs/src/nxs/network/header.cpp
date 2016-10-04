@@ -4,7 +4,7 @@
 #include <nxs/network/request.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/command.hpp>
-#include <nxs/core/config.hpp>
+#include <nxs/config.hpp>
 #include <nds/encoder.hpp>
 #include <iostream>
 

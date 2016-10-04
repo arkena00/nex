@@ -1,8 +1,12 @@
-#ifndef CORE_NEX_H_NXS
-#define CORE_NEX_H_NXS
+#ifndef CORE_NXS_H_NXS
+#define CORE_NXS_H_NXS
 
+// core include
 #include <nxs/os/share.hpp>
+#include <nxs/error.hpp>
+#include <string>
 
+// nex interface
 namespace nxs
 {
     class request;
@@ -10,8 +14,6 @@ namespace nxs
     class NXS_SHARED nex
     {
     public:
-        virtual ~nex();
-
         //virtual nxs::i_cnx& cnx() = 0;
         //virtual nxs::c_user& user() = 0;
 
@@ -21,4 +23,12 @@ namespace nxs
     };
 } // nxs
 
-#endif // CORE_NEX_H_NXS
+namespace nxs
+{
+	std::string NXS_SHARED version();
+    void NXS_SHARED load();
+
+    void execute(nxs::nex& nex);
+} // nxs
+
+#endif // CORE_NXS_H_NXS

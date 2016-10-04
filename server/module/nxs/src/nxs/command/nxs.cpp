@@ -1,5 +1,4 @@
-#include <nxs/core/nxs.hpp>
-#include <nxs/core/nex.hpp>
+#include <nxs/core.hpp>
 #include <nxs/command.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/database.hpp>

@@ -1,4 +1,4 @@
-#include <nxs/core/error.hpp>
+#include <nxs/error.hpp>
 #include <nxs/utility/reflector.hpp>
 #include <nxs/utility/trait.hpp>
 #include <iostream>

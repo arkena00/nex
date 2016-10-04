@@ -1,6 +1,6 @@
 #include <nxs/network/request.hpp>
-#include <nxs/core/constant.hpp>
-#include <nxs/core/error.hpp>
+#include <nxs/constant.hpp>
+#include <nxs/error.hpp>
 #include <nxs/command.hpp>
 #include <nds/encoder.hpp>
 #include <regex>

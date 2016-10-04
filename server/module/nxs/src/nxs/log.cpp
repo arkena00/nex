@@ -1,4 +1,4 @@
-#include <nxs/core/log.hpp>
+#include <nxs/log.hpp>
 
 #include <iostream>
 

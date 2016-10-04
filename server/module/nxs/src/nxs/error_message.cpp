@@ -1,5 +1,5 @@
-#include <nxs/core/error.hpp>
-#include <nxs/core/log.hpp>
+#include <nxs/error.hpp>
+#include <nxs/log.hpp>
 
 #define NXSINITERR(NAME) { NAME, #NAME }
 

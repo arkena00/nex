@@ -31,7 +31,7 @@ namespace ndb
         static std::vector<value<sql>> value_list_;
 
     public:
-        expression() = default;
+        expression() : _type(unknown) {}
         expression(const field_base<sql>& f, typec type);
 
         void clear();

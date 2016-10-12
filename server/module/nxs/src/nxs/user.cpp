@@ -12,14 +12,11 @@ namespace nxs
 
     bool user::login(const std::string& name, const std::string& pass)
     {
-        db::query q;
-        q << (db::nex.user.id, db::nex.user.name) << (db::nex.user.name == name && db::nex.user.pass == pass);
-        std::cout << q.native();
-        db::result r = q.exec();
+        db::result r = db::query() << (db::nex.user.id, db::nex.user.name) << (db::nex.user.name == name && db::nex.user.pass == pass);
         if (r.size() == 1)
         {
             _id = r[0][db::nex.user.id];
-            //_name = r[0][db::nex.user.name];
+            _name = r[0][db::nex.user.name];
             return true;
         }
         return false;

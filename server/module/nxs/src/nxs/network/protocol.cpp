@@ -53,6 +53,7 @@ namespace nxs{namespace network
         return nullptr;
     }
 
+    user& protocol::user() { return _user; }
     request& protocol::input() { return _input; }
     request& protocol::output() { return _output; }
 

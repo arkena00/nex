@@ -14,6 +14,17 @@ namespace nxs
             nxs::user::add(nex.input().param("name").value(), nex.input().param("pass").value());
             nex.output().add("user add");
         }
+
+        static void login(nxs::nex& nex)
+        {
+            bool success = nex.user().login(nex.input().param("name").value(), nex.input().param("pass").value());
+            if (success)
+            {
+                nex.output().add("looged as " + nex.user().name());
+            }
+
+            nex.output().add("user login error");
+        }
     };
 
     template<>
@@ -22,5 +33,7 @@ namespace nxs
         command& user_add = nxs::command::add("nxs", "user_add", &commands<command::user>::add);
         user_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");
         user_add.param_add("pass", param::require, "", "[a-z]{8,}");
+
+        nxs::command::add("nxs", "user_login", &commands<command::user>::login);
     }
 } // nxs

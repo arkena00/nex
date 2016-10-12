@@ -42,6 +42,12 @@ namespace ndb
     }
 
     template<class Engine>
+    ndb::result<Engine> query<Engine>::result()
+    {
+        return Engine::get().exec(*this);
+    }
+
+    template<class Engine>
     ndb::result<Engine> query<Engine>::exec(const ndb::expression<Engine>& expr)
     {
         ndb::query<Engine> q;

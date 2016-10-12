@@ -10,14 +10,12 @@
 namespace nxs
 {
     class request;
+    class user;
 
     class NXS_SHARED nex
     {
     public:
-        //virtual nxs::i_cnx& cnx() = 0;
-        //virtual nxs::c_user& user() = 0;
-
-        // protocol
+        virtual user& user() = 0;
         virtual request& input() = 0;
         virtual request& output() = 0;
     };

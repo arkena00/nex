@@ -8,12 +8,16 @@ namespace nxs
     class user
     {
     private:
+        int _id;
+        std::string _name;
 
     public:
-        static db::result add(const std::string& name, const std::string& pass)
-        {
-            return db::query() + (db::nex.user.name = name, db::nex.user.pass = pass);
-        }
+
+        int id() const;
+        const std::string name() const;
+        bool login(const std::string& name, const std::string& pass);
+
+        static db::result add(const std::string& name, const std::string& pass);
     };
 } // nxs
 

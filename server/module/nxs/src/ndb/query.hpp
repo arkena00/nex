@@ -23,6 +23,7 @@ namespace ndb
         void clear();
         typename setup<Engine>::expression_type native() const;
         ndb::result<Engine> exec();
+        ndb::result<Engine> result();
 
         operator ndb::result<Engine>();
 

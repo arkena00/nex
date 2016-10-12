@@ -2,6 +2,7 @@
 #define NETWORK_PROTOCOL_H_NXS
 
 #include <nxs/core.hpp>
+#include <nxs/user.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/setup/connexion.hpp>
 
@@ -16,6 +17,7 @@ namespace nxs{namespace network
 
     private:
         network::connexion* _connexion;
+        nxs::user _user;
         request _input;
         request _output;
 
@@ -36,6 +38,7 @@ namespace nxs{namespace network
         virtual void data_send(const char* data, size_t data_size);
         virtual void error_send(const std::string& message);
 
+        nxs::user& user();
         request& input();
         request& output();
         connexion& connexion();

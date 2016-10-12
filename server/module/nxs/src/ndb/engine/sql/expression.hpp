@@ -32,7 +32,7 @@ namespace ndb
 
     public:
         expression() = default;
-        expression(const field_base<sql>& f, typec type = typec::unknown);
+        expression(const field_base<sql>& f, typec type);
 
         void clear();
         const std::string& output() const;

@@ -13,7 +13,7 @@ namespace ndb
     }
 
     template<class Engine>
-    query<Engine>& query<Engine>::operator<<(ndb::expression<Engine>& expr)
+    query<Engine>& query<Engine>::operator<<(const ndb::expression<Engine>& expr)
     {
         _expression.append(expr);
         return *this;

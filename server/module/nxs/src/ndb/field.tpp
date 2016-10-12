@@ -31,6 +31,13 @@ namespace ndb
         return _default_value;
     }
 
+
+    template<class T, size_t Size, class Engine, typename Field_Basic>
+    field<T, Size, Engine, Field_Basic>::operator expression<Engine>() const
+    {
+        return expression<Engine>(*this, expression<Engine>::get);
+    }
+
     template<class T, size_t Size, class Engine, typename Field_Basic>
     template<class V>
     expression<Engine> field<T, Size, Engine, Field_Basic>::operator,(const V& other) const
@@ -51,7 +58,7 @@ namespace ndb
     template<class V>
     expression<Engine> field<T, Size, Engine, Field_Basic>::operator==(const V& other) const
     {
-        expression<Engine> test(*this);
+        expression<Engine> test(*this, expression<sql>::condition);
         return test == other;
     }
 } // ndb

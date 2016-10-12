@@ -20,7 +20,7 @@ namespace nxs
             bool success = nex.user().login(nex.input().param("name").value(), nex.input().param("pass").value());
             if (success)
             {
-                nex.output().add("looged as " + nex.user().name());
+                nex.output().add("loged as " + nex.user().name());
             }
 
             nex.output().add("user login error");

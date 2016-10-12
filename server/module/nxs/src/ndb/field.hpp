@@ -28,6 +28,7 @@ namespace ndb
 
         T default_value() const;
 
+        operator expression<Engine>() const;
         template<class V> expression<Engine> operator,(const V& other) const;
         template<class V> expression<Engine> operator=(const V& other) const;
         template<class V> expression<Engine> operator==(const V& other) const;

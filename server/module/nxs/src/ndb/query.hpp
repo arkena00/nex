@@ -27,7 +27,7 @@ namespace ndb
 
         operator ndb::result<Engine>();
 
-        query& operator<<(ndb::expression<Engine>& expr);
+        query& operator<<(const ndb::expression<Engine>& expr);
         query& operator+(ndb::expression<Engine>& expr);
         query& operator-(ndb::expression<Engine>& expr);
 

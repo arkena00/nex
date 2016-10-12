@@ -54,7 +54,7 @@ namespace ndb
         else if (_type == typec::set) str_native = "REPLACE INTO " + _table + "(" + _output + ") VALUES(" + _output2 + ")";
         else if (_type == typec::del) str_native = "DELETE FROM " + _table + " WHERE " + _output;
         else if (_type == typec::condition) str_native = " WHERE " + _output;
-        else return _output;
+        else str_native = _output;
         return str_native;
     }
 

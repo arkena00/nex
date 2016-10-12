@@ -27,7 +27,7 @@ namespace nxs
         std::cout << "Neuroshok - nex server [version " << version() << "]\n\n";
         config::load("nxs.cfg");
 
-        ndb::engine<>::model_add(ndb::nex);
+        ndb::engine<>::model_add(db::nex);
         ndb::engine<>::connect("nxs");
 
         command::load();

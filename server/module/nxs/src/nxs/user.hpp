@@ -10,9 +10,9 @@ namespace nxs
     private:
 
     public:
-        static ndb::result<> add(const std::string& name, const std::string& pass)
+        static db::result add(const std::string& name, const std::string& pass)
         {
-            return ndb::query<>() + (ndb::nex.user.name = name, ndb::nex.user.pass = pass);
+            return db::query() + (db::nex.user.name = name, db::nex.user.pass = pass);
         }
     };
 } // nxs

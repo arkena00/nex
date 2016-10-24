@@ -10,14 +10,18 @@ namespace nxs
     private:
         int _id;
         std::string _name;
+        bool _logged;
 
     public:
+        user();
 
         int id() const;
-        const std::string name() const;
-        bool login(const std::string& name, const std::string& pass);
+        const std::string& name() const;
+        bool is_logged() const;
+        void login(const std::string& name, const std::string& pass);
 
         static db::result add(const std::string& name, const std::string& pass);
+        static db::result get();
     };
 } // nxs
 

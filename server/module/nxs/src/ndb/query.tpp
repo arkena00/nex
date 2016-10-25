@@ -20,7 +20,7 @@ namespace ndb
     }
 
     template<class Engine>
-    query<Engine>& query<Engine>::operator+(ndb::expression<Engine>& expr)
+    query<Engine>& query<Engine>::operator+(auto&& expr)
     {
         expr._type = expression<Engine>::add;
         _expression.append(expr);

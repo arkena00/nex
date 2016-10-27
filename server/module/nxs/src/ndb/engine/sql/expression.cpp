@@ -25,6 +25,8 @@ namespace ndb
             if (f.table().option().is_field_array())
             {
                 _table = parent_table + "." + join_table;
+                _join = " LEFT JOIN `" + _table + "` ON `" + _table + "`" + ".id = `" + parent_table + "`.id"
+                " INNER JOIN `" + join_table + "` ON `" + join_table + "`.id = `" + _table + "`.`" + join_table + ".id`";
             }
         }
 

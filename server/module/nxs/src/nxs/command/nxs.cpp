@@ -38,7 +38,15 @@ namespace nxs
 
         static void dbtest(nxs::nex& nex)
         {
-            nxs::resource::type_add(1, 1);
+            db::query q;
+            q << (db::nex.resource.name, db::nex.resource.type.name);
+            std::string z = q.native();
+            db::result r = q.exec();
+            for (auto& item : r)
+            {
+                std::cout << "\n" << item[db::nex.resource.name] << " " << item[db::nex.resource.type.name];
+            }
+            nex.output().add(z);
         }
     };
 

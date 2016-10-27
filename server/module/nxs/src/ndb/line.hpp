@@ -6,9 +6,12 @@
 
 namespace ndb
 {
+    template<class> class result;
+
     template<class Engine>
     class line
     {
+        friend class result<Engine>;
     private:
         std::map<std::string, value<Engine>> _data;
 

@@ -11,31 +11,19 @@ namespace nxs
     private:
         int _id;
         std::string _name;
-        nxs::type _type;
+        std::chrono::time_point<std::chrono::system_clock> _date_creation;
 
     public:
-        resource() = delete;
+        resource(int id);
 
         int id() const;
         const std::string& name() const;
 
+        static std::vector<resource> list();
         static db::result add(const std::string& name);
         static db::result get();
 
-    static db::result type_add(int id, int type_id)
-    {
-        return db::query() + (db::nex.resource.type.id = type_id, db::nex.resource.id = id);
-    }
-
-        static std::vector<resource> list()
-        {
-            std::vector<resource> l;
-            db::query q;
-            q << (db::nex.resource.name, db::nex.resource.type.name);
-            db::result r = q.exec();
-
-            return l;
-        }
+        static db::result type_add(int id, int type_id);
     };
 } // nxs
 

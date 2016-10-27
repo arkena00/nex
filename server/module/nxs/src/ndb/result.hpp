@@ -23,6 +23,13 @@ namespace ndb
 
         line<Engine>& operator[](int index) { return _line_list.at(index); }
 
+        template<class F>
+        typename F::type operator[](const F& f)
+        {
+            if (!_line_list[0]._data.count(f.full_name())) throw std::out_of_range("line[" + f.full_name() + "] does not exist");
+            return type<sql>::decode<typename F::type>(_line_list[0]._data.at(f.full_name()));
+        }
+
         iterator begin() { return _line_list.begin(); }
         iterator end() { return _line_list.end(); }
 

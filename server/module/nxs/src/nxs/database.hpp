@@ -32,15 +32,14 @@ namespace db
             user(ndb::model<>& m, ndb::table_option<> option = {});
         };
 
-        struct type : public ndb::table<>
+        struct property : public ndb::table<>
         {
             field<int> id;
-            field<std::string, 255> name;
-            field<std::string, 255> image;
-            field<std::string> description;
-            field<std::string, 255> author;
+            field<std::string, 64> name;
+            field<int> type;
+            field<std::string, 255> type_data;
 
-            type(ndb::model<>& m, ndb::table_option<> option = {});
+            property(ndb::model<>& m, ndb::table_option<> option = {});
         };
 
         struct interface : public ndb::table<>
@@ -52,6 +51,18 @@ namespace db
             field<std::string, 255> author;
 
             interface(ndb::model<>& m, ndb::table_option<> option = {});
+        };
+
+        struct type : public ndb::table<>
+        {
+            field<int> id;
+            field<std::string, 255> name;
+            field<std::string, 255> image;
+            field<std::string> description;
+            field<std::string, 255> author;
+            field<tables::property> property;
+
+            type(ndb::model<>& m, ndb::table_option<> option = {});
         };
 
         struct resource : public ndb::table<>
@@ -74,6 +85,7 @@ namespace db
             // field<std::string, 2> language;
 
             field<tables::type> type;
+            field<tables::property> property;
 
             resource(ndb::model<>& m);
         };
@@ -85,6 +97,7 @@ namespace db
         {
             tables::resource resource;
             tables::type type;
+            tables::property property;
             tables::user user;
 
             nex();

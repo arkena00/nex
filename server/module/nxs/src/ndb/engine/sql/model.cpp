@@ -16,7 +16,7 @@ namespace ndb
             std::string t1 = t.option().parent().name();
             std::string t2 = t.name();
 
-            _data = "\ncreate table `" + t1 + "." + t2 + "`(" +
+            _data = "\ncreate table if not exists `" + t1 + "." + t2 + "`(" +
             "id integer not null," +
             "`" + t2 + ".id` integer not null,"
             "primary key (id,`" + t2 + ".id`),"
@@ -106,6 +106,7 @@ namespace ndb
             if (str_query.at(i) == ';')
             {
                 std::string table_query = str_query.substr(start, i - start + 1);
+                std::cout << "\n\n" << table_query;
                 e.exec(table_query);
                 start = i;
             }

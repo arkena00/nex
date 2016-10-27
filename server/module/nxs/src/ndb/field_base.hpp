@@ -25,9 +25,9 @@ namespace ndb
     public:
         field_base(const table<Engine>& table,
                    const std::string& name,
-                    size_t size,
-                    int type_id,
-                    const field_option<Engine>& option = field_option<Engine>{});
+                   size_t size,
+                   int type_id,
+                   const field_option<Engine>& option = field_option<Engine>{});
 
         const table<Engine>& table() const;
         const std::string& name() const;

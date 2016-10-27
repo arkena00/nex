@@ -10,6 +10,7 @@ namespace db
         nex::nex() :
             resource(*this),
             type(*this),
+            property(*this),
             user(*this)
         {}
     } // models
@@ -27,9 +28,19 @@ namespace db
             name(*this, "name"),
             image(*this, "image"),
             description(*this, "description"),
-            author(*this, "author")
+            author(*this, "author"),
+            property(*this)
         {
             table_option<>::unique(*this, {name, author});
+        }
+
+        property::property(ndb::model<>& m, ndb::table_option<> option) : table(m, "property", option),
+            id(*this, "id", field_option<>::id()),
+            name(*this, "name"),
+            type(*this, "type"),
+            type_data(*this, "type_data")
+        {
+            table_option<>::unique(*this, {name, type});
         }
 
         resource::resource(ndb::model<>& m) : table(m, "resource"),
@@ -37,7 +48,8 @@ namespace db
             name(*this),
             owner(*this),
             date_creation(*this),
-            type(*this)
+            type(*this),
+            property(*this)
         {}
     } // tables
 

@@ -20,21 +20,20 @@ namespace ndb
             // join by single value field
             if (f.table().option().is_field_single())
             {
-                _join = " INNER JOIN " + join_table + " ON " + parent_table + "." + join_table + "_id = " + join_table + ".id";
+                _join = " INNER JOIN `" + join_table + "` ON `" + parent_table + "`.`" + join_table + ".id` = `" + join_table + "`.id";
             }
             if (f.table().option().is_field_array())
             {
-                _table = parent_table + "_" + join_table;
+                _table = parent_table + "." + join_table;
             }
         }
-
 
         if (type == get) _output += " AS `" +  _output + "`";
 
         if (type == set || type == add)
         {
-            _output = f.real_name();
-            if (f.table().option().is_field_array()) _output = f.full_name();
+            _output = "`" + f.real_name() + "`";
+            if (f.table().option().is_field_array()) _output = "`" + f.full_name() + "`";
             _output2 = "?" + std::to_string(value_index());
         }
     }
@@ -58,10 +57,10 @@ namespace ndb
     {
         std::string str_native = "";
 
-        if (_type == typec::get) str_native = "SELECT " + _output + " FROM " + _table + _join;
-        else if (_type == typec::add) str_native = "INSERT INTO " + _table + "(" + _output + ") VALUES(" + _output2 + ")";
-        else if (_type == typec::set) str_native = "REPLACE INTO " + _table + "(" + _output + ") VALUES(" + _output2 + ")";
-        else if (_type == typec::del) str_native = "DELETE FROM " + _table + " WHERE " + _output;
+        if (_type == typec::get) str_native = "SELECT " + _output + " FROM `" + _table + "`" + _join;
+        else if (_type == typec::add) str_native = "INSERT INTO `" + _table + "`(" + _output + ") VALUES(" + _output2 + ")";
+        else if (_type == typec::set) str_native = "REPLACE INTO `" + _table + "`(" + _output + ") VALUES(" + _output2 + ")";
+        else if (_type == typec::del) str_native = "DELETE FROM `" + _table + "` WHERE " + _output;
         else if (_type == typec::condition) str_native = " WHERE " + _output;
         else str_native = _output;
         return str_native;

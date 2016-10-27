@@ -13,13 +13,13 @@ namespace ndb
         _table(table),
         _name(name),
         _real_name(name),
-        _full_name(table.name() + "_" + name),
+        _full_name(table.name() + "." + name),
         _size(size),
         _type_id(type_id),
         _option(option)
     {
         // realname for table field
-        if (_table.option().is_field_single()) _real_name = _table.name() + "_" + _name;
+        if (_table.option().is_field_single()) _real_name = _table.name() + "." + _name;
 
         table.model().field_add(*this);
     }

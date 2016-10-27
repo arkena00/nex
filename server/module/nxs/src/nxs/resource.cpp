@@ -14,6 +14,6 @@ namespace nxs
 
     db::result resource::get()
     {
-        return db::query() << (r.id, r.name);
+        return db::query() << (db::nex.resource.name, db::nex.resource.name);
     }
 } // nxs

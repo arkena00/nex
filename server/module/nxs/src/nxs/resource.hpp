@@ -24,10 +24,7 @@ namespace nxs
 
     static db::result type_add(int id, int type_id)
     {
-        db::query q;
-        q + (db::nex.resource.type.id = type_id, db::nex.resource.id = id);
-        std::cout << q.native();
-        return q.exec();
+        return db::query() + (db::nex.resource.type.id = type_id, db::nex.resource.id = id);
     }
 
         static std::vector<resource> list()

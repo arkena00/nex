@@ -16,19 +16,19 @@ namespace ndb
             std::string t1 = t.option().parent().name();
             std::string t2 = t.name();
 
-            _data = "\ncreate table `" + t1 + "_" + t2 + "`(" +
+            _data = "\ncreate table `" + t1 + "." + t2 + "`(" +
             "id integer not null," +
-            t2 + "_id integer not null,"
-            "primary key (id," + t2 + "_id),"
+            "`" + t2 + ".id` integer not null,"
+            "primary key (id,`" + t2 + ".id`),"
             "foreign key(id) references " + t1 + "(id) on delete cascade,"
-            "foreign key(" + t2 + "_id) references " + t2 + "(id) on delete cascade);" +
+            "foreign key(`" + t2 + ".id`) references " + t2 + "(id) on delete cascade);" +
             _data;
             return;
         }
         // table is a field of single value
         if (t.option().is_field())
         {
-            _data += t.name() + "_id integer,";
+            _data += "`" + t.name() + ".id` integer,";
             return;
         }
 

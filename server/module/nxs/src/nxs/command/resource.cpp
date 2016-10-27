@@ -20,7 +20,7 @@ namespace nxs
             std::stringstream ss;
             for (auto& item : resource::get())
             {
-                ss << "<br />" << item[r.id] << " - " << item[r.name];
+                ss << "<br />" << item[r.name] << " - " << item[r.name];
             }
             nex.output().add(ss.str());
         }

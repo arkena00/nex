@@ -13,19 +13,28 @@ namespace ndb
     {
         _table = f.table().name();
 
-        // join by single value field
-        if (f.table().option().is_field_single())
+        if (f.table().option().is_field())
         {
             const std::string& parent_table = f.table().option().parent().name();
             const std::string& join_table = f.table().name();
-            _join = " INNER JOIN " + join_table + " ON " + parent_table + "." + join_table + "_id = " + join_table + ".id";
+            // join by single value field
+            if (f.table().option().is_field_single())
+            {
+                _join = " INNER JOIN " + join_table + " ON " + parent_table + "." + join_table + "_id = " + join_table + ".id";
+            }
+            if (f.table().option().is_field_array())
+            {
+                _table = parent_table + "_" + join_table;
+            }
         }
+
 
         if (type == get) _output += " AS `" +  _output + "`";
 
         if (type == set || type == add)
         {
             _output = f.real_name();
+            if (f.table().option().is_field_array()) _output = f.full_name();
             _output2 = "?" + std::to_string(value_index());
         }
     }

@@ -13,7 +13,7 @@ namespace ndb
         _table(table),
         _name(name),
         _real_name(name),
-        _full_name(table.name() + "." + name),
+        _full_name(table.name() + "_" + name),
         _size(size),
         _type_id(type_id),
         _option(option)

@@ -17,10 +17,10 @@ namespace ndb
             std::string t2 = t.name();
 
             _data = "\ncreate table `" + t1 + "_" + t2 + "`(" +
-            t1 + "_id integer not null," +
+            "id integer not null," +
             t2 + "_id integer not null,"
-            "primary key (" + t1 + "_id," + t2 + "_id),"
-            "foreign key(" + t1 + "_id) references " + t1 + "(id) on delete cascade,"
+            "primary key (id," + t2 + "_id),"
+            "foreign key(id) references " + t1 + "(id) on delete cascade,"
             "foreign key(" + t2 + "_id) references " + t2 + "(id) on delete cascade);" +
             _data;
             return;

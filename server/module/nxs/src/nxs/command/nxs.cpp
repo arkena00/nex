@@ -3,6 +3,7 @@
 #include <nxs/network/request.hpp>
 #include <nxs/database.hpp>
 #include <iostream>
+#include <nxs/resource.hpp>
 
 namespace nxs
 {
@@ -37,7 +38,7 @@ namespace nxs
 
         static void dbtest(nxs::nex& nex)
         {
-
+            nxs::resource::type_add(1, 1);
         }
     };
 
@@ -52,7 +53,6 @@ namespace nxs
         test.help_set("coucou");
         //test.header_add<headers::data_target>(headers::data_target::memory);
 
-        command& dbtest = nxs::command::add("nxs", "dbtest", &nxs::commands<command::nxs>::dbtest);
-        dbtest.param_add("name");
+        nxs::command::add("nxs", "dbtest", &nxs::commands<command::nxs>::dbtest);
     }
 } // nxs

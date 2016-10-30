@@ -5,18 +5,19 @@ namespace nxs
 {
     const auto& r = db::nex.resource;
 
-    resource::resource(int id)
+    resource::resource(int id) : ndb::entity<db::tables::resource>(id, db::nex.resource)
     {
+        /*
         db::result data = db::query() << (r.name, r.owner.id, r.date_creation) << (r.id == id);
         if (data.size() == 0) nxs_error(errc::system, "unable to load resource with id : " + std::to_string(id));
         _id = id;
         _name = data[r.name];
-        _date_creation = data[r.date_creation];
-
+        _date_creation = data[r.date_creation];*/
+/*
         db::query q;
         q << (r.type.name);
         std::cout << q.native();
-        data = db::query() << (r.type.name);
+        data = db::query() << (r.type.name);*/
 
     }
 

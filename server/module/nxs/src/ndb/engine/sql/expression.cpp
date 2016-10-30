@@ -24,13 +24,13 @@ namespace ndb
             }
             if (f.table().option().is_field_array())
             {
-                _table = parent_table + "." + join_table;
-                _join = " LEFT JOIN `" + _table + "` ON `" + _table + "`" + ".id = `" + parent_table + "`.id"
-                " INNER JOIN `" + join_table + "` ON `" + join_table + "`.id = `" + _table + "`.`" + join_table + ".id`";
+                std::string link = parent_table + "." + join_table;
+                _join = " LEFT JOIN `" + link + "` ON `" + link + "`" + ".id = `" + parent_table + "`.id"
+                " INNER JOIN `" + join_table + "` ON `" + join_table + "`.id = `" + link + "`.`" + join_table + ".id`";
             }
         }
 
-        if (type == get) _output += " AS `" +  _output + "`";
+        if (type == get) _output += " AS `" + _output + "`";
 
         if (type == set || type == add)
         {
@@ -69,6 +69,15 @@ namespace ndb
     }
 
     size_t expression<sql>::value_index() { return value_list_.size() + 1; }
+
+    expression<sql> expression<sql>::all(const table<sql>& t)
+    {
+        expression<sql> expr;
+        expr._output = "*";
+        expr._table = t.name();
+        expr._type = expression<sql>::get;
+        return expr;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////           OPERATORS            ////////////////////////

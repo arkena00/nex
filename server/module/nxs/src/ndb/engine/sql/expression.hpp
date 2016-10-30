@@ -50,6 +50,7 @@ namespace ndb
         template<class T>
         static void value_add(const T& t);
         static size_t value_index();
+        static expression<sql> all(const table<sql>& t);
     };
 } // ndb
 

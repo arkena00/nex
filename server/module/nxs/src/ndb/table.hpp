@@ -3,6 +3,7 @@
 
 #include <ndb/engine/setup.hpp>
 #include <ndb/table_option.hpp>
+#include <ndb/expression.hpp>
 
 namespace ndb
 {
@@ -22,6 +23,8 @@ namespace ndb
         const std::string& name() const;
         ndb::model<Engine>& model() const;
         const table_option<Engine>& option() const;
+
+        expression<Engine> all() const;
     };
 } // ndb
 

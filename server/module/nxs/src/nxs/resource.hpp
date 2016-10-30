@@ -6,7 +6,7 @@
 
 namespace nxs
 {
-    class resource
+    class resource : ndb::entity<db::tables::resource>
     {
     private:
         int _id;

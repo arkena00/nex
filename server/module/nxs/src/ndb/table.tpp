@@ -19,4 +19,7 @@ namespace ndb
 
     template<class Engine>
     const ndb::table_option<Engine>& table<Engine>::option() const { return _option; }
+
+    template<class Engine>
+    expression<Engine> table<Engine>::all() const { return expression<sql>::all(*this); }
 } // ndb

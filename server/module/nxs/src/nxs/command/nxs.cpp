@@ -38,9 +38,11 @@ namespace nxs
 
         static void dbtest(nxs::nex& nex)
         {
+            const auto& r = db::nex.resource;
+
             nxs::resource res(1);
 
-            nex.output().add("z");
+            nex.output().add("ok");
         }
     };
 

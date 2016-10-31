@@ -8,12 +8,15 @@
 #include <ndb/field.hpp>
 #include <ndb/query.hpp>
 #include <ndb/result.hpp>
+#include <ndb/entity.hpp>
 
 // alias
 namespace db
 {
     using query = ndb::query<>;
     using result = ndb::result<>;
+    template<class T>
+    using entity = ndb::entity<T>;
 
 } // db
 

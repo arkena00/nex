@@ -10,7 +10,7 @@ namespace nxs
     {
         static void add(nxs::nex& nex)
         {
-            resource::add(nex.input().param("name").value());
+            //resource::add(nex.input().param("name").value());
             nex.output().add("resource add");
         }
 

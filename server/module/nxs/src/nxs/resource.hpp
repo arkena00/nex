@@ -6,7 +6,7 @@
 
 namespace nxs
 {
-    class resource : ndb::entity<db::tables::resource>
+    class resource
     {
     private:
         int _id;
@@ -20,7 +20,7 @@ namespace nxs
         const std::string& name() const;
 
         static std::vector<resource> list();
-        static db::result add(const std::string& name);
+        //static db::result add(const std::string& name);
         static db::result get();
 
         static db::result type_add(int id, int type_id);

@@ -40,7 +40,10 @@ namespace nxs
         {
             const auto& r = db::nex.resource;
 
+
+
             nxs::resource res(1);
+            std::cout << res.name();
 
             nex.output().add("ok");
         }

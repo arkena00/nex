@@ -11,6 +11,7 @@ namespace ndb
     public: enum code { primary = 1, autoincrement = 2, unique = 4, not_null = 8 };
 
     private:
+        bool _id;
         bool _primary;
         bool _autoincrement;
         bool _unique;
@@ -20,6 +21,7 @@ namespace ndb
         field_option();
         field_option(int c);
 
+        bool is_id() const;
         bool is_primary() const;
         bool is_autoincrement() const;
         bool is_unique() const;

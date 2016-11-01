@@ -12,32 +12,28 @@ namespace ndb
     class field_base
     {
     private:
-        static int auto_id;
+        static int id_;
 
         const table<Engine>& _table;
+        int _id;
         std::string _name;
-        std::string _real_name;
-        std::string _full_name;
         size_t _size;
         int _type_id;
         field_option<Engine> _option;
 
     public:
-        field_base(const table<Engine>& table,
-                   const std::string& name,
+        field_base(table<Engine>& table,
                    size_t size,
                    int type_id,
                    const field_option<Engine>& option = field_option<Engine>{});
 
         const table<Engine>& table() const;
         const std::string& name() const;
-        const std::string& real_name() const;
-        const std::string& full_name() const;
         size_t size() const;
         int type_id() const;
         const field_option<Engine>& option() const;
 
-        static std::string auto_name();
+        static int auto_id();
     };
 } // ndb
 

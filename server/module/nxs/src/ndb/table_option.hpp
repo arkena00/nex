@@ -15,20 +15,21 @@ namespace ndb
     private:
         std::vector<field_base<Engine>> _primary;
         std::vector<field_base<Engine>> _unique;
-        const ndb::table<Engine>* _parent;
+        const table<Engine>* _parent;
         bool _array;
 
     public:
         table_option();
-        table_option(const ndb::table<Engine>&, bool array = false);
+        table_option(const table<Engine>&, bool array = false);
+
+        void parent_add(const table<Engine>& parent);
+        const table<Engine>& parent() const;
 
         const std::vector<field_base<Engine>>& unique() const;
 
-        void parent_add(const ndb::table<Engine>& parent);
         bool is_field() const;
         bool is_field_array() const;
         bool is_field_single() const;
-        const ndb::table<Engine>& parent() const;
 
         static void unique(const table<Engine>&, std::initializer_list<field_base<Engine>> f);
     };

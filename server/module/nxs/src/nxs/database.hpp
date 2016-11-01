@@ -15,6 +15,7 @@ namespace db
 {
     using query = ndb::query<>;
     using result = ndb::result<>;
+    using line = ndb::line<>;
     template<class T>
     using entity = ndb::entity<T>;
 

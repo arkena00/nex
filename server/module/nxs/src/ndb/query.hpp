@@ -29,7 +29,7 @@ namespace ndb
 
         query& operator<<(const ndb::expression<Engine>& expr);
         query& operator+(auto&& expr);
-        query& operator-(ndb::expression<Engine>& expr);
+        query& operator-(auto&& expr);
 
         static ndb::result<Engine> exec(const ndb::expression<Engine>&);
     };

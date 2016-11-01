@@ -20,8 +20,8 @@ namespace ndb
             "id integer not null," +
             "`" + t2 + ".id` integer not null,"
             "primary key (id,`" + t2 + ".id`),"
-            "foreign key(id) references " + t1 + "(id) on delete cascade,"
-            "foreign key(`" + t2 + ".id`) references " + t2 + "(id) on delete cascade);" +
+            "foreign key(id) references " + t1 + "(" + t1 + "_id) on delete cascade,"
+            "foreign key(`" + t2 + ".id`) references " + t2 + "(" + t2 + "_id) on delete cascade);" +
             _data;
             return;
         }

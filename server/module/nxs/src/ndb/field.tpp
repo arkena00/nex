@@ -6,23 +6,16 @@ namespace ndb
     template<class Engine> class expression;
 
     template<class T, size_t Size, class Engine, typename Field_Basic>
-    field<T, Size, Engine, Field_Basic>::field(const ndb::table<Engine>& table) :
-        field_base<Engine>(table, field_base<Engine>::auto_name(), Size, ndb::type<Engine>::template id<T>())
-    {}
-
-    template<class T, size_t Size, class Engine, typename Field_Basic>
-    field<T, Size, Engine, Field_Basic>::field(const ndb::table<Engine>& table,
-                                               const std::string& name,
+    field<T, Size, Engine, Field_Basic>::field(ndb::table<Engine>& table,
                                                const T& default_value) :
-        field_base<Engine>(table, name, Size, ndb::type<Engine>::template id<T>()),
+        field_base<Engine>(table, Size, ndb::type<Engine>::template id<T>()),
         _default_value(default_value)
     {}
 
     template<class T, size_t Size, class Engine, typename Field_Basic>
-    field<T, Size, Engine, Field_Basic>::field(const ndb::table<Engine>& table,
-                                               const std::string& name,
+    field<T, Size, Engine, Field_Basic>::field(ndb::table<Engine>& table,
                                                const field_option<Engine>& option) :
-        field_base<Engine>(table, name, Size, ndb::type<Engine>::template id<T>(), option)
+        field_base<Engine>(table, Size, ndb::type<Engine>::template id<T>(), option)
     {}
 
     template<class T, size_t Size, class Engine, typename Field_Basic>

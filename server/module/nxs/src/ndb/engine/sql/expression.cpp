@@ -9,7 +9,7 @@ namespace ndb
 
     expression<sql>::expression(const field_base<sql>& f, typec type) :
         _type(type),
-        _output(f.full_name())
+        _output(f.name())
     {
         _table = f.table().name();
 
@@ -30,12 +30,12 @@ namespace ndb
             }
         }
 
-        if (type == get) _output += " AS `" + _output + "`";
+        //if (type == get) _output += " AS `" + _output + "`";
 
         if (type == set || type == add)
         {
-            _output = "`" + f.real_name() + "`";
-            if (f.table().option().is_field_array()) _output = "`" + f.full_name() + "`";
+            //_output = "`" + f.real_name() + "`";
+            //if (f.table().option().is_field_array()) _output = "`" + f.full_name() + "`";
             _output2 = "?" + std::to_string(value_index());
         }
     }

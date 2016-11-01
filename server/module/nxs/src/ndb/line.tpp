@@ -8,9 +8,9 @@ namespace ndb
     }
 
     template<class Engine> template<class F>
-    typename F::type line<Engine>::operator[](const F& f)
+    const typename F::type line<Engine>::operator[](const F& f) const
     {
-        if (!_data.count(f.full_name())) throw std::out_of_range("line[" + f.full_name() + "] does not exist");
-        return type<sql>::decode<typename F::type>(_data.at(f.full_name()));
+        if (!_data.count(f.name())) throw std::out_of_range("line[" + f.name() + "] does not exist");
+        return type<sql>::decode<typename F::type>(_data.at(f.name()));
     }
 } // ndb

@@ -8,7 +8,7 @@ namespace ndb
 {
     template<class> class result;
 
-    template<class Engine>
+    template<class Engine = setup<>::engine>
     class line
     {
         friend class result<Engine>;
@@ -19,7 +19,7 @@ namespace ndb
         void add(const std::string& id, const value<Engine>& v);
 
         template<class F>
-        typename F::type operator[](const F& f);
+        const typename F::type operator[](const F& f) const;
     };
 } // ndb
 

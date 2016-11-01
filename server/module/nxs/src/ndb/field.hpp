@@ -22,9 +22,8 @@ namespace ndb
     public:
         using type = T;
 
-        field(const ndb::table<Engine>& table);
-        field(const ndb::table<Engine>& table, const std::string& name, const T& default_value = T{});
-        field(const ndb::table<Engine>& table, const std::string& name, const field_option<Engine>& option);
+        field(ndb::table<Engine>& table, const T& default_value = T{});
+        field(ndb::table<Engine>& table, const field_option<Engine>& option);
 
         T default_value() const;
 

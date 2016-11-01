@@ -18,33 +18,33 @@ namespace db
     namespace tables
     {
         user::user(ndb::model<>& m, ndb::table_option<> option) : table(m, "user", option),
-            id(*this, "id", field_option<>::id()),
-            name(*this, "name", field_option<>::not_null | field_option<>::unique),
-            pass(*this, "pass")
+            id(*this, field_option<>::id()),
+            name(*this, field_option<>::not_null | field_option<>::unique),
+            pass(*this)
         {}
 
         type::type(ndb::model<>& m, ndb::table_option<> option) : table(m, "type", option),
-            id(*this, "id", field_option<>::id()),
-            name(*this, "name"),
-            image(*this, "image"),
-            description(*this, "description"),
-            author(*this, "author"),
+            id(*this, field_option<>::id()),
+            name(*this),
+            image(*this),
+            description(*this),
+            author(*this),
             property(*this)
         {
             table_option<>::unique(*this, {name, author});
         }
 
         property::property(ndb::model<>& m, ndb::table_option<> option) : table(m, "property", option),
-            id(*this, "id", field_option<>::id()),
-            name(*this, "name"),
-            type(*this, "type"),
-            type_data(*this, "type_data")
+            id(*this, field_option<>::id()),
+            name(*this),
+            type(*this),
+            type_data(*this)
         {
             table_option<>::unique(*this, {name, type});
         }
 
         resource::resource(ndb::model<>& m) : table(m, "resource"),
-            id(*this, "id", field_option<>::id()),
+            id(*this, field_option<>::id()),
             name(*this),
             owner(*this),
             date_creation(*this),

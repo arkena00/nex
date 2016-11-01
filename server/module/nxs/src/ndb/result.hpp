@@ -26,8 +26,8 @@ namespace ndb
         template<class F>
         typename F::type operator[](const F& f)
         {
-            if (!_line_list[0]._data.count(f.name())) throw std::out_of_range("line[" + f.name() + "] does not exist");
-            return type<sql>::decode<typename F::type>(_line_list[0]._data.at(f.name()));
+            if (!_line_list[0]._data.count(f.real_name())) throw std::out_of_range("line[" + f.real_name() + "] does not exist");
+            return type<sql>::decode<typename F::type>(_line_list[0]._data.at(f.real_name()));
         }
 
         iterator begin() { return _line_list.begin(); }

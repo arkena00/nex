@@ -17,10 +17,12 @@ namespace ndb
         {
             const std::string& parent_table = f.table().option().parent().name();
             const std::string& join_table = f.table().name();
+            const std::string& alias = f.table().field_name();
             // join by single value field
             if (f.table().option().is_field_single())
             {
-                _join = " INNER JOIN `" + join_table + "` ON `" + parent_table + "`.`" + join_table + ".id` = `" + join_table + "`.id";
+                _output = alias + "." + f.name() + " AS " + f.real_name();
+                _join = " INNER JOIN `" + join_table + "` " + alias + " ON `" + parent_table + "`.`" + alias + "` = " + alias + "." + join_table + "_id";
             }
             if (f.table().option().is_field_array())
             {

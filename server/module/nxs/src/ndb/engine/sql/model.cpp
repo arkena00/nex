@@ -18,17 +18,17 @@ namespace ndb
 
             _data = "\ncreate table if not exists `" + t1 + "." + t2 + "`(" +
             "id integer not null," +
-            "`" + t2 + ".id` integer not null,"
-            "primary key (id,`" + t2 + ".id`),"
+            t2 + "_id integer not null,"
+            "primary key (id," + t2 + "_id),"
             "foreign key(id) references " + t1 + "(" + t1 + "_id) on delete cascade,"
-            "foreign key(`" + t2 + ".id`) references " + t2 + "(" + t2 + "_id) on delete cascade);" +
+            "foreign key(" + t2 + "_id) references " + t2 + "(" + t2 + "_id) on delete cascade);" +
             _data;
             return;
         }
         // table is a field of single value
         if (t.option().is_field())
         {
-            _data += "`" + t.name() + ".id` integer,";
+            _data += t.field_name() + " integer,";
             return;
         }
 

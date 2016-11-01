@@ -23,6 +23,7 @@ namespace ndb
         table_option(const table<Engine>&, bool array = false);
 
         void parent_add(const table<Engine>& parent);
+        bool has_parent() const;
         const table<Engine>& parent() const;
 
         const std::vector<field_base<Engine>>& unique() const;

@@ -39,16 +39,27 @@ namespace nxs
         static void dbtest(nxs::nex& nex)
         {
             std::stringstream res;
+            try {
             const auto& t = db::nex.type;
+            const auto& r = db::nex.resource;
+            const auto& u = db::nex.user;
 
+            /*
             db::query q;
-            q  << (t.id, t.name, t.image, t.description, t.author);
+            q  << (r.id, r.name, r.owner.name, r.admin.pass);
             std::cout << q.native();
+            db::result result = q;
+            for (const auto& item : result)
+            {
+                res << "<br />" << item[r.id] << " - " << item[r.name] << " - " << item[r.owner.name] << " - "  << " - " << item[r.admin.pass];
+            }*/
 
             for (const nxs::type& item : nxs::type::get())
             {
                 res << "<br />" << item.name() << " - " << item.author();
             }
+
+            } catch (const std::exception& e) { res << e.what(); }
 
             nex.output().add(res.str());
         }

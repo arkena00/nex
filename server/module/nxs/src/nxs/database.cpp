@@ -47,6 +47,7 @@ namespace db
             id(*this, field_option<>::id()),
             name(*this),
             owner(*this),
+            admin(*this),
             date_creation(*this),
             type(*this),
             property(*this)

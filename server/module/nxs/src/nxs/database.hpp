@@ -74,6 +74,7 @@ namespace db
             field<int> id;
             field<std::string, 255> name;
             field<tables::user, 1> owner;
+            field<tables::user, 1> admin;
             field<std::chrono::time_point<std::chrono::system_clock>> date_creation;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_edition;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_expiration;

@@ -21,6 +21,13 @@ namespace ndb
     void table_option<Engine>::parent_add(const table<Engine>& parent) { _parent  = &parent; }
 
     template<class Engine>
+    bool table_option<Engine>::has_parent() const
+    {
+        if (_parent == nullptr) return false;
+        return true;
+    }
+
+    template<class Engine>
     const table<Engine>& table_option<Engine>::parent() const
     {
         if (_parent == nullptr) ndb_error("link table does not exist");

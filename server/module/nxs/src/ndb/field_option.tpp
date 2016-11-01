@@ -4,6 +4,7 @@ namespace ndb
 {
     template<class Engine>
     field_option<Engine>::field_option() :
+        _id(false),
         _primary(false),
         _autoincrement(false),
         _unique(false),

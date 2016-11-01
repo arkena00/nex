@@ -17,6 +17,7 @@ namespace ndb
         const table<Engine>& _table;
         int _id;
         std::string _name;
+        std::string _real_name;
         size_t _size;
         int _type_id;
         field_option<Engine> _option;
@@ -29,6 +30,7 @@ namespace ndb
 
         const table<Engine>& table() const;
         const std::string& name() const;
+        const std::string& real_name() const;
         size_t size() const;
         int type_id() const;
         const field_option<Engine>& option() const;

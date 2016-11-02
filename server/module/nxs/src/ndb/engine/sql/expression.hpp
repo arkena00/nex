@@ -3,7 +3,6 @@
 
 #include <ndb/utility/trait.hpp>
 #include <ndb/engine/sql/value.hpp>
-#include <ndb/table_join.hpp>
 #include <vector>
 
 namespace ndb
@@ -43,6 +42,7 @@ namespace ndb
 
         template<class V> expression& operator=(const V& v);
         template<class V> expression& operator==(const V& v);
+        expression& operator==(const field_base<sql>& v);
 
         expression& operator,(const expression<sql>& other);
         expression& operator&&(const expression<sql>& other);

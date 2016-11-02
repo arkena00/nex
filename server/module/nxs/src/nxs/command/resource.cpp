@@ -18,9 +18,9 @@ namespace nxs
         {
             const auto& r = db::nex.resource;
             std::stringstream ss;
-            for (auto& item : resource::get())
+            for (nxs::resource& item : resource::get())
             {
-                ss << "<br />" << item[r.name] << " - " << item[r.name];
+                ss << "<br />" << item.name() << " - " << item.name();
             }
             nex.output().add(ss.str());
         }

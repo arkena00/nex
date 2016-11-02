@@ -54,4 +54,12 @@ namespace ndb
         expression<Engine> test(*this, expression<sql>::condition);
         return test == other;
     }
+
+    template<class T, size_t Size, class Engine, typename Field_Basic>
+    expression<Engine> field<T, Size, Engine, Field_Basic>::operator==(const field<int>& other) const
+    {
+        expression<Engine> test(*this, expression<sql>::join);
+        return test == static_cast<field_base<Engine>>(other);
+    }
 } // ndb
+

@@ -70,7 +70,7 @@ namespace ndb
             sqlite3_finalize(statement);
         }
         std::string error = sqlite3_errmsg(_db);
-        if(error != "not an error") ndb_error(error);
+        if(error != "not an error") ndb_error(error + " : " + q.native());
 
         q.clear();
         return result;

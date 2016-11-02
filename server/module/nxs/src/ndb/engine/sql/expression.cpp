@@ -26,13 +26,17 @@ namespace ndb
             }
             if (f.table().option().is_field_array())
             {
+                _table = parent_table + "." + join_table;
+                /*
                 std::string link = parent_table + "." + join_table;
                 _join = " LEFT JOIN `" + link + "` ON `" + link + "`" + ".id = `" + parent_table + "`.id"
                 " INNER JOIN `" + join_table + "` ON `" + join_table + "`.id = `" + link + "`.`" + join_table + ".id`";
+                */
             }
         }
 
-        //if (type == get) _output += " AS `" + _output + "`";
+        if (type == join) _output = " INNER JOIN `" + _table + "` ON `" + _table + "`." + f.name();
+        if (type == get) _output = "`" + _table + "`." + f.name() + " AS " + f.name();
 
         if (type == set || type == add)
         {
@@ -89,6 +93,14 @@ namespace ndb
         _output += "," + other.output();
         _join += other.output_join();
         if (_type == typec::set || _type == typec::add) _output2 += "," + other.output2();
+        return *this;
+    }
+
+    expression<sql>& expression<sql>::operator==(const field_base<sql>& f)
+    {
+        std::string table = f.table().name();
+        if (f.table().option().is_field_array()) table = f.table().option().parent().name() + "." + f.table().name();
+        _output += " = `" + table + "`." + f.name();
         return *this;
     }
 

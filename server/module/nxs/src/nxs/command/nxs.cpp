@@ -54,10 +54,8 @@ namespace nxs
                 res << "<br />" << item[r.id] << " - " << item[r.name] << " - " << item[r.owner.name] << " - "  << " - " << item[r.admin.pass];
             }*/
 
-            for (const nxs::type& item : nxs::type::get())
-            {
-                res << "<br />" << item.name() << " - " << item.author();
-            }
+            nxs::resource resource(1);
+            std::cout << "__" << resource.name();
 
             } catch (const std::exception& e) { res << e.what(); }
 

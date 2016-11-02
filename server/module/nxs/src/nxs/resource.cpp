@@ -4,14 +4,28 @@
 namespace nxs
 {
     const auto& r = db::nex.resource;
+    const auto& t = db::nex.type;
 
-    resource::resource(int id)
+    resource::resource(const db::line& data) : db::entity<nxs::resource>(data)
     {
-        db::result data = db::query() << (r.name, r.date_creation) << (r.id == id);
+        hydrate(data);
+    }
+    resource::resource(int id) : db::entity<nxs::resource>(id)
+    {
+        hydrate(db::entity<nxs::resource>::data());
+    }
 
-        _id = id;
+    void resource::hydrate(const db::line& data)
+    {
         _name = data[r.name];
         _date_creation = data[r.date_creation];
+
+        db::query q;
+        q << (r.type.id, t.name) << (t.id == r.type.id) << (r.id == id());
+        std::cout << q.native();
+
+        //nxs::type type = nxs::type(id);
+        //_type.insert(std::make_pair(type.name(), type));
     }
 
     int resource::id() const { return _id; }
@@ -20,19 +34,16 @@ namespace nxs
     //const nxs::user& resource::owner() const { return _owner; }
 
 
-    std::vector<resource> resource::list()
+    std::vector<resource> resource::get()
     {
-        std::vector<resource> l;
-        db::query q;
-        q << (db::nex.resource.name, db::nex.resource.type.name);
-        std::cout << "\n" << q.native();
-        db::result r = q.exec();
-        for (auto& item : r)
+        std::vector<resource> vec;
+        const auto& r = db::nex.resource;
+        db::result res = db::query() << (r.id, r.name, r.date_creation);
+        for(auto& item : res)
         {
-            std::cout << "\n" << item[db::nex.resource.name] << " " << item[db::nex.resource.type.name];
+            //vec.push_back(type(item));
         }
-
-        return l;
+        return vec;
     }
 
     /*
@@ -40,11 +51,6 @@ namespace nxs
     {
         return db::query() + (r.name = name, r.owner.id = 0);
     }*/
-
-    db::result resource::get()
-    {
-        return db::query() << (db::nex.resource.name, db::nex.resource.name);
-    }
 
     db::result resource::type_add(int id, int type_id)
     {

@@ -35,8 +35,7 @@ namespace ndb
             }
         }
 
-        if (type == join) _output = " INNER JOIN `" + _table + "` ON `" + _table + "`." + f.name();
-        if (type == get) _output = "`" + _table + "`." + f.name() + " AS " + f.name();
+        if (type == get || type == condition) _output = "`" + _table + "`." + f.name();
 
         if (type == set || type == add)
         {
@@ -90,8 +89,8 @@ namespace ndb
 ////////////////////////////////////////////////////////////////////////////////
     expression<sql>& expression<sql>::operator,(const expression<sql>& other)
     {
-        _output += "," + other.output();
-        _join += other.output_join();
+        if (_type == typec::join) _output += " " + other.output();
+        else _output += "," + other.output();
         if (_type == typec::set || _type == typec::add) _output2 += "," + other.output2();
         return *this;
     }
@@ -99,8 +98,13 @@ namespace ndb
     expression<sql>& expression<sql>::operator==(const field_base<sql>& f)
     {
         std::string table = f.table().name();
-        if (f.table().option().is_field_array()) table = f.table().option().parent().name() + "." + f.table().name();
-        _output += " = `" + table + "`." + f.name();
+        std::string fname = f.name();
+        if (f.table().option().is_field_array())
+        {
+            table = f.table().option().parent().name() + "." + f.table().name();
+            fname = _output;
+        }
+        _output =  " INNER JOIN `" + _table + "` ON `" + _table + "`." + fname + " = `" + table + "`." + fname;
         return *this;
     }
 

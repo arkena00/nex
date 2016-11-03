@@ -8,11 +8,11 @@ namespace nxs
 {
     class resource : public db::entity<nxs::resource>
     {
+        using Type_List = std::map<std::string, nxs::type>;
     private:
-        int _id;
         std::string _name;
         std::chrono::time_point<std::chrono::system_clock> _date_creation;
-        std::map<std::string, nxs::type> _type;
+        Type_List _type;
 
         void hydrate(const db::line&);
 
@@ -24,8 +24,7 @@ namespace nxs
         int id() const;
         const std::string& name() const;
 
-        static std::vector<resource> get();
-        //static db::result add(const std::string& name);
+        const Type_List& type_get() const;
 
         static db::result type_add(int id, int type_id);
     };

@@ -44,18 +44,23 @@ namespace nxs
             const auto& r = db::nex.resource;
             const auto& u = db::nex.user;
 
-            /*
-            db::query q;
-            q  << (r.id, r.name, r.owner.name, r.admin.pass);
-            std::cout << q.native();
-            db::result result = q;
-            for (const auto& item : result)
-            {
-                res << "<br />" << item[r.id] << " - " << item[r.name] << " - " << item[r.owner.name] << " - "  << " - " << item[r.admin.pass];
-            }*/
 
-            nxs::resource resource(1);
-            std::cout << "__" << resource.name();
+            nxs::resource test(1);
+
+            for (nxs::type& t : nxs::type::get())
+            {
+                std::cout << "\n" << t.id() << " " << t.author() << " " << t.name();
+            }
+
+            for (nxs::resource& resource : nxs::resource::get())
+            {
+                res << "\n" << resource.id() << " " << " " << resource.name();
+                for (auto& tl : resource.type_get())
+                {
+                    std::cout << "\n" << tl.first;
+                }
+            }
+
 
             } catch (const std::exception& e) { res << e.what(); }
 

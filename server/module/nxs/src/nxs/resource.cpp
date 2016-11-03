@@ -3,54 +3,40 @@
 
 namespace nxs
 {
-    const auto& r = db::nex.resource;
-    const auto& t = db::nex.type;
-
-    resource::resource(const db::line& data) : db::entity<nxs::resource>(data)
+    resource::resource(const db::line& data) : db::entity<resource>(data)
     {
         hydrate(data);
     }
-    resource::resource(int id) : db::entity<nxs::resource>(id)
+    resource::resource(int id) : db::entity<resource>(id)
     {
-        hydrate(db::entity<nxs::resource>::data());
+        hydrate(db::entity<resource>::data());
     }
 
     void resource::hydrate(const db::line& data)
     {
+        const auto& r = db::nex.resource;
+        const auto& t = db::nex.type;
+
         _name = data[r.name];
         _date_creation = data[r.date_creation];
 
-        db::query q;
-        q << (r.type.id, t.name) << (t.id == r.type.id) << (r.id == id());
-        std::cout << q.native();
+        db::result res = db::query() << (r.id, t.id, t.name) << (r.type.id == r.id, t.id == r.type.id) << (r.id == id());
 
-        //nxs::type type = nxs::type(id);
-        //_type.insert(std::make_pair(type.name(), type));
+        for (const auto& item : res)
+        {
+            nxs::type type = nxs::type(item);
+            _type.insert(std::make_pair(type.name(), type));
+        }
+
+        //resource.type("movie").property("name")
+        //resource.data("movie", "name")
     }
 
-    int resource::id() const { return _id; }
+    int resource::id() const { return db::entity<resource>::id(); }
     const std::string& resource::name() const { return _name; }
 
-    //const nxs::user& resource::owner() const { return _owner; }
+    const resource::Type_List& resource::type_get() const { return _type; }
 
-
-    std::vector<resource> resource::get()
-    {
-        std::vector<resource> vec;
-        const auto& r = db::nex.resource;
-        db::result res = db::query() << (r.id, r.name, r.date_creation);
-        for(auto& item : res)
-        {
-            //vec.push_back(type(item));
-        }
-        return vec;
-    }
-
-    /*
-    db::result resource::add(const std::string& name)
-    {
-        return db::query() + (r.name = name, r.owner.id = 0);
-    }*/
 
     db::result resource::type_add(int id, int type_id)
     {

@@ -19,7 +19,10 @@ namespace ndb
         void add(const std::string& id, const value<Engine>& v);
 
         template<class F>
-        const typename F::type operator[](const F& f) const;
+        typename F::type get(const F& f, const typename F::type& default_value) const;
+
+        template<class F>
+        typename F::type operator[](const F& f) const;
     };
 } // ndb
 

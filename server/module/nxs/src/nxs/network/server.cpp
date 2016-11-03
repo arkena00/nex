@@ -44,8 +44,8 @@ void server::input(input_connexion* cnx, const boost::system::error_code& status
     listen();
 }
 
-void server::start()
+void server::start(short port)
 {
-    network::server server(50);
+    network::server server(port);
     ios_.run();
 }

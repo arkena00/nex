@@ -25,7 +25,7 @@ namespace nxs{namespace network
     public:
         server(short port);
 
-        static void start();
+        static void start(short port = 50);
     };
 }} // nxs::network
 

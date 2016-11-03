@@ -152,6 +152,10 @@ DISTFILES += \
     android/Makefile
 
 SUBDIRS += \
+    android/templates.pro \
+    android/templates.pro \
+    android/templates.pro \
+    android/templates.pro \
     android/templates.pro
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

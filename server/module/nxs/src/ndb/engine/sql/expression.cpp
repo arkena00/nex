@@ -39,8 +39,7 @@ namespace ndb
 
         if (type == set || type == add)
         {
-            //_output = "`" + f.real_name() + "`";
-            //if (f.table().option().is_field_array()) _output = "`" + f.full_name() + "`";
+            if (f.table().option().is_field_single()) _output = f.table().field_name();
             _output2 = "?" + std::to_string(value_index());
         }
     }

@@ -38,6 +38,13 @@ namespace nxs
     const resource::Type_List& resource::type_get() const { return _type; }
 
 
+    int resource::add(const std::string& name)
+    {
+        const auto& r = db::nex.resource;
+        db::result res = db::entity<resource>::add((r.name = name, r.owner.id = 0));
+        return res.add_id();
+    }
+
     db::result resource::type_add(int id, int type_id)
     {
         return db::query() + (db::nex.resource.type.id = type_id, db::nex.resource.id = id);

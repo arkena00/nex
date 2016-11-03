@@ -48,6 +48,8 @@ namespace ndb
             }
             step = sqlite3_step(statement);
 
+            result._add_id = sqlite3_last_insert_rowid(_db);
+
             // select
             while (step == SQLITE_ROW)
             {

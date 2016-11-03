@@ -4,15 +4,16 @@
 
 namespace ndb
 {
-    template<class Engine>
-    std::map<std::string, std::unique_ptr<engine<Engine>>> engine<Engine>::connect_list_;
-    template<class Engine>
-    std::string engine<Engine>::current_ = "";
-    template<class Engine>
-    const model<Engine>* engine<Engine>::model_default_ = nullptr;
+    template<class Engine> std::map<std::string, std::unique_ptr<engine<Engine>>> engine<Engine>::connect_list_;
+    template<class Engine> std::string engine<Engine>::current_ = "";
+    template<class Engine> std::string engine<Engine>::path_ = setup<setup<>::engine>::path;
+    template<class Engine> const model<Engine>* engine<Engine>::model_default_ = nullptr;
 
     template<class Engine>
-    engine<Engine>::engine(const std::string& identifier) : _identifier(identifier) {}
+    engine<Engine>::engine(const std::string& identifier) :
+        _identifier(identifier)
+    {}
+
     template<class Engine>
     engine<Engine>::~engine() {}
 
@@ -22,15 +23,14 @@ namespace ndb
     template<class Engine>
     std::string engine<Engine>::path() const
     {
-        using engine_setup = setup<setup<>::engine>;
-        return engine_setup::path + _identifier + engine_setup::ext;
+        return path_ + _identifier + setup<setup<>::engine>::ext;
     }
 
     template<class Engine>
     bool engine<Engine>::exist() const
     {
         if (std::ifstream(path())) return true;
-        if (!std::ofstream(setup<setup<>::engine>::path)) ndb_error("path is inaccessible : " + std::string(setup<setup<>::engine>::path));
+        if (!std::ofstream(path())) ndb_error("path is inaccessible : " + path_);
         return false;
     }
 
@@ -52,6 +52,12 @@ namespace ndb
     void engine<Engine>::model_add(const ndb::model<Engine>& m)
     {
         model_default_ = &m;
+    }
+
+    template<class Engine>
+    void engine<Engine>::path_set(const std::string& path)
+    {
+        path_ = path;
     }
 
     template<class Engine>

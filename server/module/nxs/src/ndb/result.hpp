@@ -8,16 +8,22 @@ namespace ndb
     template<class Engine = setup<>::engine>
     class result
     {
+        friend Engine;
         using iterator = typename std::vector<line<Engine>>::iterator;
 
     private:
         std::vector<line<Engine>> _line_list;
+        int _add_id;
 
     public:
+        result() : _add_id(0) {}
+
         void add(const line<Engine>& l)
         {
             _line_list.push_back(l);
         }
+
+        int add_id() const { return _add_id; }
 
         size_t size() const { return _line_list.size(); }
 

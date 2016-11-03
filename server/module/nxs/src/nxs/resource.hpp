@@ -26,6 +26,7 @@ namespace nxs
 
         const Type_List& type_get() const;
 
+        static int add(const std::string& name);
         static db::result type_add(int id, int type_id);
     };
 } // nxs

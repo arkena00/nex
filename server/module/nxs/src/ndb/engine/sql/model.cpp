@@ -73,7 +73,7 @@ namespace ndb
             str_field += " float"; break;
 
         case SQLITE3_TEXT:
-            str_default = static_cast<const field<type<sql>::get<SQLITE3_TEXT>, 0, sql>&>(f).default_value();
+            /// crash with QT str_default = static_cast<const field<type<sql>::get<SQLITE3_TEXT>, 0, sql>&>(f).default_value();
             if (f.size() > 0) str_field += " varchar";
             else str_field += " text";
             break;

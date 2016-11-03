@@ -17,10 +17,15 @@ DEFINES += NXS_UNIX NDB_ENGINE_SQL
 
 INCLUDEPATH += $$PWD/../../module/nxs/src
 
-INCLUDEPATH += C:/lib/boost_1_55_0
-LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_system
-LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_filesystem
-LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_serialization
+INCLUDEPATH += C:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\include
+
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9 -lboost_system
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9 -lboost_filesystem
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9 -lboost_serialization
+
+ANDROID_EXTRA_LIBS += C:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9\libboost_system.so
+ANDROID_EXTRA_LIBS += C:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9\libboost_filesystem.so
+ANDROID_EXTRA_LIBS += C:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-4.9\libboost_serialization.so
 
 
 CONFIG += mobility object_parallel_to_source
@@ -133,4 +138,21 @@ HEADERS  += \
     ../../module/nxs/src/nxs/setup.hpp \
     ../../module/nxs/src/nxs/user.hpp \
     ../../module/nxs/src/nxs/version.hpp
+
+DISTFILES += \
+    android/android-libtemplates.so-deployment-settings.json \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/libtemplates.so \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/Makefile
+
+SUBDIRS += \
+    android/templates.pro
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

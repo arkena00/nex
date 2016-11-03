@@ -29,8 +29,9 @@ namespace ndb
     template<class Engine>
     bool engine<Engine>::exist() const
     {
-        if (std::ifstream(path())) return 1;
-        return 0;
+        if (std::ifstream(path())) return true;
+        if (!std::ofstream(setup<setup<>::engine>::path)) ndb_error("path is inaccessible : " + std::string(setup<setup<>::engine>::path));
+        return false;
     }
 
     template<class Engine>

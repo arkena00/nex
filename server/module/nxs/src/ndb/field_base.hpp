@@ -14,7 +14,7 @@ namespace ndb
     private:
         static int id_;
 
-        const table<Engine>& _table;
+        const ndb::table<Engine>& _table;
         int _id;
         std::string _name;
         std::string _real_name;
@@ -23,12 +23,12 @@ namespace ndb
         field_option<Engine> _option;
 
     public:
-        field_base(table<Engine>& table,
+        field_base(ndb::table<Engine>& table,
                    size_t size,
                    int type_id,
                    const field_option<Engine>& option = field_option<Engine>{});
 
-        const table<Engine>& table() const;
+        const ndb::table<Engine>& table() const;
         const std::string& name() const;
         const std::string& real_name() const;
         size_t size() const;

@@ -22,7 +22,7 @@ namespace nxs{namespace network
         request _output;
 
     public:
-        using buffer_type = buffer<setup<connexion>::buffer_size>;
+        using buffer_type = buffer<setup<network::connexion>::buffer_size>;
 
         protocol(network::connexion* cnx);
         virtual ~protocol();
@@ -41,7 +41,7 @@ namespace nxs{namespace network
         nxs::user& user();
         request& input();
         request& output();
-        connexion& connexion();
+        network::connexion& connexion();
 
         static protocol* create(network::connexion* cnx, const buffer_type&);
         template<class Protocol>

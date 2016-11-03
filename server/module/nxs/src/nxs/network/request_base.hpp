@@ -13,7 +13,7 @@ namespace nxs
     {
     public:
         enum module_typec { unknown, module, interface };
-        using header_list = std::map<header::code, std::unique_ptr<nxs::header>>;
+        using header_list = std::map<nxs::header::code, std::unique_ptr<nxs::header>>;
 
     protected:
         module_typec _module_type;
@@ -31,7 +31,7 @@ namespace nxs
 
         size_t header_count() const;
         template<class H> bool header_exist() const;
-        bool header_exist(header::code id) const;
+        bool header_exist(nxs::header::code id) const;
         template<class H> void header_exist_check() const;
         template<class H, class T> void header_add(T value);
         template<class H> H& header();

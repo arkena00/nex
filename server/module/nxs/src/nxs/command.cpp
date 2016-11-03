@@ -8,6 +8,9 @@ namespace nxs
 {
     std::map<std::string, command> command::list_;
 
+    template<>
+    void command::init_all<command::size_>() {}
+
     command::command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn) :
         request_base(request_base::module, module, name),
         _address(fn),

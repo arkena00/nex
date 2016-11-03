@@ -18,7 +18,7 @@ namespace ndb
     private:
         static std::map<std::string, std::unique_ptr<engine<Engine>>> connect_list_;
         static std::string current_;
-        static const model<Engine>* model_default_;
+        static const ndb::model<Engine>* model_default_;
 
         std::string _identifier;
 

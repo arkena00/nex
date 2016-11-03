@@ -1,5 +1,5 @@
-#ifndef COMMAND_COMMAND_H_NXS
-#define COMMAND_COMMAND_H_NXS
+#ifndef COMMAND_H_NXS
+#define COMMAND_H_NXS
 
 #include <nxs/os/share.hpp>
 #include <nxs/constant.hpp>
@@ -56,16 +56,12 @@ namespace nxs
         static void init();
 
         template<unsigned char C = 0>
-        constexpr static void init_all()
+        static void init_all()
         {
             command::init<C>();
             init_all<C + 1>();
         }
     };
-
-    template<>
-    constexpr void command::init_all<command::size_>() {}
-
 } // nxs
 
-#endif // COMMAND_COMMAND_H_NXS
+#endif // COMMAND_H_NXS

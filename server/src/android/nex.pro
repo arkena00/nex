@@ -11,13 +11,28 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = nex
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -Wno-unused-local-typedefs -std=c++14
+
+DEFINES += NXS_UNIX NDB_ENGINE_SQL
+
+INCLUDEPATH += $$PWD/../../module/nxs/src
+
+INCLUDEPATH += C:/lib/boost_1_55_0
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_system
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_filesystem
+LIBS += -LC:\Android\crystax-ndk-10.3.1\sources\boost\1.59.0\libs\armeabi-v7a\gnu-5 -lboost_serialization
+
+
+CONFIG += mobility object_parallel_to_source
+MOBILITY =
+
+
 
 SOURCES += main.cpp \
     ../../module/nxs/src/ndb/engine/sql/expression.cpp \
     ../../module/nxs/src/ndb/engine/sql/model.cpp \
     ../../module/nxs/src/ndb/engine/sql/sql.cpp \
     ../../module/nxs/src/ndb/engine/sql/type.cpp \
-    ../../module/nxs/src/ndb/user_model.cpp \
     ../../module/nxs/src/nds/data.cpp \
     ../../module/nxs/src/nds/nds.cpp \
     ../../module/nxs/src/nxs/command/file.cpp \
@@ -79,7 +94,6 @@ HEADERS  += \
     ../../module/nxs/src/ndb/table_join.hpp \
     ../../module/nxs/src/ndb/table_option.hpp \
     ../../module/nxs/src/ndb/type.hpp \
-    ../../module/nxs/src/ndb/user_model.hpp \
     ../../module/nxs/src/ndb/version.hpp \
     ../../module/nxs/src/nds/data.hpp \
     ../../module/nxs/src/nds/encoder.hpp \
@@ -119,7 +133,4 @@ HEADERS  += \
     ../../module/nxs/src/nxs/setup.hpp \
     ../../module/nxs/src/nxs/user.hpp \
     ../../module/nxs/src/nxs/version.hpp
-
-CONFIG += mobility
-MOBILITY = 
 

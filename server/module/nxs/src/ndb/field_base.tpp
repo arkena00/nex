@@ -25,8 +25,6 @@ namespace ndb
             _name = table.name() + "_id";
             _real_name = _name;
         }
-
-        table.model().field_add(*this);
     }
 
     template<class Engine> const table<Engine>& field_base<Engine>::table() const { return _table; }

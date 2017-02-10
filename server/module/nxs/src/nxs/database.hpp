@@ -56,7 +56,7 @@ namespace db
             field<std::string> description;
             field<std::string, 255> author;
             field<std::string, 255> tag;
-            field<std::string> ext;
+            field<std::string, 8> ext;
 
             module(ndb::model<>& m, ndb::table_option<> option = {});
         };
@@ -102,7 +102,7 @@ namespace db
             field<std::string, 255> name;
             field<tables::user, 1> owner;
             field<tables::user, 1> admin;
-            //field<std::chrono::time_point<std::chrono::system_clock>> date_creation;
+            field<std::chrono::time_point<std::chrono::system_clock>> date_creation;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_edition;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_expiration;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_delete;

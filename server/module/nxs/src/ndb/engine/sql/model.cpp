@@ -62,8 +62,6 @@ namespace ndb
         std::string str_option = "";
         std::string str_default = "";
 
-        std::cout << "\nFIELD : " << f.name();
-
         switch (f.type_id())
         {
         case SQLITE_INTEGER:
@@ -75,14 +73,11 @@ namespace ndb
             str_field += " float"; break;
 
         case SQLITE3_TEXT:
-            std::cout << "str___" << static_cast<const field<std::string>&>(f).default_value();
-            str_default = static_cast<const field<std::string>&>(f).default_value();
+            str_default = static_cast<const field<type<sql>::get<SQLITE3_TEXT>, 0, sql>&>(f).default_value();
             if (f.size() > 0) str_field += " varchar";
             else str_field += " text";
             break;
         }
-
-        std::cout << "__" << str_default;
 
         // field size
         if (f.size() > 0) str_field += "("+ std::to_string(f.size()) +")";

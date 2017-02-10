@@ -52,7 +52,7 @@ namespace db
             name(*this),
             image(*this),
             description(*this),
-            author(*this),
+            author(*this, "nex"),
             tag(*this),
             ext(*this, "dl")
         {
@@ -71,7 +71,7 @@ namespace db
             name(*this),
             image(*this),
             description(*this),
-            author(*this),
+            author(*this, "nex"),
             tag(*this),
             ext(*this, "dl")
         {
@@ -83,7 +83,7 @@ namespace db
             name(*this),
             owner(*this),
             admin(*this),
-            //date_creation(*this),
+            date_creation(*this),
             type(*this),
             property(*this)
         {}

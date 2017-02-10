@@ -7,6 +7,8 @@
 //! execute input when receiving data (can be changed by command)
 //! send output if all data received or input marked as finish
 
+//! NEX:1.0/header_param=header_value;/module::command;param=value; ;
+
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/connexion.hpp>
 #include <nxs/network/buffer.hpp>

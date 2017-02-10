@@ -9,6 +9,7 @@ namespace nxs
         _command_name(command_name)
     {}
 
+    request_base::module_typec request_base::module_type() const { return _module_type; }
     const std::string& request_base::module_name() const { return _module_name; }
     const std::string& request_base::command_name() const { return _command_name; }
     const std::string request_base::full_command_name() const

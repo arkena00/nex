@@ -1,6 +1,7 @@
 #include <nxs/network/protocol.hpp>
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/protocol/http.hpp>
+#include <nxs/network/protocol/ws.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/core.hpp>
 #include <nxs/error.hpp>
@@ -44,6 +45,9 @@ namespace nxs{namespace network
         // http
         if (strncmp(buf.data(), "GET", 3) == 0 || strncmp(buf.data(), "POST", 4) == 0)
         {
+            // ws
+            std::string str_data = std::string(buf.data(), buf.size());
+            if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) return create<ws>(cnx);
             return create<http>(cnx);
         }
 

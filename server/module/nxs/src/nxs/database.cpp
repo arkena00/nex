@@ -1,4 +1,5 @@
 #include <nxs/database.hpp>
+#include <nxs/module.hpp>
 
 namespace db
 {
@@ -11,6 +12,9 @@ namespace db
             resource(*this),
             type(*this),
             property(*this),
+            module(*this),
+            module_data(*this),
+            interface(*this),
             user(*this)
         {}
     } // models
@@ -43,16 +47,68 @@ namespace db
             table_option<>::unique(*this, {name, type});
         }
 
+        module::module(ndb::model<>& m, ndb::table_option<> option) : table(m, "module", option),
+            id(*this, field_option<>::id()),
+            name(*this),
+            image(*this),
+            description(*this),
+            author(*this),
+            tag(*this),
+            ext(*this, "dl")
+        {
+            table_option<>::unique(*this, {name, author});
+        }
+
+        module_data::module_data(ndb::model<>& m, ndb::table_option<> option) : table(m, "module_data", option),
+            id(*this, field_option<>::id()),
+            key(*this),
+            value(*this)
+        {
+        }
+
+        interface::interface(ndb::model<>& m, ndb::table_option<> option) : table(m, "interface", option),
+            id(*this, field_option<>::id()),
+            name(*this),
+            image(*this),
+            description(*this),
+            author(*this),
+            tag(*this),
+            ext(*this, "dl")
+        {
+            table_option<>::unique(*this, {name, author});
+        }
+
         resource::resource(ndb::model<>& m) : table(m, "resource"),
             id(*this, field_option<>::id()),
             name(*this),
             owner(*this),
             admin(*this),
-            date_creation(*this),
+            //date_creation(*this),
             type(*this),
             property(*this)
         {}
     } // tables
 
     const models::nex nex;
-} // ndb
+} // db
+
+
+namespace nxs{namespace database
+{
+    void init()
+    {
+        ndb::engine<>::model_add(db::nex);
+        ndb::engine<>::connect("nxs");
+
+        const auto& r = db::nex.resource;
+        const auto& md = db::nex.module_data;
+
+        // add system data
+        if (db::engine::get().is_created())
+        {
+            db::result res = db::query() + (r.id = 0, r.name = "ROOT");
+            // nxs data
+            res = db::query() + (md.id = 0, md.key = "port", md.value = "50");
+        }
+    }
+}} // nxs::database

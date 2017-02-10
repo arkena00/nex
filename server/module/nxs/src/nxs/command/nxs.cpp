@@ -69,7 +69,7 @@ namespace nxs
     };
 
     template<>
-    void command::init<command::nxs>()
+    void command::initialize<command::nxs>()
     {
         command& version = nxs::command::add("nxs", "version", &nxs::commands<command::nxs>::version);
         version.help_set("return nxs version");

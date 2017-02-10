@@ -18,6 +18,7 @@ namespace db
     using line = ndb::line<>;
     template<class T>
     using entity = ndb::entity<T>;
+    using engine = ndb::engine<>;
 
 } // db
 
@@ -46,6 +47,29 @@ namespace db
             property(ndb::model<>& m, ndb::table_option<> option = {});
         };
 
+
+        struct module : public ndb::table<>
+        {
+            field<int> id;
+            field<std::string, 255> name;
+            field<std::string, 255> image;
+            field<std::string> description;
+            field<std::string, 255> author;
+            field<std::string, 255> tag;
+            field<std::string> ext;
+
+            module(ndb::model<>& m, ndb::table_option<> option = {});
+        };
+
+        struct module_data : public ndb::table<>
+        {
+            field<int> id;
+            field<std::string, 255> key;
+            field<std::string, 255> value;
+
+            module_data(ndb::model<>& m, ndb::table_option<> option = {});
+        };
+
         struct interface : public ndb::table<>
         {
             field<int> id;
@@ -53,9 +77,12 @@ namespace db
             field<std::string, 255> image;
             field<std::string> description;
             field<std::string, 255> author;
+            field<std::string, 255> tag;
+            field<std::string, 8> ext;
 
             interface(ndb::model<>& m, ndb::table_option<> option = {});
         };
+
 
         struct type : public ndb::table<>
         {
@@ -75,7 +102,7 @@ namespace db
             field<std::string, 255> name;
             field<tables::user, 1> owner;
             field<tables::user, 1> admin;
-            field<std::chrono::time_point<std::chrono::system_clock>> date_creation;
+            //field<std::chrono::time_point<std::chrono::system_clock>> date_creation;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_edition;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_expiration;
             // field<std::chrono::time_point<std::chrono::system_clock>> date_delete;
@@ -103,6 +130,9 @@ namespace db
             tables::resource resource;
             tables::type type;
             tables::property property;
+            tables::module module;
+            tables::module_data module_data;
+            tables::interface interface;
             tables::user user;
 
             nex();
@@ -111,5 +141,10 @@ namespace db
 
     extern const models::nex nex;
 } // db
+
+namespace nxs{namespace database
+{
+    void init();
+}} // nxs::database
 
 #endif // DATABASE_H_NXS

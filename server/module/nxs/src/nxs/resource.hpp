@@ -10,6 +10,7 @@ namespace nxs
     {
         using Type_List = std::map<std::string, nxs::type>;
     private:
+        // nxs::user& _user;
         std::string _name;
         std::chrono::time_point<std::chrono::system_clock> _date_creation;
         Type_List _type;
@@ -24,9 +25,8 @@ namespace nxs
         int id() const;
         const std::string& name() const;
 
+        // std::vector<resource> list() const;
         const Type_List& type_get() const;
-
-        static int add(const std::string& name);
         static db::result type_add(int id, int type_id);
     };
 } // nxs

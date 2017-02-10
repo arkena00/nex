@@ -1,6 +1,8 @@
 #ifndef NDS_ENCODER_H_NDS
 #define NDS_ENCODER_H_NDS
 
+#include <nxs/os/share.hpp>
+
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
@@ -17,7 +19,7 @@ namespace nds
 {
     namespace encoders { class global; }
 
-    class encoder
+    class NXS_SHARED encoder
     {
     public:
         template<typename Enc, typename T>
@@ -42,23 +44,23 @@ namespace nds
 
 
     template<class Encoder, class T>
-    typename Encoder::Linear_type encode(T& data)
+    typename Encoder::Linear_type NXS_SHARED encode(T& data)
     {
         Encoder enc;
         return enc.encode(data);
     }
 
     template<class Encoder, class T, class Linear_type>
-    T decode(Linear_type& data)
+    T NXS_SHARED decode(Linear_type& data)
     {
         Encoder enc;
-        return enc.decode<T>(data);
+        return enc.decode(data);
     }
 
 
     namespace encoders
     {
-        class boost_text
+        class NXS_SHARED boost_text
         {
         public:
             using Linear_type = std::string;

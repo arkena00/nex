@@ -16,7 +16,7 @@ namespace nxs
     extern NXS_SHARED std::map<int, std::string> error_message_;
 
     // class
-    class error : public std::exception
+    class NXS_SHARED error : public std::exception
     {
     private:
         std::string _source;

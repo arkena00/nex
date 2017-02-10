@@ -42,6 +42,15 @@ namespace ndb
         return query<Engine>() + (expr);
     }
 
+    // add entity with secified name and return id, field name must exist
+    template<class T, class Engine>
+    int entity<T, Engine>::add(const std::string& name)
+    {
+        const auto& t = T::db_ref;
+        result<Engine> res = query<Engine>() + (t.name = name);
+        return res.add_id();
+    }
+
     template<class T, class Engine>
     result<Engine> entity<T, Engine>::del(int id)
     {

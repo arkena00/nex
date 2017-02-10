@@ -4,7 +4,7 @@
 #include <ndb/line.hpp>
 #include <ndb/result.hpp>
 #include <ndb/error.hpp>
-#include <iostream>
+
 namespace ndb
 {
     sql::sql(const std::string& identifier) :
@@ -15,11 +15,15 @@ namespace ndb
     bool sql::connect()
     {
         bool db_exist = false;
-        if (exist()) db_exist = true; // if file doesn t exist, create nxs model
+        if (engine<sql>::exist()) db_exist = true; // if file doesn t exist, create nxs model
         if (sqlite3_open(engine::path().c_str(), &_db) == SQLITE_OK)
         {
             exec("PRAGMA foreign_keys = ON;");
-            if (!db_exist) model().make(*this);
+            if (!db_exist)
+            {
+                model().make(*this);
+                _created = true;
+            }
             return true;
         }
         return false;
@@ -32,7 +36,7 @@ namespace ndb
 
     ndb::result<sql> sql::exec(ndb::query<sql>& q) const
     {
-        sqlite3_stmt* statement;
+         sqlite3_stmt* statement;
         int step = SQLITE_DONE;
         ndb::result<sql> result;
 

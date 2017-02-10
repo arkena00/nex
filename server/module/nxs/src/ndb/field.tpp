@@ -19,8 +19,9 @@ namespace ndb
     {}
 
     template<class T, size_t Size, class Engine, typename Field_Basic>
-    T field<T, Size, Engine, Field_Basic>::default_value() const
+    const T& field<T, Size, Engine, Field_Basic>::default_value() const
     {
+        std::cout << "\n get value " << _default_value;
         return _default_value;
     }
 

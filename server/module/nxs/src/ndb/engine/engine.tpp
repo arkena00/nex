@@ -11,7 +11,8 @@ namespace ndb
 
     template<class Engine>
     engine<Engine>::engine(const std::string& identifier) :
-        _identifier(identifier)
+        _identifier(identifier),
+        _created(false)
     {}
 
     template<class Engine>
@@ -35,10 +36,19 @@ namespace ndb
     }
 
     template<class Engine>
+    bool engine<Engine>::is_created() const { return _created; }
+
+    template<class Engine>
     const engine<Engine>& engine<Engine>::get(const std::string& identifier)
     {
         if (!connect_list_.count(identifier)) ndb_error("identifier not found : " + std::string(identifier));
         return *connect_list_[identifier].get();
+    }
+
+    template<class Engine>
+    void engine<Engine>::set(const std::string& identifier)
+    {
+        current_ = identifier;
     }
 
     template<class Engine>

@@ -25,6 +25,7 @@ namespace nxs
         request_base(module_typec module_type, const std::string& module_name, const std::string& command_name);
 
     public:
+        module_typec module_type() const;
         const std::string& module_name() const;
         const std::string& command_name() const;
         const std::string full_command_name() const;

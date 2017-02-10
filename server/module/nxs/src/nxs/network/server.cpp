@@ -29,18 +29,13 @@ void server::listen()
 
 void server::input(input_connexion* cnx, const boost::system::error_code& status)
 {
-    if (!status)
-    {
-        //load cnx
-        cnx->load();
-    }
+    if (!status) cnx->load();
     else
     {
         delete cnx;
         nxs_error(errc::connexion);
     }
-
-    //create new listening socket
+    // create new listening socket
     listen();
 }
 

@@ -8,7 +8,7 @@
 
 namespace nxs{namespace network
 {
-    class data
+    class NXS_SHARED data
     {
     public:
         enum targetc : int { memory, hdd };
@@ -35,7 +35,7 @@ namespace nxs{namespace network
     };
 
 
-    class memory_data : public data
+    class NXS_SHARED memory_data : public data
     {
     private:
         std::vector<char> _data;
@@ -49,7 +49,7 @@ namespace nxs{namespace network
         template<class T> T get() const;
     };
 
-    class hdd_data : public data
+    class NXS_SHARED hdd_data : public data
     {
     private:
         std::string _path;

@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QtConcurrent/QtConcurrentRun>
+#include <functional>
 
 #include <nxs/database.hpp>
 #include <nxs/resource.hpp>
@@ -13,12 +14,26 @@
 
 #include <boost/filesystem.hpp>
 
+QLabel* loglabel;
+
+void ui_log(const std::string& msg)
+{
+    QString z = loglabel->text();
+    z+= msg.c_str();
+    loglabel->setText(z);
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QWidget w;
-    QLabel l(&w);
+    loglabel = new QLabel(&w);
+    loglabel->setFixedSize(800, 400);
     std::string output;
+
+    std::function<void(const std::string&)> fn;
+
+    nxs::log::redirect_output(ui_log);
 
     try {
     boost::filesystem::create_directory("/storage/extSdCard/nex/");
@@ -30,7 +45,7 @@ int main(int argc, char *argv[])
     nxs::header::init();
     nxs::command::load();
 
-    /*
+/*
     nxs::resource::add("John");
     nxs::resource::add("X-men");
     nxs::resource::add("Battlestar");
@@ -40,18 +55,19 @@ int main(int argc, char *argv[])
     nxs::type::add("serie");
     nxs::type::add("contact");
     nxs::type::add("photo");
-    */
+*/
 
     for (nxs::type& t : nxs::type::get())
     {
         output += "<br />" + std::to_string(t.id()) + " " + t.author() + " " + t.name();
     }
 
-    l.setText(output.c_str());
-
     w.show();
 
-    QtConcurrent::run(&nxs::network::server::start);
+    void (*ptr)(short);
+    ptr = &nxs::network::server::start;
+
+    QtConcurrent::run(ptr, 5050);
 
     } catch(const std::exception& e) { qDebug() << e.what(); }
 

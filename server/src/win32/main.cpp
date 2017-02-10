@@ -10,7 +10,7 @@ int main()
     nxs::network::server::start();
     } catch (const std::exception& e)
     {
-        std::cout << "Error : " << e.what() << std::endl;
+        std::cout << "Fatal server error !! FATALITY !! : " << e.what() << std::endl;
         system("pause");
     }
     std::cout << std::endl << std::endl;

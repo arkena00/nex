@@ -6,7 +6,7 @@
 #ifndef NXS_SHARED_H_NXS
 #define NXS_SHARED_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/module/share.hpp>
 
 // import
 // previously export, redefine to import
@@ -14,6 +14,6 @@
 #define NXS_SHARED NXS_IMPORT
 #define NXS_IMPORTED
 
-#include <nxs/core/nxs.hpp>
+#include <nxs/core.hpp>
 
 #endif // NXS_SHARED_H_NXS

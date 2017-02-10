@@ -1,6 +1,4 @@
 //! \file nxs.cpp
-//! \brief process requested commands
-
 #include <nxs/core.hpp>
 
 #include <nxs/config.hpp>
@@ -9,6 +7,8 @@
 #include <nxs/network/server.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/command.hpp>
+#include <nxs/module.hpp>
+#include <nxs/interface.hpp>
 #include <nxs/database.hpp>
 #include <iostream>
 
@@ -27,10 +27,10 @@ namespace nxs
         std::cout << "Neuroshok - nex server [version " << version() << "]\n\n";
         config::load("nxs.cfg");
 
-        ndb::engine<>::model_add(db::nex);
-        ndb::engine<>::connect("nxs");
-
-        command::load();
+        database::init();
+        command::init();
+        module::init();
+        interface::init();
     }
 
     void execute(nxs::nex& nex)
@@ -38,6 +38,12 @@ namespace nxs
         if (command::exist(nex.input().full_command_name()))
         {
             command::get(nex.input().full_command_name()).execute(nex);
+        }
+        else
+        {
+            // command not registered, call module or interface
+            if (nex.input().module_type() == nxs::request::module) nxs::module::execute(nex);
+            if (nex.input().module_type() == nxs::request::interface) nxs::interface::execute(nex);
         }
     }
 } //nxs

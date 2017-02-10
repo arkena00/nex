@@ -27,7 +27,7 @@ namespace ndb
         field(ndb::table<Engine>& table, const T& default_value = T{});
         field(ndb::table<Engine>& table, const field_option<Engine>& option);
 
-        T default_value() const;
+        const T& default_value() const;
 
         operator expression<Engine>() const;
         template<class V> expression<Engine> operator,(const V& other) const;

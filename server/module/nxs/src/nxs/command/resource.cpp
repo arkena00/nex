@@ -27,7 +27,7 @@ namespace nxs
     };
 
     template<>
-    void command::init<command::resource>()
+    void command::initialize<command::resource>()
     {
         command& resource_add = command::add("nxs", "resource_add", &commands<command::resource>::add);
         resource_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");

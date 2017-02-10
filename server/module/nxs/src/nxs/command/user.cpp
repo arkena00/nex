@@ -38,7 +38,7 @@ namespace nxs
     };
 
     template<>
-    void command::init<command::user>()
+    void command::initialize<command::user>()
     {
         command& user_add = command::add("nxs", "user_add", &commands<command::user>::add);
         user_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");

@@ -25,6 +25,7 @@ namespace ndb
 
         static std::vector<T> get();
         static result<Engine> add(expression<Engine>& expr);
+        static int add(const std::string& name);
         static result<Engine> del(int id);
     };
 } // ndb

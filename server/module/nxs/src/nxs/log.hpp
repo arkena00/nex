@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 #define NXS_STRINGIFY(x) #x
 #define NXS_TOSTRING(x) NXS_STRINGIFY(x)
@@ -23,6 +24,8 @@ namespace nxs
     private:
         static std::vector<std::string> type_str_;
         static std::vector<std::string> level_str_;
+        static std::function<void(const std::string&)> redirect_;
+        static bool list_mod_;
 
         log();
 
@@ -37,6 +40,10 @@ namespace nxs
                         const std::string& func = "",
                         const std::string& line = "");
         static void output(const std::string& message);
+        static void redirect_output(std::function<void(const std::string&)> fn);
+
+        static void list(const log::type& type, const std::string& message);
+        static void list();
     };
 } // nxs
 

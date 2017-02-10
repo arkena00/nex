@@ -46,7 +46,10 @@ namespace nxs
 
     void request::validate()
     {
-        // get configured command
+        // validate nxs commands and module registered commmands
+        if (!command::exist(full_command_name()) && module_name() != "nxs") return;
+
+        // get registered command
         const nxs::command& cmd = nxs::command::get(full_command_name());
 
         // validate headers

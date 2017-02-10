@@ -18,7 +18,7 @@ namespace nxs
         const auto& t = db::nex.type;
 
         _name = data[r.name];
-        _date_creation = data[r.date_creation];
+        //_date_creation = data[r.date_creation];
 
         db::result res = db::query() << (r.id, t.id, t.name) << (r.type.id == r.id, t.id == r.type.id) << (r.id == id());
 
@@ -36,14 +36,6 @@ namespace nxs
     const std::string& resource::name() const { return _name; }
 
     const resource::Type_List& resource::type_get() const { return _type; }
-
-
-    int resource::add(const std::string& name)
-    {
-        const auto& r = db::nex.resource;
-        db::result res = db::entity<resource>::add((r.name = name, r.owner.id = 0));
-        return res.add_id();
-    }
 
     db::result resource::type_add(int id, int type_id)
     {

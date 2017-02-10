@@ -34,7 +34,7 @@ namespace nxs
     };
 
     template<>
-    void command::init<command::file>()
+    void command::initialize<command::file>()
     {
         command& file_add = nxs::command::add("nxs", "file_add", &commands<command::file>::add);
         file_add.wait_transfer(true);

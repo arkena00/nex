@@ -7,12 +7,13 @@
 #include <functional>
 #include <nds/encoder.hpp>
 #include <nxs/setup/request.hpp>
+#include <nxs/os/share.hpp>
 
 namespace nxs
 {
     namespace network { class nex; }
 
-    class header
+    class NXS_SHARED header
     {
     public:
         using linear_type = setup<request>::linear_type;
@@ -103,7 +104,7 @@ namespace nxs
     {
         namespace detail { template<int T> struct initializer {}; }
 
-        class data_size : public header_basic<std::vector<size_t>>
+        class NXS_SHARED data_size : public header_basic<std::vector<size_t>>
         {
         private:
             size_t _data_index;
@@ -120,7 +121,7 @@ namespace nxs
         };
         namespace detail { template<> struct initializer<header::data_size> { using type = headers::data_size; }; }
 
-        class data_target : public header_basic<std::vector<size_t>>
+        class NXS_SHARED data_target : public header_basic<std::vector<size_t>>
         {
         public:
             constexpr static header::code id() { return header::data_target; }
@@ -132,7 +133,7 @@ namespace nxs
         };
         namespace detail { template<> struct initializer<header::data_target> { using type = headers::data_target; }; }
 
-        class user_name : public header_basic<std::string>
+        class NXS_SHARED user_name : public header_basic<std::string>
         {
         public:
             constexpr static header::code id() { return header::user_name; }

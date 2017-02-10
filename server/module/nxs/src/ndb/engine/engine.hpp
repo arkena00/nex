@@ -24,6 +24,8 @@ namespace ndb
         std::string _identifier;
 
     protected:
+        bool _created = false;
+
         engine(const std::string& identifier);
 
         virtual bool connect() = 0;
@@ -37,11 +39,13 @@ namespace ndb
         const std::string& identifier() const;
         std::string path() const;
         bool exist() const;
+        bool is_created() const;
 
         virtual ndb::result<Engine> exec(ndb::query<Engine>& q) const = 0;
         virtual ndb::result<Engine> exec(const typename setup<Engine>::expression_type& q) const = 0;
 
         static const engine& get(const std::string& identifier = current_);
+        static void set(const std::string& identifier);
         static const ndb::model<Engine>& model();
         static void model_add(const ndb::model<Engine>& m);
         static void path_set(const std::string& path);

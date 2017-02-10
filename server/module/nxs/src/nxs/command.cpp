@@ -9,7 +9,7 @@ namespace nxs
     std::map<std::string, command> command::list_;
 
     template<>
-    void command::init_all<command::size_>() {}
+    void command::init_loop<command::size_>() {}
 
     command::command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn) :
         request_base(request_base::module, module, name),
@@ -56,8 +56,8 @@ namespace nxs
 
     bool command::exist(const std::string& full_command_name) { return list_.count(full_command_name) > false ? true : false; }
 
-    void command::load()
+    void command::init()
     {
-        command::init_all();
+        command::init_loop();
     }
 } // nxs

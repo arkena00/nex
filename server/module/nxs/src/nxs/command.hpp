@@ -26,7 +26,7 @@ namespace nxs
         bool _wait_transfer;
 
     public:
-        enum code { nxs = 0, resource, file, user, size_ };
+        enum code { nxs = 0, resource, file, user, module, size_ };
 
         command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn);
 
@@ -50,16 +50,16 @@ namespace nxs
         static command& add(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn);
         static const command& get(const std::string& full_command);
         static bool exist(const std::string& full_command);
-        static void load();
-
-        template<unsigned char C = 0>
         static void init();
 
         template<unsigned char C = 0>
-        static void init_all()
+        static void initialize();
+
+        template<unsigned char C = 0>
+        static void init_loop()
         {
-            command::init<C>();
-            init_all<C + 1>();
+            command::initialize<C>();
+            init_loop<C + 1>();
         }
     };
 } // nxs

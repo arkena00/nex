@@ -1,11 +1,13 @@
 #ifndef NETWORK_REQUEST_BASE_H_NXS
 #define NETWORK_REQUEST_BASE_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/network/header.hpp>
 #include <string>
 #include <map>
 #include <memory>
+
+#undef interface
 
 namespace nxs
 {

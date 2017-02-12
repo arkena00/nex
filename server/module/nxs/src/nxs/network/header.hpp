@@ -7,7 +7,7 @@
 #include <functional>
 #include <nds/encoder.hpp>
 #include <nxs/setup/request.hpp>
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 namespace nxs
 {

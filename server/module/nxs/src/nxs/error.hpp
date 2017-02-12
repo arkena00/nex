@@ -1,7 +1,7 @@
 #ifndef CORE_ERROR_H_NXS
 #define CORE_ERROR_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/log.hpp>
 
 #include <exception>

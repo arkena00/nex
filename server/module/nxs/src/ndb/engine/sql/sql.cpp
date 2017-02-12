@@ -22,7 +22,7 @@ namespace ndb
             if (!db_exist)
             {
                 model().make(*this);
-                _created = true;
+                _init = true;
             }
             return true;
         }

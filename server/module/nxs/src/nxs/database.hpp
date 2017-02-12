@@ -10,6 +10,8 @@
 #include <ndb/result.hpp>
 #include <ndb/entity.hpp>
 
+#include <nxs/share.hpp>
+
 // alias
 namespace db
 {
@@ -139,7 +141,7 @@ namespace db
         };
     } // models
 
-    extern const models::nex nex;
+    NXS_SHARED extern models::nex nex;
 } // db
 
 namespace nxs{namespace database

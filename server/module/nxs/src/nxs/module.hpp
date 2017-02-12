@@ -5,7 +5,7 @@
 
 namespace nxs
 {
-    class module : public common_module<module>
+    class NXS_SHARED module : public common_module<module>
     {
     public:
         static const std::string name_;
@@ -15,6 +15,7 @@ namespace nxs
         constexpr static const auto& db_ref = db::nex.module;
         module(int id);
         module(const std::string& name);
+        module(const db::line&);
     };
 } // nxs
 

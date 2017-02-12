@@ -12,7 +12,7 @@ namespace ndb
     template<class Engine>
     engine<Engine>::engine(const std::string& identifier) :
         _identifier(identifier),
-        _created(false)
+        _init(false)
     {}
 
     template<class Engine>
@@ -36,7 +36,7 @@ namespace ndb
     }
 
     template<class Engine>
-    bool engine<Engine>::is_created() const { return _created; }
+    bool engine<Engine>::is_init() const { return _init; }
 
     template<class Engine>
     const engine<Engine>& engine<Engine>::get(const std::string& identifier)

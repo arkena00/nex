@@ -1,7 +1,7 @@
 #ifndef OS_MODULE_H_NXS
 #define OS_MODULE_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 #ifdef NXS_UNIX
     #include <dlfcn.h>

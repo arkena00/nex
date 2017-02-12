@@ -2,7 +2,7 @@
 #define CORE_NXS_H_NXS
 
 // core include
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/error.hpp>
 #include <string>
 

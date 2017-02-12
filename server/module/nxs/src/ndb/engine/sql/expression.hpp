@@ -1,6 +1,7 @@
 #ifndef ENGINE_SQL_EXPRESSION_H_NDB
 #define ENGINE_SQL_EXPRESSION_H_NDB
 
+#include <ndb/share.hpp>
 #include <ndb/utility/trait.hpp>
 #include <ndb/engine/sql/value.hpp>
 #include <vector>
@@ -11,7 +12,7 @@ namespace ndb
     template<class> class expression;
 
     template<>
-    class expression<sql>
+    class NDB_SHARED expression<sql>
     {
         friend class sql;
         friend class query<sql>;

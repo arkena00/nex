@@ -3,6 +3,8 @@
 
 #include <nxs/module/common.hpp>
 
+#undef interface
+
 namespace nxs
 {
     class interface : public common_module<interface>
@@ -15,6 +17,7 @@ namespace nxs
         constexpr static const auto& db_ref = db::nex.interface;
         interface(int id);
         interface(const std::string& name);
+        interface(const db::line& data);
     };
 } // nxs
 

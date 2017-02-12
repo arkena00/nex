@@ -21,4 +21,12 @@ namespace ndb
     template<> template<> struct type<sql>::type_impl<SQLITE3_TEXT> { using type_ = std::string; };
 } // ndb
 
+namespace ndb
+{
+    template<> template<>
+    NDB_SHARED int type<sql>::decode(const value<sql>& v);
+    template<> template<>
+    NDB_SHARED std::string type<sql>::decode(const value<sql>& v);
+} // ndb
+
 #endif // ENGINE_SQL_TYPE_H_NDB

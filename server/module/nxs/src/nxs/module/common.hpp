@@ -7,7 +7,7 @@
 namespace nxs
 {
     template<class T>
-    class common_module : public base_module<T>
+    class NXS_SHARED common_module : public base_module<T>
     {
     private:
         bool load() { return false; }
@@ -15,10 +15,12 @@ namespace nxs
 
     protected:
         common_module(int id);
+        common_module(const db::line&);
         //common_module(const std::string& name);
 
     public:
         static void init();
+        static int add(const std::string& name, const std::string& ext = "dl");
         static bool load(int id, const std::string& ext);
         template<class M_Type> static bool load(int id);
     };

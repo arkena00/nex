@@ -6,7 +6,7 @@
     #include <boost/asio.hpp>
 #endif
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 namespace nxs{namespace network
 {

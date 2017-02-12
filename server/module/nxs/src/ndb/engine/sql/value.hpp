@@ -8,7 +8,7 @@ namespace ndb
     template<class> class value;
 
     template<>
-    class value<sql>
+    class NDB_SHARED value<sql>
     {
         union value_data
         {

@@ -1,7 +1,7 @@
 #ifndef NETWORK_DATA_NXS
 #define NETWORK_DATA_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/utility/trait.hpp>
 #include <string>
 #include <vector>

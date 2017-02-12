@@ -2,13 +2,14 @@
 #define ENGINE_TYPE_H_NDB
 
 #include <cstddef>
+#include <ndb/share.hpp>
 
 namespace ndb
 {
     template<class Engine> class value;
 
     template<class Engine>
-    struct type
+    struct NDB_SHARED type
     {
         template<class T> static constexpr int id();
 

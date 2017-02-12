@@ -16,8 +16,14 @@ namespace nxs
 
         try {
         // load module
+        A_Module::_is_loaded = true;
         _handle = NXS_OS_MODULE_LOAD(A_Module::path().c_str());
-        if (_handle == 0) { nxs_log("file not found : " + A_Module::path()); return false; }
+        if (_handle == 0)
+        {
+            nxs_log("file not found : " + A_Module::path());
+            A_Module::_is_loaded = false;
+            return false;
+        }
 
         // get main pointer
         _main_ptr = reinterpret_cast<Module_main_ptr>(NXS_OS_MODULE_FUNCTION(_handle, "nex_main"));
@@ -29,9 +35,13 @@ namespace nxs
             _load_ptr();
             db::engine::set("nxs"); // set nxs db if module changed it
         }
-        } catch (const std::exception& e) { nxs_log(std::string("can t load module : ") + e.what()); return false; }
+        } catch (const std::exception& e)
+        {
+            nxs_log(std::string("can t load module : ") + e.what());
+            A_Module::_is_loaded = false;
+            return false;
+        }
 
-        A_Module::_is_loaded = true;
         return true;
     }
 

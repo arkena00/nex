@@ -19,8 +19,8 @@ namespace nxs
 
     public:
         constexpr static const auto& db_ref = db::nex.resource;
-        resource(const db::line&);
         resource(int id);
+        resource(const db::line&);
 
         int id() const;
         const std::string& name() const;

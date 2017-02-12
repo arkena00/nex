@@ -1,7 +1,7 @@
 #ifndef NDS_ENCODER_H_NDS
 #define NDS_ENCODER_H_NDS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>

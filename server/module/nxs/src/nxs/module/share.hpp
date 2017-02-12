@@ -6,7 +6,7 @@
 #ifndef MODULE_SHARE_H_NXS
 #define MODULE_SHARE_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 namespace nxs { class nex; }
 

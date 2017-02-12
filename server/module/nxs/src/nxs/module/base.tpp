@@ -1,15 +1,22 @@
 #include <nxs/os/module.hpp>
 #include <nxs/network/request.hpp>
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
 namespace nxs
 {
-    template<class T> std::map<int, std::unique_ptr<base_module<T>>> base_module<T>::load_list_id_;
-    template<class T> std::map<std::string, int> base_module<T>::module_id_;
+    template<class T> NXS_SHARED std::map<int, std::unique_ptr<base_module<T>>> base_module<T>::load_list_id_;
+    template<class T> NXS_SHARED std::map<std::string, int> base_module<T>::module_id_;
 
     // protected:
     template<class T>
     base_module<T>::base_module(int id) : db::entity<T>(id),
+        _path("./" + T::name_ + "/"),
+        _is_loaded(0)
+    {
+        hydrate(db::entity<T>::data());
+    }
+    template<class T>
+    base_module<T>::base_module(const db::line& data) : db::entity<T>(data),
         _path("./" + T::name_ + "/"),
         _is_loaded(0)
     {
@@ -31,7 +38,7 @@ namespace nxs
         _path = "./" + T::name_ + "/";
         std::string v_ext = ext();
         if (v_ext == "dl") v_ext = NXS_OS_SHARELIBEXT;
-        if (boost::filesystem::is_directory(_path + name())) _path = _path + name() + "/";
+        if (std::experimental::filesystem::is_directory(_path + name())) _path = _path + name() + "/";
         _path = _path + name() + T::ext_ + "." + v_ext;
     }
 
@@ -84,6 +91,12 @@ namespace nxs
         return get(nex.input().module_name()).process(nex);
     }
 
+
+    template<class T>
+    std::vector<T> base_module<T>::get()
+    {
+        return db::entity<T>::get();
+    }
     template<class T>
     base_module<T>& base_module<T>::get(int id)
     {

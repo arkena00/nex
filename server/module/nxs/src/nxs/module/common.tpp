@@ -8,6 +8,8 @@ namespace nxs
     // protected:
     template<class T>
     common_module<T>::common_module(int id) : base_module<T>(id) {}
+    template<class T>
+    common_module<T>::common_module(const db::line& data) : base_module<T>(data) {}
 
     // initialize all modules
     template<class T>
@@ -29,6 +31,14 @@ namespace nxs
             else nxs_log(" ERROR");
         }
         log::list();
+    }
+
+    template<class T>
+    int common_module<T>::add(const std::string& name, const std::string& ext)
+    {
+        const auto& t = T::db_ref;
+        db::result res = db::query() + (t.name = name, t.ext = ext);
+        return res.add_id();
     }
 
     template<class T>

@@ -1,7 +1,7 @@
 #ifndef NETWORK_CONNEXION_H_NXS
 #define NETWORK_CONNEXION_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
 #include <string>
 

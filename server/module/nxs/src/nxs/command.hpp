@@ -1,7 +1,7 @@
 #ifndef COMMAND_H_NXS
 #define COMMAND_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/constant.hpp>
 #include <nxs/network/request_base.hpp>
 #include <nxs/network/param.hpp>
@@ -26,7 +26,7 @@ namespace nxs
         bool _wait_transfer;
 
     public:
-        enum code { nxs = 0, resource, file, user, module, size_ };
+        enum code { nxs = 0, resource, file, user, module, interface, size_ };
 
         command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn);
 

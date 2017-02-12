@@ -3,13 +3,13 @@
 
 namespace nxs
 {
-    resource::resource(const db::line& data) : db::entity<resource>(data)
-    {
-        hydrate(data);
-    }
     resource::resource(int id) : db::entity<resource>(id)
     {
         hydrate(db::entity<resource>::data());
+    }
+    resource::resource(const db::line& data) : db::entity<resource>(data)
+    {
+        hydrate(data);
     }
 
     void resource::hydrate(const db::line& data)
@@ -18,7 +18,7 @@ namespace nxs
         const auto& t = db::nex.type;
 
         _name = data[r.name];
-        //_date_creation = data[r.date_creation];
+        _date_creation = data[r.date_creation];
 
         db::result res = db::query() << (r.id, t.id, t.name) << (r.type.id == r.id, t.id == r.type.id) << (r.id == id());
 

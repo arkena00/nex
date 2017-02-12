@@ -1,5 +1,4 @@
 #include <nxs/database.hpp>
-#include <nxs/module.hpp>
 
 namespace db
 {
@@ -89,7 +88,7 @@ namespace db
         {}
     } // tables
 
-    const models::nex nex;
+    NXS_SHARED models::nex nex;
 } // db
 
 
@@ -104,7 +103,7 @@ namespace nxs{namespace database
         const auto& md = db::nex.module_data;
 
         // add system data
-        if (db::engine::get().is_created())
+        if (db::engine::get().is_init())
         {
             db::result res = db::query() + (r.id = 0, r.name = "ROOT");
             // nxs data

@@ -24,7 +24,7 @@ namespace ndb
         std::string _identifier;
 
     protected:
-        bool _created = false;
+        bool _init = false;
 
         engine(const std::string& identifier);
 
@@ -39,7 +39,7 @@ namespace ndb
         const std::string& identifier() const;
         std::string path() const;
         bool exist() const;
-        bool is_created() const;
+        bool is_init() const;
 
         virtual ndb::result<Engine> exec(ndb::query<Engine>& q) const = 0;
         virtual ndb::result<Engine> exec(const typename setup<Engine>::expression_type& q) const = 0;

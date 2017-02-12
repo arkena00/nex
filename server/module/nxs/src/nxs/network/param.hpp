@@ -1,7 +1,7 @@
 #ifndef NETWORK_PARAM_H_NXS
 #define NETWORK_PARAM_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 #include <nxs/network/header.hpp>
 #include <map>
 #include <string>

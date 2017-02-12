@@ -1,7 +1,7 @@
 #ifndef CORE_LOG_H_NXS
 #define CORE_LOG_H_NXS
 
-#include <nxs/os/share.hpp>
+#include <nxs/share.hpp>
 
 #include <string>
 #include <vector>

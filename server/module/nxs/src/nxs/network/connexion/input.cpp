@@ -21,7 +21,7 @@ input_connexion::~input_connexion()
     // delete cnx pointer
     input_connexion::list_.erase(_id);
     // delete user pointer
-    nxs_log("connexion closed " + _ip_client + " " + to_string(_id), log::network);
+    nxs_log << "connexion closed " << _ip_client << _id << log::network;
 }
 
 // load connexion
@@ -35,7 +35,7 @@ void input_connexion::load()
     input_connexion::list_[_id] = this;
 
     //nxs::event("connexion_open", "id=" + to_string(_id) + ";ip=" + _ip_client + ";");
-    nxs_log("connexion incoming " + _ip_client + " " + to_string(_id), log::network);
+    nxs_log << "connexion incoming " << _ip_client << _id << log::network;
     data_read();
 }
 
@@ -60,7 +60,7 @@ void input_connexion::socket_read(const boost::system::error_code& status, size_
 
         } catch (const exception& e)
         {
-            nxs_log(e.what());
+            nxs_log << e.what() << log::network;
             socket_close(status);
         }
     }

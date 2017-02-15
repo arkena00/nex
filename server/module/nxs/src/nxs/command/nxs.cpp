@@ -47,17 +47,12 @@ namespace nxs
 
             nxs::resource test(1);
 
-            for (nxs::type& t : nxs::type::get())
-            {
-                std::cout << "\n" << t.id() << " " << t.author() << " " << t.name();
-            }
-
             for (nxs::resource& resource : nxs::resource::get())
             {
-                res << "\n" << resource.id() << " " << " " << resource.name();
-                for (auto& tl : resource.type_get())
+                res << "<br />" << resource.id() << " " << " " << resource.name();
+                for (auto& rt : resource.type_get())
                 {
-                    std::cout << "\n" << tl.first;
+                    res << "<br />types : " << rt.name();
                 }
             }
 

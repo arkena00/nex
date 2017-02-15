@@ -29,7 +29,7 @@ namespace nxs
     template<class T>
     void header_basic<T>::add_linear(const header::linear_type& linear_data) { _value = nds::encoder::decode<T, header>(linear_data); }
 
-    template<> template<class T>
+    template<class T>
     header::linear_type header_basic<T>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
 
     template<class T>
@@ -45,19 +45,19 @@ namespace nxs
     template<class T> const T& header_basic<T>::value() const { return _value; }
 
     // multi value header
-    template<> template<class T>
+    template<class T>
     header_basic<std::vector<T>>::header_basic(header::code id, const std::string& name) :
         header(id, name)
     {}
-    template<> template<class T>
+    template<class T>
     header_basic<std::vector<T>>::header_basic(header::code id, const std::string& name, const T& value) :
             header(id, name)
     { add(value); }
 
-    template<> template<class T>
+    template<class T>
     void header_basic<std::vector<T>>::add_linear(const header::linear_type& linear_data) { _value.push_back(nds::encoder::decode<T, header>(linear_data)); }
 
-    template<> template<class T>
+    template<class T>
     header::linear_type header_basic<std::vector<T>>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
 
     template<class T>
@@ -67,16 +67,16 @@ namespace nxs
         return *this;
     }
 
-    template<> template<class T>
+    template<class T>
     void header_basic<std::vector<T>>::add(const T& value) { _value.push_back(value); }
 
-    template<> template<class T>
+    template<class T>
     const T& header_basic<std::vector<T>>::value(size_t index) const
     {
         if (index >= _value.size()) nxs_error(errc::system, std::string("value index " + std::to_string(index) + " out of range for header ") + name());
         return _value[index];
     }
-    template<> template<class T>
+    template<class T>
     size_t header_basic<std::vector<T>>::size() const { return _value.size(); }
 
 } // nxs

@@ -5,7 +5,9 @@ namespace nxs
 {
     resource::resource(int id) : db::entity<resource>(id)
     {
+        try {
         hydrate(db::entity<resource>::data());
+        } catch (const std::exception& e) { nxs_error(errc::database, "can't load resource : " + std::to_string(id)); }
     }
     resource::resource(const db::line& data) : db::entity<resource>(data)
     {
@@ -25,7 +27,9 @@ namespace nxs
         for (const auto& item : res)
         {
             nxs::type type = nxs::type(item);
-            _type.insert(std::make_pair(type.name(), type));
+            _type.push_back(type);
+            // link type string to vector index
+            _type_str.insert(std::make_pair(type.name(), _type.size()));
         }
 
         //resource.type("movie").property("name")

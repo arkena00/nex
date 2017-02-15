@@ -8,14 +8,14 @@
 #include <string>
 #include <map>
 
-#define nxs_error_impl(code, data, ...) nxs::error::add("nxs", code, data, nxs::log::system, __PRETTY_FUNCTION__, NXS_LINE)
+#define nxs_error_impl(code, data, ...) nxs::error::add("nxs", code, data, nxs::log::system, NXS_FUNC_NAME, NXS_LINE)
 #define nxs_error(...) nxs_error_impl(__VA_ARGS__, 0)
+
 
 namespace nxs
 {
     extern NXS_SHARED std::map<int, std::string> error_message_;
 
-    // class
     class NXS_SHARED error : public std::exception
     {
     private:
@@ -36,15 +36,17 @@ namespace nxs
         const std::string& data() const;
         ~error() throw() {};
 
-    static void add(const std::string& source,
-              int code,
-              const std::string& data = "",
-              const log::type& type = log::system,
-              const std::string& func = "",
-              const std::string& line = "");
-    static void add(int code, const std::string& data = "");
-    static void add(int code, int data);
-    static void NXS_SHARED add(const std::string& data);
+        static error& get();
+
+        static void add(const std::string& source,
+                  int code,
+                  const std::string& data = "",
+                  const log::type& type = log::system,
+                  const std::string& func = "",
+                  const std::string& line = "");
+        static void add(int code, const std::string& data = "");
+        static void add(int code, int data);
+        static void add(const std::string& data);
 
     };
 
@@ -57,6 +59,7 @@ namespace nxs
         {
             success = 0,
             system,
+            database,
 
             connexion,
             connexion_unknown,

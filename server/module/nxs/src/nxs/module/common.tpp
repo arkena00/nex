@@ -16,21 +16,22 @@ namespace nxs
     void common_module<T>::init()
     {
         const auto& m = T::db_ref;
-        log::list(log::system, "loading " + std::string(T::name_));
+        nxs_log << "loading" << T::name_;
+         //log::list(log::system, "loading " + std::string(T::name_));
         // load path ./module/
         db::result res = db::query() << m.all();
         for(size_t i = 0; i != res.size(); i++)
         {
             int id = res[i][m.id];
             std::string ext = res[i][m.ext];
-            nxs_log("\n" + res[i][m.name] + " ");
+            nxs_log << "\n" + res[i][m.name] << " ";
 
             bool load_ok = load(id, ext);
 
-            if (load_ok) nxs_log(" OK");
-            else nxs_log(" ERROR");
+            if (load_ok) nxs_log << " OK";
+            else nxs_log << " ERROR";
         }
-        log::list();
+        nxs_log << log::system;
     }
 
     template<class T>
@@ -46,7 +47,7 @@ namespace nxs
     {
         if (ext == "dl") return load<binary_module<T>>(id);
         else if (ext == "html") return load<text_module<T>>(id);
-        else nxs_log("unsupported ext : " + ext);
+        else nxs_log << "unsupported ext : " << ext << log::system;
         return false;
     }
 

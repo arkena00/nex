@@ -25,7 +25,7 @@ namespace nxs
             }
             file.close();
         }
-        else { nxs_log("can't open file : " + A_Module::path()); return false; }
+        else { nxs_log << "can't open file : " << A_Module::path() << log::system; return false; }
 
         A_Module::_is_loaded = true;
         return true;

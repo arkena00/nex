@@ -20,14 +20,14 @@ namespace nxs
         _handle = NXS_OS_MODULE_LOAD(A_Module::path().c_str());
         if (_handle == 0)
         {
-            nxs_log("file not found : " + A_Module::path());
+            nxs_log << "file not found : " << A_Module::path() << log::system;
             A_Module::_is_loaded = false;
             return false;
         }
 
         // get main pointer
         _main_ptr = reinterpret_cast<Module_main_ptr>(NXS_OS_MODULE_FUNCTION(_handle, "nex_main"));
-        if (!_main_ptr) { nxs_log("function nex_main missing"); return 0; }
+        if (!_main_ptr) { nxs_log << "function nex_main missing" << log::system; return 0; }
         // get load pointer and call
         _load_ptr = reinterpret_cast<Module_load_ptr>(NXS_OS_MODULE_FUNCTION(_handle, "nex_load"));
         if (_load_ptr)
@@ -37,7 +37,7 @@ namespace nxs
         }
         } catch (const std::exception& e)
         {
-            nxs_log(std::string("can t load module : ") + e.what());
+            nxs_log << "can t load module : " << e.what() << log::system;
             A_Module::_is_loaded = false;
             return false;
         }

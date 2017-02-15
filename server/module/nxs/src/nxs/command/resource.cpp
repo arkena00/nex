@@ -10,8 +10,8 @@ namespace nxs
     {
         static void add(nxs::nex& nex)
         {
-            //resource::add(nex.input().param("name").value());
-            nex.output().add("resource add");
+            int id = resource::add(nex.input().param("name").value());
+            nex.output().add("resource added : " + std::to_string(id));
         }
 
         static void get(nxs::nex& nex)
@@ -20,9 +20,17 @@ namespace nxs
             std::stringstream ss;
             for (nxs::resource& item : resource::get())
             {
-                ss << "<br />" << item.name() << " - " << item.name();
+                ss << "<br />" << item.id() << " - " << item.name();
             }
             nex.output().add(ss.str());
+        }
+
+        static void type_add(nxs::nex& nex)
+        {
+            int id = nex.input().param("id").value<int>();
+            int type_id = nex.input().param("type_id").value<int>();
+            resource::type_add(id, type_id);
+            nex.output().add("resource type added : " + std::to_string(id));
         }
     };
 
@@ -33,5 +41,9 @@ namespace nxs
         resource_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");
 
         command::add("nxs", "resource_get", &commands<command::resource>::get);
+
+        command& resource_type_add = command::add("nxs", "resource_type_add", &commands<command::resource>::type_add);
+        resource_type_add.param_add("id", param::require);
+        resource_type_add.param_add("type_id", param::require);
     }
 } // nxs

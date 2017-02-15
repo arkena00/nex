@@ -79,7 +79,7 @@ namespace nxs
     };
 
     // multi value header
-    template<> template<class T>
+    template<class T>
     class header_basic<std::vector<T>> : public header
     {
     private:

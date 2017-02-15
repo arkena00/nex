@@ -3,8 +3,6 @@
 #include <nds/data.hpp>
 #include <nxs/network/header.hpp>
 
-using namespace std;
-
 namespace nds
 {
     template<> size_t encoder::decode<size_t, nxs::header>(const std::string& v) { return std::stoi(v); }
@@ -20,12 +18,12 @@ namespace nds
         size_t header_end = str_request.find('/', header_start);
         size_t request_start = header_end + 1;
         size_t request_end = str_request.find(";;");
-        if (request_end == string::npos) nxs_error(nxs::errc::system, "end of request not found");
+        if (request_end == std::string::npos) nxs_error(nxs::errc::system, "end of request not found");
         req._size = request_end + 2;
 
         req._version = str_request.substr(version_start, version_end - version_start);
-        string str_header = "";
-        if (header_end == string::npos) str_header = "";
+        std::string str_header = "";
+        if (header_end == std::string::npos) str_header = "";
         else str_header = str_request.substr(header_start, header_end - version_end - 1);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,17 +60,17 @@ namespace nds
             }
         }
 
-        string nex_command_name = str_request.substr(request_start, request_end - request_start + 1);
+        std::string nex_command_name = str_request.substr(request_start, request_end - request_start + 1);
         nex_command_name += ";"; // add extra ; to avoid parse errors
 
         // parse module::command
         size_t module_command_name_end = nex_command_name.find(";");
-        if (module_command_name_end != string::npos)
+        if (module_command_name_end != std::string::npos)
         {
-            string module_command_name = nex_command_name.substr(0, module_command_name_end);
+            std::string module_command_name = nex_command_name.substr(0, module_command_name_end);
             // module
             size_t module_end = module_command_name.find("::", 0);
-            if (module_end != string::npos)
+            if (module_end != std::string::npos)
             {
                 req._module_name = module_command_name.substr(0, module_end);
                 req._command_name = module_command_name.substr(module_end + 2, module_command_name_end);
@@ -80,7 +78,7 @@ namespace nds
             }
             // interface
             module_end = module_command_name.find(":", 0);
-            if (module_end != string::npos && req._module_name == "")
+            if (module_end != std::string::npos && req._module_name == "")
             {
                 req._module_name = module_command_name.substr(0, module_end);
                 req._command_name = module_command_name.substr(module_end + 1, module_command_name_end);
@@ -88,7 +86,7 @@ namespace nds
             }
         }
 
-        string str_param = nex_command_name.substr(module_command_name_end + 1);
+        std::string str_param = nex_command_name.substr(module_command_name_end + 1);
         if (str_param != ";") req._param_list.parse(str_param);
 
         } catch (const std::exception& e) { nxs_error(nxs::errc::system, "header decode error : " + std::string(e.what())); }

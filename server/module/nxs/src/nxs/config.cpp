@@ -15,7 +15,7 @@ namespace nxs
         ptree pt;
         try {
         read_xml(file, pt);
-        } catch (const std::exception& e) { nxs_log(e.what()); }
+        } catch (const std::exception& e) { nxs_log << e.what() << log::system; }
 
         // network
         network_server_name = pt.get("network.server.name", "nex");

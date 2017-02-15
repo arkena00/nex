@@ -9,6 +9,7 @@ std::map<int, std::string> nxs::error_message_ =
 {
     NXSINITERR(success),
     { errc::system, "system error"},
+    { errc::database, "database error"},
 
     NXSINITERR(connexion),
     NXSINITERR(connexion_unknown),

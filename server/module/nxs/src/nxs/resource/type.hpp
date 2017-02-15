@@ -25,7 +25,7 @@ namespace nxs
         const std::string& description() const;
         const std::string& author() const;
 
-        static db::result add(const std::string& name,
+        static int add(const std::string& name,
                        const std::string& image = "",
                        const std::string& description = "",
                        const std::string& author = "anonymous");

@@ -14,7 +14,7 @@ using nxs::network::server;
 
 server::server(short port) : _acceptor(server::ios_, tcp::endpoint(tcp::v4(), port))
 {
-    nxs_log("server started on port " + std::to_string(port), log::network);
+    nxs_log << "server started on port" << port << log::network;
     listen();
 }
 

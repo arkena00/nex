@@ -100,12 +100,16 @@ namespace nxs{namespace database
         ndb::engine<>::connect("nxs");
 
         const auto& r = db::nex.resource;
+        const auto& t = db::nex.type;
         const auto& md = db::nex.module_data;
 
         // add system data
         if (db::engine::get().is_init())
         {
+            // root resource
             db::result res = db::query() + (r.id = 0, r.name = "ROOT");
+            // generic type
+            res = db::query() + (t.id = 0, t.name = "generic");
             // nxs data
             res = db::query() + (md.id = 0, md.key = "port", md.value = "50");
         }

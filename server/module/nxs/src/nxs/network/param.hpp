@@ -3,6 +3,7 @@
 
 #include <nxs/share.hpp>
 #include <nxs/network/header.hpp>
+#include <nds/encoder.hpp>
 #include <map>
 #include <string>
 
@@ -31,7 +32,9 @@ namespace nxs
         std::string& operator[](int index);
 
         const std::string& name() const;
-        const std::string& value(int index = 0) const;
+        template<class T = std::string>
+        T value(int index = 0) const;
+
         const std::string& format() const;
         const std::map<int, std::string>& value_list() const;
         modc mod() const;
@@ -42,8 +45,15 @@ namespace nxs
         bool is_required() const;
     };
 
-    // param_list
+    template<class T>
+    T param::value(int index) const
+    {
+        return nds::encoder::decode<T, nxs::param>(_value.at(index));
+    }
 
+
+
+    // param_list
     class NXS_SHARED param_list
     {
         using Param_List = std::map<std::string, nxs::param>;

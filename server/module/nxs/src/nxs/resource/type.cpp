@@ -25,9 +25,10 @@ namespace nxs
     const std::string& type::description() const { return _description; }
     const std::string& type::author() const { return _author; }
 
-    db::result type::add(const std::string& name, const std::string& image, const std::string& description, const std::string& author)
+    int type::add(const std::string& name, const std::string& image, const std::string& description, const std::string& author)
     {
         const auto& t = db::nex.type;
-        return db::query() + (t.name = name, t.image = image, t.description = description, t.author = author);
+        db::result res = db::query() + (t.name = name, t.image = image, t.description = description, t.author = author);
+        return res.add_id();
     }
 } // nxs

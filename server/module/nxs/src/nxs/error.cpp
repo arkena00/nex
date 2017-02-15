@@ -12,7 +12,7 @@ namespace nxs
         _data = data;
         _message = error_str(_code) + " : " + _data;
 
-        log::add(_message, type, _source, log::error, func, line);
+        log::stadd(_message, type, _source, log::error, func, line);
     }
 
     const char* error::what() const throw()

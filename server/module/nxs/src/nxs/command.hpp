@@ -26,7 +26,7 @@ namespace nxs
         bool _wait_transfer;
 
     public:
-        enum code { nxs = 0, resource, file, user, module, interface, size_ };
+        enum code { nxs = 0, resource, type, file, user, module, interface, size_ };
 
         command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn);
 

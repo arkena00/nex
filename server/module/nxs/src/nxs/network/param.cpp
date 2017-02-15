@@ -3,6 +3,12 @@
 #include <regex>
 #include <iostream>
 
+namespace nds
+{
+    template<> int encoder::decode<int, nxs::param>(const std::string& v) { return std::stoi(v); }
+    template<> std::string encoder::decode<std::string, nxs::param>(const std::string& v) { return v; }
+} // nds
+
 namespace nxs
 {
     using Param_List = std::map<std::string, nxs::param>;
@@ -19,7 +25,6 @@ namespace nxs
     std::string& param::operator[](int index) { return _value[index]; }
 
     const std::string& param::name() const { return _name; }
-    const std::string& param::value(int index) const { return _value.at(index); }
     const std::string& param::format() const { return _format; }
     const std::map<int, std::string>& param::value_list() const { return _value; }
     param::modc param::mod() const { return _mod; }

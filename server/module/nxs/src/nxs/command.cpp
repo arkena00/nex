@@ -50,7 +50,7 @@ namespace nxs
 
     const command& command::get(const std::string& full_command_name)
     {
-        if (!exist(full_command_name)) nxs_error(errc::command_unknown, full_command_name);
+        if (!exist(full_command_name)) throw nxs_error << "commend unknown :" << full_command_name;
         return list_.at(full_command_name);
     }
 

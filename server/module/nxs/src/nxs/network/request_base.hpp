@@ -27,6 +27,9 @@ namespace nxs
         request_base(module_typec module_type, const std::string& module_name, const std::string& command_name);
 
     public:
+        request_base(request_base&&) { ///TODO
+        }
+
         module_typec module_type() const;
         const std::string& module_name() const;
         const std::string& command_name() const;

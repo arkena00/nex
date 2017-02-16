@@ -16,7 +16,8 @@ namespace nxs
         void hydrate(const db::line&);
 
     public:
-        constexpr static const auto& db_ref = db::nex.type;
+        static const db::tables::type& db_ref;
+
         type(const db::line&);
         type(int id);
 

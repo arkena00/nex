@@ -1,3 +1,5 @@
+#include <nxs/log.hpp>
+
 namespace nxs
 {
     template<class T>
@@ -10,24 +12,24 @@ namespace nxs
     template<class T>
     bool binary_module<T>::load()
     {
-        using A_Module = base_module<T>;
+        using Base_module = base_module<T>;
 
-        if (!db::entity<T>::exist() || A_Module::is_loaded()) return false;
+        if (!Base_module::exist() || Base_module::is_loaded()) return false;
 
         try {
         // load module
-        A_Module::_is_loaded = true;
-        _handle = NXS_OS_MODULE_LOAD(A_Module::path().c_str());
+        Base_module::_is_loaded = true;
+        _handle = NXS_OS_MODULE_LOAD(reinterpret_cast<LPCWSTR>(Base_module::path().c_str()));
         if (_handle == 0)
         {
-            nxs_log << "file not found : " << A_Module::path() << log::system;
-            A_Module::_is_loaded = false;
+            nxs_log << "file not found : " << Base_module::path();
+            Base_module::_is_loaded = false;
             return false;
         }
 
         // get main pointer
         _main_ptr = reinterpret_cast<Module_main_ptr>(NXS_OS_MODULE_FUNCTION(_handle, "nex_main"));
-        if (!_main_ptr) { nxs_log << "function nex_main missing" << log::system; return 0; }
+        if (!_main_ptr) { nxs_log << "function nex_main missing"; return 0; }
         // get load pointer and call
         _load_ptr = reinterpret_cast<Module_load_ptr>(NXS_OS_MODULE_FUNCTION(_handle, "nex_load"));
         if (_load_ptr)
@@ -37,8 +39,8 @@ namespace nxs
         }
         } catch (const std::exception& e)
         {
-            nxs_log << "can t load module : " << e.what() << log::system;
-            A_Module::_is_loaded = false;
+            nxs_log << "can t load module :" << e.what();
+            Base_module::_is_loaded = false;
             return false;
         }
 
@@ -58,7 +60,7 @@ namespace nxs
     {
         try {
         _main_ptr(nex);
-        } catch (const std::exception& e) { nxs_error(errc::module, e.what()); }
+        } catch (const std::exception& e) { throw nxs_error << "module error", e.what(); }
         return 0;
     }
 

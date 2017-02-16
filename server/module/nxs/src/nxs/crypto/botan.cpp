@@ -44886,7 +44886,7 @@ namespace Botan {
 /**
 * Record_Writer Constructor
 */
-Record_Writer::Record_Writer(std::tr1::function<void (const byte[], size_t)> out) :
+Record_Writer::Record_Writer(std::function<void (const byte[], size_t)> out) :
    output_fn(out),
    buffer(DEFAULT_BUFFERSIZE)
    {
@@ -45388,8 +45388,8 @@ void client_check_state(Handshake_Type new_msg, Handshake_State* state)
 /**
 * TLS Client Constructor
 */
-TLS_Client::TLS_Client(std::tr1::function<size_t (byte[], size_t)> input_fn,
-                       std::tr1::function<void (const byte[], size_t)> output_fn,
+TLS_Client::TLS_Client(std::function<size_t (byte[], size_t)> input_fn,
+                       std::function<void (const byte[], size_t)> output_fn,
                        const TLS_Policy& policy,
                        RandomNumberGenerator& rng) :
    input_fn(input_fn),
@@ -46148,8 +46148,8 @@ void server_check_state(Handshake_Type new_msg, Handshake_State* state)
 /*
 * TLS Server Constructor
 */
-TLS_Server::TLS_Server(std::tr1::function<size_t (byte[], size_t)> input_fn,
-                       std::tr1::function<void (const byte[], size_t)> output_fn,
+TLS_Server::TLS_Server(std::function<size_t (byte[], size_t)> input_fn,
+                       std::function<void (const byte[], size_t)> output_fn,
                        const TLS_Policy& policy,
                        RandomNumberGenerator& rng,
                        const X509_Certificate& cert,

@@ -31,7 +31,7 @@ namespace nxs{namespace network
         void resize(size_t n);
 
         virtual void add(const char* data_ptr, size_t data_size) = 0;
-        template<class T = std::string> constexpr T get() const;
+        template<class T = std::string> T get() const;
     };
 
 

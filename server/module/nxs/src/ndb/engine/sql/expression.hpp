@@ -21,7 +21,7 @@ namespace ndb
         enum typec { unknown, add, get, set, del, condition, join };
 
     private:
-        typec _type;
+        mutable typec _type;
 
         std::string _table;
         std::string _join;

@@ -16,22 +16,21 @@ namespace nxs
     void common_module<T>::init()
     {
         const auto& m = T::db_ref;
-        nxs_log << "loading" << T::name_;
-         //log::list(log::system, "loading " + std::string(T::name_));
+        nxs_log << log::list << "loading" << T::name_;
         // load path ./module/
         db::result res = db::query() << m.all();
         for(size_t i = 0; i != res.size(); i++)
         {
             int id = res[i][m.id];
             std::string ext = res[i][m.ext];
-            nxs_log << "\n" + res[i][m.name] << " ";
+            nxs_log << "\n" << res[i][m.name];
 
             bool load_ok = load(id, ext);
 
-            if (load_ok) nxs_log << " OK";
-            else nxs_log << " ERROR";
+            if (load_ok) nxs_log << "OK";
+            else nxs_log << "ERROR";
         }
-        nxs_log << log::system;
+        nxs_log << "\n" << log::system;
     }
 
     template<class T>
@@ -55,7 +54,7 @@ namespace nxs
     template<class M_Type>
     bool common_module<T>::load(int id)
     {
-        if (base_module<T>::is_loaded(id)) { nxs_warning("module already loaded " + std::to_string(id)); return false; }
+        if (base_module<T>::is_loaded(id)) { nxs_warning << "module already loaded" << id << log::system; return false; }
         // create module
         auto m = std::make_unique<M_Type>(id);
         if (!m->load()) return false;

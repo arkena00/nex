@@ -2,6 +2,8 @@
 
 namespace nxs
 {
+    const db::tables::type& type::db_ref = db::nex.type;
+
     type::type(const db::line& data) : db::entity<nxs::type>(data)
     {
         hydrate(data);

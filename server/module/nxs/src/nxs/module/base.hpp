@@ -13,7 +13,8 @@ namespace nxs
     template<class T>
     class NXS_SHARED base_module : public db::entity<T>
     {
-        using A_Module = base_module<T>;
+        using Entity = db::entity<T>;
+        using Base_module = base_module<T>;
 
     private:
         std::string _name;
@@ -25,8 +26,8 @@ namespace nxs
         std::string _path;
 
     protected:
-        static NXS_SHARED std::map<int, std::unique_ptr<A_Module>> load_list_id_;
-        static NXS_SHARED std::map<std::string, int> module_id_;
+        static std::map<int, std::unique_ptr<Base_module>> load_list_id_;
+        static std::map<std::string, int> module_id_;
 
         bool _is_loaded;
 
@@ -59,8 +60,8 @@ namespace nxs
 
         static int execute(nxs::nex& nex);
         static std::vector<T> get();
-        static A_Module& get(int id);
-        static A_Module& get(const std::string& name);
+        static Base_module& get(int id);
+        static Base_module& get(const std::string& name);
         static bool is_loaded(int id);
         static bool is_loaded(const std::string& name);
     };

@@ -67,7 +67,7 @@ namespace nxs{namespace network
             output.close();
             _transfer_size += data_size;
         }
-        else nxs_error(errc::system, "can't write data");
+        else throw nxs_error << "can't write data";
     }
 
     template<>

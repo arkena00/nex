@@ -20,7 +20,7 @@ namespace ndb
     }
 
     template<class Engine>
-    query<Engine>& query<Engine>::operator+(auto&& expr)
+    query<Engine>& query<Engine>::operator+(const ndb::expression<Engine>& expr)
     {
         expr._type = expression<Engine>::add;
         _expression.append(expr);
@@ -28,7 +28,7 @@ namespace ndb
     }
 
     template<class Engine>
-    query<Engine>& query<Engine>::operator-(auto&& expr)
+    query<Engine>& query<Engine>::operator-(const ndb::expression<Engine>& expr)
     {
         expr._type = expression<Engine>::del;
         _expression.append(expr);

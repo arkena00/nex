@@ -73,7 +73,7 @@ namespace nxs
     template<class T>
     const T& header_basic<std::vector<T>>::value(size_t index) const
     {
-        if (index >= _value.size()) nxs_error(errc::system, std::string("value index " + std::to_string(index) + " out of range for header ") + name());
+        if (index >= _value.size()) throw nxs_error << "value index" << index << "out of range for header" << name();
         return _value[index];
     }
     template<class T>

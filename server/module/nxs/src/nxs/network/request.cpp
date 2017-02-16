@@ -70,7 +70,7 @@ namespace nxs
             if (p.is_required() && !_param_list.exist(p.name()))
             {
                 // no default value
-                if (p.value().empty()) nxs_error(errc::command_param_missing, p.name());
+                if (p.value().empty()) throw nxs_error << "command_param_missing" << p.name();
                 // else use default value
                 _param_list.add(p);
             }
@@ -80,9 +80,9 @@ namespace nxs
                 for (size_t i = 0; i != _param_list[p.name()].size(); i++)
                 {
                     if (!std::regex_match(_param_list[p.name()][i], std::regex("(" + p.format() + ")")))
-                        nxs_error(errc::command_invalid, "wrong format for " + p.name() +
-                                  ", value : " + _param_list[p.name()][i] +
-                                  ", expected : " + p.format());
+                        throw nxs_error << "command_invalid, wrong format for " << p.name() <<
+                                  ", value : " << _param_list[p.name()][i] <<
+                                  ", expected : " << p.format();
                 }
             }
         }
@@ -107,12 +107,12 @@ namespace nxs
 
     network::data& request::data(size_t index)
     {
-        if (index >= _data.size()) nxs_error(errc::system, "request data out of range");
+        if (index >= _data.size()) throw nxs_error << "request data out of range";
         return *_data[index];
     }
     const network::data& request::data_const(size_t index) const
     {
-        if (index >= _data.size()) nxs_error(errc::system, "request data out of range");
+        if (index >= _data.size()) throw nxs_error << "request data out of range";
         return *_data.at(index);
     }
 

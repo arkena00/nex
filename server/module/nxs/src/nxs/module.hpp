@@ -10,9 +10,8 @@ namespace nxs
     public:
         static const std::string name_;
         static const std::string ext_;
+        static const db::tables::module& db_ref;
 
-    public:
-        constexpr static const auto& db_ref = db::nex.module;
         module(int id);
         module(const std::string& name);
         module(const db::line&);

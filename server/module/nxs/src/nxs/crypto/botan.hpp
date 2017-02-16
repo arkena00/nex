@@ -38,7 +38,8 @@
 #define BOTAN_DISTRIBUTION_INFO "unspecified"
 
 #ifndef BOTAN_DLL
-  #define BOTAN_DLL __attribute__((visibility("default")))
+    #define BOTAN_DLL
+  // #define BOTAN_DLL __attribute__((visibility("default")))
 #endif
 
 /* Chunk sizes */
@@ -8930,7 +8931,7 @@ class BOTAN_DLL SessionKeys
 #if defined(BOTAN_BUILD_COMPILER_IS_MSVC)
     #include <functional>
 #else
-    #include <tr1/functional>
+    #include <functional>
 #endif
 
 #elif defined(BOTAN_USE_BOOST_TR1)
@@ -8941,7 +8942,7 @@ class BOTAN_DLL SessionKeys
 
 namespace Botan {
 
-using namespace std::tr1::placeholders;
+using namespace std::placeholders;
 
 /**
 * TLS Record Writer
@@ -8962,7 +8963,7 @@ class BOTAN_DLL Record_Writer
 
       void reset();
 
-      Record_Writer(std::tr1::function<void (const byte[], size_t)> output_fn);
+      Record_Writer(std::function<void (const byte[], size_t)> output_fn);
 
       ~Record_Writer() { delete mac; }
    private:
@@ -8970,7 +8971,7 @@ class BOTAN_DLL Record_Writer
       void send_record(byte type, byte major, byte minor,
                        const byte input[], size_t length);
 
-      std::tr1::function<void (const byte[], size_t)> output_fn;
+      std::function<void (const byte[], size_t)> output_fn;
       Pipe cipher;
       MessageAuthenticationCode* mac;
 
@@ -13910,8 +13911,8 @@ class BOTAN_DLL TLS_Server : public TLS_Connection
       * FIXME: support cert chains (!)
       * FIXME: support anonymous servers
       */
-      TLS_Server(std::tr1::function<size_t (byte[], size_t)> input_fn,
-                 std::tr1::function<void (const byte[], size_t)> output_fn,
+      TLS_Server(std::function<size_t (byte[], size_t)> input_fn,
+                 std::function<void (const byte[], size_t)> output_fn,
                  const TLS_Policy& policy,
                  RandomNumberGenerator& rng,
                  const X509_Certificate& cert,
@@ -13927,7 +13928,7 @@ class BOTAN_DLL TLS_Server : public TLS_Connection
 
       void process_handshake_msg(Handshake_Type, const MemoryRegion<byte>&);
 
-      std::tr1::function<size_t (byte[], size_t)> input_fn;
+      std::function<size_t (byte[], size_t)> input_fn;
 
       const TLS_Policy& policy;
       RandomNumberGenerator& rng;
@@ -14658,8 +14659,8 @@ class BOTAN_DLL TLS_Client : public TLS_Connection
       void add_client_cert(const X509_Certificate& cert,
                            Private_Key* cert_key);
 
-      TLS_Client(std::tr1::function<size_t (byte[], size_t)> input_fn,
-                 std::tr1::function<void (const byte[], size_t)> output_fn,
+      TLS_Client(std::function<size_t (byte[], size_t)> input_fn,
+                 std::function<void (const byte[], size_t)> output_fn,
                  const TLS_Policy& policy,
                  RandomNumberGenerator& rng);
 
@@ -14676,7 +14677,7 @@ class BOTAN_DLL TLS_Client : public TLS_Connection
       void read_handshake(byte, const MemoryRegion<byte>&);
       void process_handshake_msg(Handshake_Type, const MemoryRegion<byte>&);
 
-      std::tr1::function<size_t (byte[], size_t)> input_fn;
+      std::function<size_t (byte[], size_t)> input_fn;
 
       const TLS_Policy& policy;
       RandomNumberGenerator& rng;

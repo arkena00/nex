@@ -8,10 +8,8 @@
 #include <vector>
 #include <functional>
 
-#define nxs_log nxs::log::instance(NXS_LINE, NXS_FUNC_NAME)
-
-#define nxs_warning_impl(message, type, ...) nxs::log::stadd(message, type, "nxs", nxs::log::warning, NXS_FUNC_NAME, NXS_LINE)
-#define nxs_warning(...) nxs_warning_impl(__VA_ARGS__, nxs::log::system)
+#define nxs_log nxs::log::add(NXS_LINE, NXS_FUNC_NAME)
+#define nxs_warning nxs::log::add(NXS_LINE, NXS_FUNC_NAME) << nxs::log::warning
 
 namespace nxs
 {
@@ -20,41 +18,36 @@ namespace nxs
     public:
         enum type { system, network, database };
         enum level { note, warning, error };
+        enum mod { none = 0, list = 1 };
 
     public:
         static log* instance_;
         static std::vector<std::string> type_str_;
         static std::vector<std::string> level_str_;
 
-
         std::string _output;
         level _level;
         std::string _line;
         std::string _func;
         std::function<void(const std::string&)> _redirect;
-        bool _list_mod;
+        bool _pushed;
+        bool _mod;
 
         log();
 
-    public:
-        static log& instance(const std::string& line, const std::string& func);
-
-        static void stadd(const std::string& message,
-                        const log::type& type = system,
-                        const std::string& source = "nxs",
-                        const log::level& level = note,
-                        const std::string& func = "",
-                        const std::string& line = "") {}
-
         void push(const log::type& type);
-        void redirect_output(std::function<void(const std::string&)> fn);
+        void clear();
 
-        void list(const log::type& type, const std::string& message);
-        void list();
+    public:
+        void redirect_output(std::function<void(const std::string&)> fn);
 
         log& operator<<(const std::string& data);
         log& operator<<(int data);
+        log& operator<<(log::mod log_mod);
+        log& operator<<(log::level log_level);
         log& operator<<(log::type log_type);
+
+        static log& add(const std::string& line, const std::string& func);
     };
 } // nxs
 

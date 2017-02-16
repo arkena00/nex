@@ -34,6 +34,8 @@ namespace nxs
         request();
         request(const std::string& str_request);
 
+        //request(const request&) {}
+
         void clear();
         void set(const std::string& str_request);
         size_t size() const;

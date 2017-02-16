@@ -9,12 +9,12 @@ namespace nxs
     template<class T>
     bool text_module<T>::load()
     {
-        using A_Module = base_module<T>;
+        using Base_module = base_module<T>;
 
-        if (!db::entity<T>::exist() || A_Module::is_loaded()) return false;
+        if (!Base_module::exist() || Base_module::is_loaded()) return false;
 
         // load module
-        std::ifstream file(A_Module::path(), std::ios::binary | std::ios::in);
+        std::ifstream file(Base_module::path(), std::ios::binary | std::ios::in);
         if (file.is_open())
         {
             char buffer[512] = {0};
@@ -25,9 +25,9 @@ namespace nxs
             }
             file.close();
         }
-        else { nxs_log << "can't open file : " << A_Module::path() << log::system; return false; }
+        else { nxs_log << "can't open file : " << Base_module::path(); return false; }
 
-        A_Module::_is_loaded = true;
+        Base_module::_is_loaded = true;
         return true;
     }
 
@@ -36,7 +36,7 @@ namespace nxs
     {
         try {
         nex.output().add(_text);
-        } catch (const std::exception& e) { nxs_error(errc::module, e.what()); }
+        } catch (const std::exception& e) { throw nxs_error << "module error" << e.what(); }
         return 0;
     }
 

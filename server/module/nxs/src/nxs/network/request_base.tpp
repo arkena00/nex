@@ -4,7 +4,7 @@ namespace nxs
 
     template<class H> void request_base::header_exist_check() const
     {
-        if (!header_exist<H>()) nxs_error(errc::system, "header does not exist in request : " + std::string(H::name()));
+        if (!header_exist<H>()) throw nxs_error << "header does not exist in request :" << H::name();
     }
 
     template<class H, class T>

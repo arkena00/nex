@@ -3,7 +3,7 @@
 namespace nxs{namespace network
 {
     template<class T>
-    constexpr T data::get() const
+    T data::get() const
     {
         if (_target == hdd) return static_cast<const hdd_data*>(this)->get<T>();
         return static_cast<const memory_data*>(this)->get<T>();

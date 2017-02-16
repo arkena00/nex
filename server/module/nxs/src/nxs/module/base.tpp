@@ -13,14 +13,14 @@ namespace nxs
         _path("./" + T::name_ + "/"),
         _is_loaded(0)
     {
-        hydrate(db::entity<T>::data());
+        hydrate(Entity::data());
     }
     template<class T>
     base_module<T>::base_module(const db::line& data) : db::entity<T>(data),
         _path("./" + T::name_ + "/"),
         _is_loaded(0)
     {
-        hydrate(db::entity<T>::data());
+        hydrate(Entity::data());
     }
 
     template<class T>
@@ -46,7 +46,7 @@ namespace nxs
     template<class T>
     void base_module<T>::unload()
     {
-        load_list_id_.erase(db::entity<T>::id());
+        load_list_id_.erase(id());
         module_id_.erase(name());
         _is_loaded = 0;
     }
@@ -60,7 +60,7 @@ namespace nxs
     }
 
     // public:
-    template<class T> int base_module<T>::id() const { return db::entity<T>::id(); }
+    template<class T> int base_module<T>::id() const { return Entity::id(); }
     template<class T> const std::string& base_module<T>::name() const { return _name; }
     template<class T> const std::string& base_module<T>::image() const { return _image; }
     template<class T> const std::string& base_module<T>::description() const { return _description; }
@@ -100,13 +100,13 @@ namespace nxs
     template<class T>
     base_module<T>& base_module<T>::get(int id)
     {
-        if (!is_loaded(id)) nxs_error(errc::system, T::name_ + " is not loaded : " + std::to_string(id));
+        if (!is_loaded(id)) throw nxs_error << T::name_ << "is not loaded :" + id;
         return *load_list_id_.at(id).get();
     }
     template<class T>
     base_module<T>& base_module<T>::get(const std::string& name)
     {
-        if (!is_loaded(name)) nxs_error(errc::system, T::name_ + " is not loaded : " + name);
+        if (!is_loaded(name)) throw nxs_error << T::name_ << "is not loaded :" + name;
         return get(module_id_.at(name));
     }
 

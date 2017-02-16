@@ -3,11 +3,13 @@
 
 namespace nxs
 {
+    const db::tables::resource& resource::db_ref = db::nex.resource;
+
     resource::resource(int id) : db::entity<resource>(id)
     {
         try {
-        hydrate(db::entity<resource>::data());
-        } catch (const std::exception& e) { nxs_error(errc::database, "can't load resource : " + std::to_string(id)); }
+        hydrate(Entity::data());
+        } catch (const std::exception& e) { throw nxs_error << "can't load resource :" << id << log::database; }
     }
     resource::resource(const db::line& data) : db::entity<resource>(data)
     {
@@ -36,7 +38,7 @@ namespace nxs
         //resource.data("movie", "name")
     }
 
-    int resource::id() const { return db::entity<resource>::id(); }
+    int resource::id() const { return Entity::id(); }
     const std::string& resource::name() const { return _name; }
 
     const resource::Type_List& resource::type_get() const { return _type; }

@@ -52,7 +52,7 @@ namespace nxs{namespace network
         }
 
         // no protocol found, disconnect
-        nxs_error(errc::protocol_unknown, std::string(buf.data(), buf.size()));
+        throw nxs_error << "protocol_unknown" << std::string(buf.data(), buf.size());
 
         return nullptr;
     }
@@ -63,7 +63,7 @@ namespace nxs{namespace network
 
     network::connexion& protocol::connexion()
     {
-        if (_connexion == nullptr) nxs_error(errc::system);
+        if (_connexion == nullptr) throw nxs_error;
         return *_connexion;
     }
 

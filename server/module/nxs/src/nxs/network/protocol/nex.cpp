@@ -61,7 +61,7 @@ namespace nxs{namespace network
             else
             {
                 std::ifstream file(output_data.get<std::string>(), std::ios::binary | std::ios::in);
-                if (!file.is_open()) nxs_error(errc::data_hdd_read);
+                if (!file.is_open()) throw nxs_error << "data_hdd_read";
                 std::array<char, 1024> buffer;
                 while (!file.eof())
                 {

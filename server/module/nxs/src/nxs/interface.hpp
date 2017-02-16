@@ -12,9 +12,8 @@ namespace nxs
     public:
         static const std::string name_;
         static const std::string ext_;
+        static const db::tables::interface& db_ref;
 
-    public:
-        constexpr static const auto& db_ref = db::nex.interface;
         interface(int id);
         interface(const std::string& name);
         interface(const db::line& data);

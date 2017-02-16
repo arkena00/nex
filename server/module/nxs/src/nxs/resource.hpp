@@ -8,6 +8,7 @@ namespace nxs
 {
     class resource : public db::entity<nxs::resource>
     {
+        using Entity = db::entity<nxs::resource>;
         using Type_List = std::vector<nxs::type>;
         using Type_List_Str = std::map<std::string, int>;
     private:
@@ -20,7 +21,7 @@ namespace nxs
         void hydrate(const db::line&);
 
     public:
-        constexpr static const auto& db_ref = db::nex.resource;
+        static const db::tables::resource& db_ref;
         resource(int id);
         resource(const db::line&);
 

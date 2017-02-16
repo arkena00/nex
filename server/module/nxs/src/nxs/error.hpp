@@ -8,9 +8,7 @@
 #include <string>
 #include <map>
 
-#define nxs_error_impl(code, data, ...) nxs::error::add("nxs", code, data, nxs::log::system, NXS_FUNC_NAME, NXS_LINE)
-#define nxs_error(...) nxs_error_impl(__VA_ARGS__, 0)
-
+#define nxs_error nxs::error(NXS_LINE, NXS_FUNC_NAME)
 
 namespace nxs
 {
@@ -19,38 +17,25 @@ namespace nxs
     class NXS_SHARED error : public std::exception
     {
     private:
+        std::string _line;
+        std::string _func;
         std::string _source;
         int _code;
-        std::string _data;
+        log::type _type;
         std::string _message;
 
     public:
-        error(const std::string& source,
-              int code,
-              const std::string& data = "",
-              const log::type& type = log::system,
-              const std::string& func = "",
-              const std::string& line = "");
+        error(const std::string& line, const std::string& func, const std::string& source = "nxs");
         const char* what() const throw();
         int code() const;
-        const std::string& data() const;
-        ~error() throw() {};
+        ~error() throw();
 
-        static error& get();
+        error& operator<<(const std::string& data);
+        error& operator<<(int data);
+        error& operator<<(log::type log_type);
 
-        static void add(const std::string& source,
-                  int code,
-                  const std::string& data = "",
-                  const log::type& type = log::system,
-                  const std::string& func = "",
-                  const std::string& line = "");
-        static void add(int code, const std::string& data = "");
-        static void add(int code, int data);
-        static void add(const std::string& data);
-
+        std::string static str(int code);
     };
-
-    std::string NXS_SHARED error_str(int code);
 
     // error code
     namespace errc

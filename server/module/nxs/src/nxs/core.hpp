@@ -15,6 +15,7 @@ namespace nxs
     class NXS_SHARED nex
     {
     public:
+        virtual ~nex() {}
         virtual nxs::user& user() = 0;
         virtual request& input() = 0;
         virtual request& output() = 0;

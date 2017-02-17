@@ -45,6 +45,8 @@ namespace nxs
         template<class M_Type> static void store(std::unique_ptr<M_Type> ptr);
 
     public:
+        virtual ~base_module() {}
+
         int id() const;
         const std::string& name() const;
         const std::string& image() const;

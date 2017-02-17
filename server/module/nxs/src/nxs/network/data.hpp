@@ -45,7 +45,7 @@ namespace nxs{namespace network
         template<class T, nxs::enable_if<std::is_arithmetic<T>::value>...>
         memory_data(T data);
 
-        void add(const char* data_ptr, size_t data_size);
+        virtual void add(const char* data_ptr, size_t data_size) override;
         template<class T> T get() const;
     };
 
@@ -60,7 +60,7 @@ namespace nxs{namespace network
         ~hdd_data();
 
         void tmp(bool n);
-        void add(const char* data_ptr, size_t data_size);
+        virtual void add(const char* data_ptr, size_t data_size) override;
         template<class T> T get() const;
     };
 }} // nxs::network

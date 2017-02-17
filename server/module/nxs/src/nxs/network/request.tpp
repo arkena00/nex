@@ -1,6 +1,7 @@
 #include <nxs/error.hpp>
 #include <nxs/network/header.hpp>
 #include <string>
+#include <memory>
 
 namespace nxs
 {

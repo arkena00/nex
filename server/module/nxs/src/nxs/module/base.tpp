@@ -1,6 +1,8 @@
 #include <nxs/os/module.hpp>
 #include <nxs/network/request.hpp>
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
 
 namespace nxs
 {
@@ -38,7 +40,7 @@ namespace nxs
         _path = "./" + T::name_ + "/";
         std::string v_ext = ext();
         if (v_ext == "dl") v_ext = NXS_OS_SHARELIBEXT;
-        if (std::experimental::filesystem::is_directory(_path + name())) _path = _path + name() + "/";
+        if (fs::is_directory(_path + name())) _path = _path + name() + "/";
         _path = _path + name() + T::ext_ + "." + v_ext;
     }
 

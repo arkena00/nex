@@ -20,9 +20,9 @@ namespace nxs
     public:
         binary_module(int id);
 
-        bool load();
-        void unload();
-        int process(nxs::nex& nex);
+        virtual bool load();
+        virtual void unload() override;
+        virtual int process(nxs::nex& nex);
     };
 } // nxs
 

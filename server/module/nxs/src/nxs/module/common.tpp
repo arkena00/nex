@@ -11,6 +11,12 @@ namespace nxs
     template<class T>
     common_module<T>::common_module(const db::line& data) : base_module<T>(data) {}
 
+    template<class T>
+    bool common_module<T>::load() { return false; }
+
+    template<class T>
+    int common_module<T>::process(nxs::nex& nex) { return 0; }
+
     // initialize all modules
     template<class T>
     void common_module<T>::init()

@@ -10,8 +10,8 @@ namespace nxs
     class NXS_SHARED common_module : public base_module<T>
     {
     private:
-        bool load() { return false; }
-        int process(nxs::nex& nex) { return 0; }
+        virtual bool load() override;
+        virtual int process(nxs::nex& nex) override;
 
     protected:
         common_module(int id);

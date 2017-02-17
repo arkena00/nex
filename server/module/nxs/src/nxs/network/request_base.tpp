@@ -1,3 +1,5 @@
+#include <memory>
+
 namespace nxs
 {
     template<class H> bool request_base::header_exist() const { return _header_list.count(H::id()); }

@@ -9,7 +9,7 @@ namespace nxs
     template<unsigned char H_id>
     void header::init()
     {
-        using H = typename headers::detail::initializer<(header::code)H_id>::type;
+        using H = typename headers::detail::initializer<static_cast<header::code>(H_id)>::type;
         code_.insert(std::make_pair(H::name(), H::id()));
         list_.push_back(H::id());
         reflector_list_.push_back(&reflector<header, H>);

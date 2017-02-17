@@ -26,7 +26,7 @@ namespace nxs
 
     public:
         error(const std::string& line, const std::string& func, const std::string& source = "nxs");
-        const char* what() const throw();
+        const char* what() const throw() override;
         int code() const;
         ~error() throw();
 

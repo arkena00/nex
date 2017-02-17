@@ -39,6 +39,8 @@ namespace nxs
         header(header::code id, const std::string& name);
 
     public:
+        virtual ~header() {}
+
         header::code id() const;
         const std::string& name() const;
 
@@ -71,9 +73,9 @@ namespace nxs
         header_basic(header::code id, const std::string& name);
         header_basic(header::code id, const std::string& name, const T& value);
 
-        virtual void add_linear(const linear_type& linear_data);
-        virtual linear_type value_linear();
-        virtual header& operator=(const header&);
+        virtual void add_linear(const linear_type& linear_data) override;
+        virtual linear_type value_linear() override;
+        virtual header& operator=(const header&) override;
 
         void add(const T& value);
         const T& value() const;
@@ -89,10 +91,11 @@ namespace nxs
     public:
         header_basic(header::code id, const std::string& name);
         header_basic(header::code id, const std::string& name, const T& value);
+        virtual ~header_basic() {}
 
-        virtual void add_linear(const linear_type& linear_data);
-        virtual linear_type value_linear();
-        virtual header& operator=(const header&);
+        virtual void add_linear(const linear_type& linear_data) override;
+        virtual linear_type value_linear() override;
+        virtual header& operator=(const header&) override;
 
         void add(const T& value);
         const T& value(size_t index = 0) const;

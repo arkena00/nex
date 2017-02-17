@@ -1,5 +1,5 @@
-#ifndef NETWORK_CONNEXION_INPUT_CONNEXION_H_NXS
-#define NETWORK_CONNEXION_INPUT_CONNEXION_H_NXS
+#ifndef NETWORK_CONNEXION_INPUT_H_NXS
+#define NETWORK_CONNEXION_INPUT_H_NXS
 
 #include <nxs/network/socket.hpp>
 #include <nxs/network/connexion.hpp>
@@ -50,4 +50,4 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#endif // NETWORK_CONNEXION_INPUT_CONNEXION_H_NXS
+#endif // NETWORK_CONNEXION_INPUT_H_NXS

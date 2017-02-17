@@ -2,17 +2,6 @@
 #define NDS_ENCODER_H_NDS
 
 #include <nxs/share.hpp>
-
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
-#include <boost/serialization/nvp.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/map.hpp>
-
 #include <iostream>
 
 namespace nds
@@ -60,6 +49,7 @@ namespace nds
 
     namespace encoders
     {
+        /*
         class NXS_SHARED boost_text
         {
         public:
@@ -83,7 +73,7 @@ namespace nds
                 encoder::encode(ar, t);
                 return t;
             }
-        };
+        };*/
 
     } // encoders
 

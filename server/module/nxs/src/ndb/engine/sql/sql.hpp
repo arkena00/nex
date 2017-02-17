@@ -14,10 +14,10 @@ namespace ndb
     public:
         sql(const std::string& identifier);
 
-        virtual bool connect();
-        virtual void close();
-        virtual ndb::result<sql> exec(ndb::query<sql>& q) const;
-        virtual ndb::result<sql> exec(const typename setup<sql>::expression_type& q) const;
+        virtual bool connect() override;
+        virtual void close() override;
+        virtual ndb::result<sql> exec(ndb::query<sql>& q) const override;
+        virtual ndb::result<sql> exec(const typename setup<sql>::expression_type& q) const override;
     };
 } // db
 

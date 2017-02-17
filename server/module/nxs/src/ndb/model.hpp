@@ -15,6 +15,7 @@ namespace ndb
     {
     public:
         virtual std::string str() const { return ""; }
+        virtual ~model_base() {}
     };
 
     template<class Engine>

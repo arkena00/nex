@@ -3,6 +3,7 @@
 #include <nxs/network/request.hpp>
 #include <nxs/user.hpp>
 #include <nxs/database.hpp>
+#include <sstream>
 
 namespace nxs
 {

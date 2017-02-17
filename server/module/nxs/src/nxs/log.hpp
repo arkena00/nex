@@ -18,12 +18,12 @@ namespace nxs
     public:
         enum type { system, network, database };
         enum level { note, warning, error };
-        enum mod { none = 0, list = 1 };
+        enum mod { none, list = 1 };
 
     public:
         static log* instance_;
-        static std::vector<std::string> type_str_;
-        static std::vector<std::string> level_str_;
+        static std::array<std::string, 3> type_str_;
+        static std::array<std::string, 3> level_str_;
 
         std::string _output;
         level _level;
@@ -31,7 +31,7 @@ namespace nxs
         std::string _func;
         std::function<void(const std::string&)> _redirect;
         bool _pushed;
-        bool _mod;
+        mod _mod;
 
         log();
 

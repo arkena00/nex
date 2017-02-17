@@ -2,6 +2,7 @@
 #include <nxs/core.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/resource.hpp>
+#include <sstream>
 
 namespace nxs
 {

@@ -34,7 +34,7 @@ namespace nxs{namespace network
         else
         {
             delete cnx;
-            throw nxs_error << log::network;
+            throw nxs_error << "server connexion" << log::network;
         }
         // create new listening socket
         listen();

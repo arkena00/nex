@@ -2,8 +2,10 @@
 #include <nxs/command.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/database.hpp>
-#include <iostream>
 #include <nxs/resource.hpp>
+
+#include <sstream>
+#include <iostream>
 
 namespace nxs
 {

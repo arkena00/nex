@@ -5,7 +5,7 @@
 * Distributed under the terms of the Botan license
 */
 
-#include "botan.hpp"
+#include <nxs/crypto/botan.hpp>
 #include <utility>
 #include <deque>
 #include <vector>

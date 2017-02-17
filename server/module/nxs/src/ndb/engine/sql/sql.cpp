@@ -15,7 +15,8 @@ namespace ndb
     bool sql::connect()
     {
         bool db_exist = false;
-        if (engine<sql>::exist()) db_exist = true; // if file doesn t exist, create nxs model
+        if (engine::exist()) db_exist = true; // if file doesn t exist, create nxs model
+
         if (sqlite3_open(engine::path().c_str(), &_db) == SQLITE_OK)
         {
             exec("PRAGMA foreign_keys = ON;");
@@ -40,7 +41,7 @@ namespace ndb
         int step = SQLITE_DONE;
         ndb::result<sql> result;
 
-        if(sqlite3_prepare_v2(_db, q.native().c_str(), -1, &statement, 0) == SQLITE_OK)
+        if(sqlite3_prepare_v2(_db, q.native().c_str(), -1, &statement, nullptr) == SQLITE_OK)
         {
             // bind values
             for (size_t i = 0; i != expression<sql>::value_list_.size(); i++)

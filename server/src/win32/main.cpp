@@ -3,6 +3,12 @@
 
 #include <iostream>
 
+class zeta
+{
+    int a;
+    zeta() {}
+};
+
 int main()
 {
     try {

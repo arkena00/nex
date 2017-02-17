@@ -5,6 +5,8 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
 
+namespace fs = boost::filesystem;
+
 namespace nxs{namespace network
 {
     http::http(network::connexion* cnx) : protocol(cnx)
@@ -50,7 +52,7 @@ namespace nxs{namespace network
 
         if (output_data.target() == network::data::hdd)
         {
-            boost::filesystem::path p(output_data.get<std::string>());
+            fs::path p(output_data.get<std::string>());
             header_file = "Content-Disposition: attachment; filename=" + p.filename().generic_string() + "\r\n";
         }
 

@@ -1,13 +1,20 @@
 #include <nxs/log.hpp>
 #include <iostream>
 
+class zeta
+{
+    int a;
+    zeta() {}
+};
+
 namespace nxs
 {
-    std::vector<std::string> log::type_str_ { "system", "network", "database" };
-    std::vector<std::string> log::level_str_ { "note", "warning", "error" };
+    std::array<std::string, 3> log::type_str_ { "system", "network", "database" };
+    std::array<std::string, 3> log::level_str_ { "note", "warning", "error" };
     log* log::instance_ = nullptr;
 
     log::log() :
+        _level(level::note),
         _pushed(true),
         _mod(mod::none)
     {}

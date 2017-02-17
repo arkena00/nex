@@ -76,7 +76,7 @@ namespace ndb
         current_ = identifier;
         auto engine_ptr = std::make_unique<Engine>(identifier);
         if (!engine_ptr->connect()) ndb_error("database connexion failed");
-        connect_list_.insert(std::make_pair(identifier, std::move(engine_ptr)));
+        connect_list_.emplace(identifier, std::move(engine_ptr));
         return get(identifier);
     }
 } // ndb

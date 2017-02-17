@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <memory>
 #include <nds/encoder.hpp>
 #include <nxs/setup/request.hpp>
 #include <nxs/share.hpp>

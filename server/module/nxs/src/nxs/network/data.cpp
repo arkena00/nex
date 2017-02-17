@@ -1,7 +1,6 @@
 #include <nxs/network/data.hpp>
 #include <fstream>
 #include <string>
-#include <boost/filesystem.hpp>
 #include <iostream>
 
 namespace nxs{namespace network

@@ -8,19 +8,15 @@ namespace nxs{namespace network
     template<size_t S>
     class buffer
     {
-        friend class input_connexion;
-
     private:
         std::size_t _data_size;
         std::array<char, S> _data;
 
-        auto address() { return &_data; }
-
     public:
         buffer() : _data_size(0) {}
 
+        auto address() { return &_data; }
         const char* data() const { return _data.data(); }
-
         constexpr size_t capacity() const { return S; }
         void size(size_t n) { _data_size = n; }
         size_t size() const { return _data_size; }

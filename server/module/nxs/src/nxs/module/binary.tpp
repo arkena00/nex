@@ -60,7 +60,7 @@ namespace nxs
     {
         try {
         _main_ptr(nex);
-        } catch (const std::exception& e) { throw nxs_error << "module error", e.what(); }
+        } catch (const std::exception& e) { nxs_error << "module error", e.what(); }
         return 0;
     }
 

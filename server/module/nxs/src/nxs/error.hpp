@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 
-#define nxs_error nxs::error(NXS_LINE, NXS_FUNC_NAME)
+#define nxs_error throw nxs::error(NXS_LINE, NXS_FUNC_NAME)
 
 namespace nxs
 {

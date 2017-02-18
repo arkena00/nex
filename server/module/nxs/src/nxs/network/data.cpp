@@ -8,7 +8,8 @@ namespace nxs{namespace network
     data::data(data::targetc target) :
         _target(target),
         _size(0),
-        _transfer_size(0)
+        _transfer_size(0),
+        _capacity(0)
     {}
 
     data::~data() {}
@@ -16,7 +17,8 @@ namespace nxs{namespace network
     data::targetc data::target() const { return _target; }
     size_t data::size() const { return _size; }
     size_t data::transfer_size() const { return _transfer_size; }
-    void data::resize(size_t n) { _size = n; }
+    void data::reserve(size_t n) { _capacity = n; }
+    size_t data::capacity() const { return _capacity; }
 
 
     // memory
@@ -26,10 +28,11 @@ namespace nxs{namespace network
         add(v.c_str(), v.size());
     }
 
+    size_t memory_data::size() const { return _data.size(); }
+
     void memory_data::add(const char* data_ptr, size_t data_size)
     {
         _data.insert(_data.end(), data_ptr, data_ptr + data_size);
-        _size += data_size;
     }
 
     template<>
@@ -66,7 +69,7 @@ namespace nxs{namespace network
             output.close();
             _transfer_size += data_size;
         }
-        else throw nxs_error << "can't write data";
+        else nxs_error << "can't write data";
     }
 
     template<>

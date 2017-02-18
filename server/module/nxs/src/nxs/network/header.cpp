@@ -19,7 +19,7 @@ namespace nxs
 
     std::unique_ptr<header> header::make(const std::string& name)
     {
-        if (!code_.count(name)) throw nxs_error << "header not found :" << name;
+        if (!code_.count(name)) nxs_error << "header not found :" << name;
         return make(code_[name]);
     }
     std::unique_ptr<header> header::make(header::code id) { return std::unique_ptr<header>(reflector_list_[id]()); }
@@ -58,8 +58,8 @@ namespace nxs
 
             try {
             nex.input_complete(false);
-            // data target
-            int target = data_target::hdd;
+            // data target, default target is memory
+            int target = data_target::memory;
             if (nex.input().header_exist<headers::data_target>()) target = nex.input().header<headers::data_target>().value();
             // data
             size_t data_count = 0;
@@ -75,21 +75,22 @@ namespace nxs
                     {
                         network::hdd_data d(nxs::config::network_download_path + "__tmp" + std::to_string(nex.connexion().id()) + std::to_string(i));
                         d.tmp(true);
-                        d.resize(data_size);
+                        d.reserve(data_size);
                         nex.input().add(d);
                     }
                     // memory data
                     else
                     {
                         network::memory_data d;
-                        d.resize(data_size);
+                        d.reserve(data_size);
                         nex.input().add(d);
+
                     }
                 }
                 // init first data
                 _data_offset = nex.input().size();
             }
-            } catch (const std::exception& e) { throw nxs_error << "header data_size init fail :" << e.what(); }
+            } catch (const std::exception& e) { nxs_error << "header data_size init fail :" << e.what(); }
         }
 
         void data_size::process(network::nex& nex)
@@ -99,10 +100,10 @@ namespace nxs
             network::data& current = nex.input().data(_data_index);
             size_t write_size = nex.connexion().buffer().size() - _data_offset;
 
-            // end of data
-            if (current.transfer_size() + write_size >= current.size())
+            // end of current data
+            if (current.transfer_size() + write_size >= current.capacity())
             {
-                write_size = write_size - (current.transfer_size() + write_size - current.size());
+                write_size = write_size - (current.transfer_size() + write_size - current.capacity());
                 current.add(nex.connexion().buffer().data() + _data_offset, write_size);
                 // next data
                 _data_index++;
@@ -116,7 +117,7 @@ namespace nxs
                 _data_offset += write_size;
                 process(nex);
             }
-            else current.add(nex.connexion().buffer().data() + _data_offset, write_size);
+            else if (write_size > 0) current.add(nex.connexion().buffer().data() + _data_offset, write_size);
 
             _data_offset = 0;
         }
@@ -125,6 +126,5 @@ namespace nxs
         {
             //std::cout << "\nINIT USER : " << nex.input().header<headers::user_name>().value();
         }
-
     } // headers
 } // nxs

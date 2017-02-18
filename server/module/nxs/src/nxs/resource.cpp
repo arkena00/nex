@@ -9,7 +9,7 @@ namespace nxs
     {
         try {
         hydrate(Entity::data());
-        } catch (const std::exception& e) { throw nxs_error << "can't load resource :" << id << log::database; }
+        } catch (const std::exception& e) { nxs_error << "can't load resource :" << id << log::database; }
     }
     resource::resource(const db::line& data) : db::entity<resource>(data)
     {

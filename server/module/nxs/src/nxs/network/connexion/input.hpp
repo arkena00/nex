@@ -13,7 +13,6 @@ namespace nxs{namespace network
     {
     private:
         boost::asio::ip::tcp::socket _socket;
-        protocol* _protocol;
 
         buffer_type _buffer;
 

@@ -13,8 +13,6 @@ namespace nxs{namespace network
 
     class NXS_SHARED protocol : public nxs::nex
     {
-        friend class nxs::request;
-
     private:
         network::connexion* _connexion;
         nxs::user _user;
@@ -22,6 +20,7 @@ namespace nxs{namespace network
         request _output;
 
     public:
+        enum type { nex, http, ws };
         using buffer_type = buffer<setup<network::connexion>::buffer_size>;
 
         protocol(network::connexion* cnx);
@@ -43,13 +42,20 @@ namespace nxs{namespace network
         request& output();
         network::connexion& connexion();
 
+        static protocol* create(network::connexion* cnx, type protocol_type);
         static protocol* create(network::connexion* cnx, const buffer_type&);
         template<class Protocol>
-        static protocol* create(network::connexion* cnx)
-        {
-            return dynamic_cast<protocol*>(new Protocol(cnx));
-        }
+        static protocol* create(network::connexion* cnx);
     };
+}} // nxs::network
+
+namespace nxs{namespace network
+{
+    template<class Protocol>
+    protocol* protocol::create(network::connexion* cnx)
+    {
+        return dynamic_cast<protocol*>(new Protocol(cnx));
+    }
 }} // nxs::network
 
 #endif // NETWORK_PROTOCOL_H_NXS

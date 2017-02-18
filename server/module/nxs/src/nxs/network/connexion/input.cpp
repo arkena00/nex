@@ -9,7 +9,7 @@ namespace nxs{namespace network
     int input_connexion::id_ = 0;
     std::map<int, input_connexion*> input_connexion::list_;
 
-    input_connexion::input_connexion(boost::asio::io_service& ios) : connexion(), _socket(ios), _protocol(nullptr)
+    input_connexion::input_connexion(boost::asio::io_service& ios) : connexion(), _socket(ios)
     {
         id_++;
         _id = id_;
@@ -49,11 +49,8 @@ namespace nxs{namespace network
         {
             try {
             // detect protocol
-            if (_protocol == nullptr)
-            {
-                _protocol = protocol::create(this, _buffer);
-            }
-            _protocol->input_read(_buffer);
+            if (!has_protocol()) protocol_set(_buffer);
+            protocol().input_read(_buffer);
 
             // read next data
             data_read();

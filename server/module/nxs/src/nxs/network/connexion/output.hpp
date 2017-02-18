@@ -1,8 +1,9 @@
 #ifndef NETWORK_CONNEXION_OUTPUT_H_NXS
 #define NETWORK_CONNEXION_OUTPUT_H_NXS
-/*
+
 #include <nxs/network/socket.hpp>
 #include <nxs/network/connexion.hpp>
+#include <nxs/network/buffer.hpp>
 
 namespace nxs{namespace network
 {
@@ -10,13 +11,12 @@ namespace nxs{namespace network
     {
     private:
         boost::asio::ip::tcp::socket _socket;
-        enum{_buffer_size = 2048};
-        char _buffer[_buffer_size];
+        connexion::buffer_type _buffer;
         std::string _ip;
         int _port;
         boost::asio::deadline_timer _timer;
         std::function<void()> _callback_connect;
-        std::function<void(const char*, size_t)> _callback_data_read;
+        std::function<void(connexion::buffer_type)> _callback_data_read;
         std::function<void(size_t)> _callback_data_send;
         std::function<void(const char*)> _callback_error;
 
@@ -36,17 +36,17 @@ namespace nxs{namespace network
         void sync_connect(std::string ip, int port);
 
         void connect_callback_set(std::function<void()>);
-        void data_read_callback_set(std::function<void(const char*, size_t)>);
+        void data_read_callback_set(std::function<void(connexion::buffer_type)>);
         void data_send_callback_set(std::function<void(size_t)>);
         void error_callback_set(std::function<void(const char*)>);
 
-        void data_read();
+        virtual void data_read();
         void sync_data_read();
-        void data_send(const char* data, int data_size);
+        virtual void data_send(const char* data, int data_size);
 
         void run();
 
-        const buffer_type& buffer() const;
+        virtual const buffer_type& buffer() const;
 
         // get
         std::string ip();
@@ -58,5 +58,5 @@ namespace nxs{namespace network
 
     };
 }} // nxs::network
-*/
+
 #endif // NETWORK_CONNEXION_OUTPUT_H_NXS

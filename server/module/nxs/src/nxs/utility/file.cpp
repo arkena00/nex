@@ -8,7 +8,7 @@ namespace nxs
 {
     std::string file::rename(const std::string& source_path, const std::string& name)
     {
-        if (!nxs::file::exist(source_path)) throw nxs_error << "can't rename file :" << source_path;
+        if (!nxs::file::exist(source_path)) nxs_error << "can't rename file :" << source_path;
         fs::path source(source_path);
         fs::path target(name);
         std::string path = source.parent_path().generic_string() + "/";

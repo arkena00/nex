@@ -18,7 +18,7 @@ namespace nds
         size_t header_end = str_request.find('/', header_start);
         size_t request_start = header_end + 1;
         size_t request_end = str_request.find(";;");
-        if (request_end == std::string::npos) throw nxs_error << "end of request not found";
+        if (request_end == std::string::npos) nxs_error << "end of request not found";
         req._size = request_end + 2;
 
         req._version = str_request.substr(version_start, version_end - version_start);
@@ -89,6 +89,6 @@ namespace nds
         std::string str_param = nex_command_name.substr(module_command_name_end + 1);
         if (str_param != ";") req._param_list.parse(str_param);
 
-        } catch (const std::exception& e) { throw nxs_error << "header decode error :" << e.what(); }
+        } catch (const std::exception& e) { nxs_error << "header decode error :" << e.what(); }
     }
 } // nds

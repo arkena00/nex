@@ -7,10 +7,6 @@
 #include <nxs/error.hpp>
 #include <string.h>
 
-using nxs::network::protocol;
-using nxs::network::connexion;
-using nxs::request;
-
 namespace nxs{namespace network
 {
     protocol::protocol(network::connexion* cnx) :
@@ -36,7 +32,30 @@ namespace nxs{namespace network
         output_send(_output);
     }
 
-    // create detected protocol
+    user& protocol::user() { return _user; }
+    request& protocol::input() { return _input; }
+    request& protocol::output() { return _output; }
+
+    network::connexion& protocol::connexion()
+    {
+        if (_connexion == nullptr) nxs_error;
+        return *_connexion;
+    }
+
+    void protocol::input_complete(bool n) { _input._data_complete = n; }
+
+    // create specified protocol
+    protocol* protocol::create(network::connexion* cnx, protocol::type protocol_type)
+    {
+        if (protocol_type == protocol::nex) return create<network::nex>(cnx);
+        if (protocol_type == protocol::http) return create<network::http>(cnx);
+        if (protocol_type == protocol::ws) return create<network::ws>(cnx);
+
+        nxs_error << "protocol unknown" << log::network;
+        return nullptr;
+    }
+
+    // create protocol from buffer data
     protocol* protocol::create(network::connexion* cnx, const buffer_type& buf)
     {
         // nex
@@ -47,25 +66,13 @@ namespace nxs{namespace network
         {
             // ws
             std::string str_data = std::string(buf.data(), buf.size());
-            if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) return create<ws>(cnx);
-            return create<http>(cnx);
+            if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) return create<network::ws>(cnx);
+            return create<network::http>(cnx);
         }
 
         // no protocol found, disconnect
-        throw nxs_error << "protocol_unknown" << std::string(buf.data(), buf.size());
+        nxs_error << "protocol_unknown\n" << std::string(buf.data(), buf.size());
 
         return nullptr;
     }
-
-    user& protocol::user() { return _user; }
-    request& protocol::input() { return _input; }
-    request& protocol::output() { return _output; }
-
-    network::connexion& protocol::connexion()
-    {
-        if (_connexion == nullptr) throw nxs_error;
-        return *_connexion;
-    }
-
-    void protocol::input_complete(bool n) { _input._data_complete = n; }
 }} // nxs::network

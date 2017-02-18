@@ -7,6 +7,9 @@
 #include <sstream>
 #include <iostream>
 
+#include <nxs/network/connexion/output.hpp>
+#include <nxs/network/protocol.hpp>
+
 namespace nxs
 {
     template<>
@@ -19,6 +22,15 @@ namespace nxs
 
         static void test(nxs::nex& nex)
         {
+            std::cout << "\nCREATE CNX";
+            network::output_connexion cnx;
+            cnx.sync_connect("127.0.0.1", 5050);
+            std::string req = "NEX:1.0//nxs::version;;";
+            std::cout << "\nSEND";
+            cnx.data_send(req.c_str(), req.size());
+            cnx.sync_data_read();
+            std::cout << "RESULT : " << cnx.protocol().input().data(0).get();
+
             //nex.output().file_add("d:/ads.txt");
 
             /*

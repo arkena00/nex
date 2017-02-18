@@ -5,6 +5,7 @@
 #include <nxs/preprocessor.hpp>
 
 #include <string>
+#include <array>
 #include <vector>
 #include <functional>
 

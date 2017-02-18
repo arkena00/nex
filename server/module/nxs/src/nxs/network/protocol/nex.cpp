@@ -22,6 +22,7 @@ namespace nxs{namespace network
         protocol(cnx)
     {}
 
+    // read from input connexion
     void nex::input_read(const buffer_type& buf)
     {
         try {
@@ -41,7 +42,23 @@ namespace nxs{namespace network
     }
 
     void nex::input_send(const request&) {}
-    void nex::output_read(const buffer_type& buf) {}
+
+    // read from output connexion
+    void nex::output_read(const buffer_type& buf)
+    {
+         try {
+        // process new request
+        if (input().is_finished() || input().data_complete())
+        {
+            input().set(std::string(buf.data(), buf.size()));
+            output().set("nxs::response;");
+            input_complete(true); // data complete, can be changed by headers
+            header::preprocess_all(*this);
+        }
+        header::process_all(*this);
+
+        } catch (const std::exception& e) { nxs_log << e.what() << log::network; }
+    }
 
     void nex::output_send(const request& req)
     {
@@ -61,7 +78,7 @@ namespace nxs{namespace network
             else
             {
                 std::ifstream file(output_data.get<std::string>(), std::ios::binary | std::ios::in);
-                if (!file.is_open()) throw nxs_error << "data_hdd_read";
+                if (!file.is_open()) nxs_error << "data_hdd_read";
                 std::array<char, 1024> buffer;
                 while (!file.eof())
                 {

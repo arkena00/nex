@@ -70,7 +70,7 @@ namespace nxs{namespace network
         // get message length
 
         // close connection if unmasked message from client (protocol error)
-        if (byte[1] < 128) throw nxs_error << "NXS_PROTOCOL_WS_ERROR";
+        if (byte[1] < 128) nxs_error << "NXS_PROTOCOL_WS_ERROR";
 
         size_t length = byte[1] & 127;
         size_t nb_byte = 0;

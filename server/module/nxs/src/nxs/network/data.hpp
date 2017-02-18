@@ -19,6 +19,7 @@ namespace nxs{namespace network
     protected:
         size_t _size;
         size_t _transfer_size;
+        size_t _capacity;
 
         data(targetc target);
 
@@ -26,9 +27,10 @@ namespace nxs{namespace network
         virtual ~data();
 
         targetc target() const;
-        size_t size() const;
-        size_t transfer_size() const;
-        void resize(size_t n);
+        virtual size_t size() const;
+        virtual size_t transfer_size() const;
+        virtual void reserve(size_t n);
+        virtual size_t capacity() const;
 
         virtual void add(const char* data_ptr, size_t data_size) = 0;
         template<class T = std::string> T get() const;
@@ -44,6 +46,8 @@ namespace nxs{namespace network
         memory_data(const std::string&);
         template<class T, nxs::enable_if<std::is_arithmetic<T>::value>...>
         memory_data(T data);
+
+        virtual size_t size() const override;
 
         virtual void add(const char* data_ptr, size_t data_size) override;
         template<class T> T get() const;

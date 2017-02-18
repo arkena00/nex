@@ -88,7 +88,7 @@ namespace nxs
                 // remove escaped chars
                 param_value = std::regex_replace(param_value, std::regex("(\\\\;)"), ";");
 
-                if (param_name == "") throw nxs_error << "param parse error";
+                if (param_name == "") nxs_error << "param parse error";
                 if (!exist(param_name)) _list.insert(make_pair(param_name, nxs::param(param_name, param::require, param_value)));
                 else _list[param_name][_list[param_name].size()] = param_value;
 

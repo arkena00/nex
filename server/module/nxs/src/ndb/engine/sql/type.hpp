@@ -15,18 +15,13 @@ namespace ndb
     template<> template<> constexpr int type<sql>::id<std::string>() { return SQLITE3_TEXT; }
     template<> template<> constexpr int type<sql>::id<std::chrono::time_point<std::chrono::system_clock>>() { return SQLITE_INTEGER; }
 
-    // associate engine native type to cpp scalar type
-    template<> template<> struct type<sql>::type_impl<SQLITE_INTEGER> { using type_ = int; };
-    template<> template<> struct type<sql>::type_impl<SQLITE_FLOAT> { using type_ = double; };
-    template<> template<> struct type<sql>::type_impl<SQLITE3_TEXT> { using type_ = std::string; };
-} // ndb
+    // associate engine native type to cpp type
+    template<> struct cpp_type<sql, SQLITE_INTEGER> { using type = int; };
+    template<> struct cpp_type<sql, SQLITE_FLOAT> { using type = double; };
+    template<> struct cpp_type<sql, SQLITE3_TEXT> { using type = std::string; };
 
-namespace ndb
-{
     template<> template<>
-    NDB_SHARED int type<sql>::decode(const value<sql>& v);
-    template<> template<>
-    NDB_SHARED std::string type<sql>::decode(const value<sql>& v);
+    auto type<sql>::encode(const std::chrono::time_point<std::chrono::system_clock>& v) -> get<id<std::decay<decltype(v)>::type>()>;
 } // ndb
 
 #endif // ENGINE_SQL_TYPE_H_NDB

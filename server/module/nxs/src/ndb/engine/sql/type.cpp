@@ -4,6 +4,8 @@
 
 namespace ndb
 {
+
+
     template<> template<>
     auto type<sql>::encode(const std::chrono::time_point<std::chrono::system_clock>& v) -> get<id<std::decay<decltype(v)>::type>()>
     {

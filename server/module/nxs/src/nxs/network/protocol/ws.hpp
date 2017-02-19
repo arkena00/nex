@@ -12,10 +12,8 @@ namespace nxs{namespace network
     public:
         ws(network::connexion* cnx);
 
-        virtual void input_read(const buffer_type&);
-        virtual void input_send(const request&);
-        virtual void output_read(const buffer_type&);
-        virtual void output_send(const request&);
+        virtual void read();
+        virtual void send(const request&);
 
         void process_handshake(const char* data, size_t data_received);
         std::string data_decode(const char* data, size_t data_received);

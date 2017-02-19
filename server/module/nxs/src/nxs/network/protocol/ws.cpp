@@ -11,8 +11,9 @@ namespace nxs{namespace network
         _handshake_done(0)
     {}
 
-    void ws::input_read(const buffer_type& buf)
+    void ws::read()
     {
+        const auto& buf = connexion().buffer();
         // process handshake if not done
         if (!_handshake_done) return process_handshake(buf.data(), buf.size());
 
@@ -23,19 +24,14 @@ namespace nxs{namespace network
 
         output().set("nxs::response;");
 
-        input_process();
+        process();
     }
 
-    void ws::output_send(const request& req)
+    void ws::send(const request& req)
     {
 
         //connexion().data_send(req.data_const(0).get<std::string>().c_str(), req.data_const(0).size());
     }
-
-    void ws::input_send(const nxs::request& req){}
-
-    void ws::output_read(const buffer_type&){}
-
 
     // handshake
     void ws::process_handshake(const char* raw_data, size_t data_received)
@@ -129,6 +125,6 @@ namespace nxs{namespace network
         memcpy(response + header_size, data, data_size);
 
         // send data on socket
-        connexion().data_send((char*)response, response_size);
+        connexion().send((char*)response, response_size);
     }
 }} // nxs::network

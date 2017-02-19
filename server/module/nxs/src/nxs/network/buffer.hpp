@@ -18,7 +18,7 @@ namespace nxs{namespace network
         auto address() { return &_data; }
         const char* data() const { return _data.data(); }
         constexpr size_t capacity() const { return S; }
-        void size(size_t n) { _data_size = n; }
+        void reserve(size_t n) { _data_size = n; }
         size_t size() const { return _data_size; }
     };
 }} // nxs::network

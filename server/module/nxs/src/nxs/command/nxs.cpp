@@ -20,6 +20,10 @@ namespace nxs
             nex.output().add(nxs::version());
         }
 
+        static void response(nxs::nex& nex)
+        {
+        }
+
         static void test(nxs::nex& nex)
         {
             std::cout << "\nCREATE CNX";
@@ -27,7 +31,8 @@ namespace nxs
             cnx.sync_connect("127.0.0.1", 5050);
             std::string req = "NEX:1.0//nxs::version;;";
             std::cout << "\nSEND";
-            cnx.data_send(req.c_str(), req.size());
+            if (cnx.iotype() == network::connexion::output) std::cout << "__OUT";
+            cnx.send(req.c_str(), req.size());
             cnx.sync_data_read();
             std::cout << "RESULT : " << cnx.protocol().input().data(0).get();
 
@@ -82,6 +87,9 @@ namespace nxs
     {
         command& version = nxs::command::add("nxs", "version", &nxs::commands<command::nxs>::version);
         version.help_set("return nxs version");
+
+        command& response = nxs::command::add("nxs", "response", &nxs::commands<command::nxs>::response);
+        response.help_set("command to validate response request");
 
         command& test = nxs::command::add("nxs", "test", &nxs::commands<command::nxs>::test);
         test.param_add("zeta", param::optional);

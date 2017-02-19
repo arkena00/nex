@@ -9,11 +9,12 @@ namespace nxs{namespace network
     int input_connexion::id_ = 0;
     std::map<int, input_connexion*> input_connexion::list_;
 
-    input_connexion::input_connexion(boost::asio::io_service& ios) : connexion(), _socket(ios)
+    input_connexion::input_connexion(boost::asio::io_service& ios) :
+        connexion(connexion::input),
+        _socket(ios)
     {
         id_++;
         _id = id_;
-        _iotype = connexion::input;
         _alive = 1;
     }
     input_connexion::~input_connexion()
@@ -36,24 +37,24 @@ namespace nxs{namespace network
 
         //nxs::event("connexion_open", "id=" + to_string(_id) + ";ip=" + _ip_client + ";");
         nxs_log << "connexion incoming " << _ip_client << _id << log::network;
-        data_read();
+        read();
     }
 
     // socket read
     void input_connexion::socket_read(const boost::system::error_code& status, size_t bytes_transferred)
     {
-        _buffer.size(bytes_transferred);
+        buffer().reserve(bytes_transferred);
 
         if (!_alive) return;
         if (!status)
         {
             try {
             // detect protocol
-            if (!has_protocol()) protocol_set(_buffer);
-            protocol().input_read(_buffer);
+            if (!has_protocol()) protocol_detect(buffer());
+           protocol().read();
 
             // read next data
-            data_read();
+            read();
 
             } catch (const std::exception& e)
             {
@@ -82,15 +83,15 @@ namespace nxs{namespace network
     }
 
     // data_read
-    void input_connexion::data_read()
+    void input_connexion::read()
     {
         if (!_alive) return;
-        _socket.async_read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()),
+        _socket.async_read_some(boost::asio::buffer(buffer().address(), buffer().capacity()),
         boost::bind(&input_connexion::socket_read, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
         );
     }
 
-    void input_connexion::data_send(const char* data, int data_size)
+    void input_connexion::send(const char* data, int data_size)
     {
         if (!_alive) return;
         boost::asio::async_write(_socket,
@@ -108,7 +109,6 @@ namespace nxs{namespace network
     }
 
     boost::asio::ip::tcp::socket& input_connexion::socket() { return _socket; }
-    const input_connexion::buffer_type& input_connexion::buffer() const { return _buffer; }
     const std::string& input_connexion::ip_client() const { return _ip_client; }
     const std::string& input_connexion::ip_local() const { return _ip_local; }
 }} // nxs::network

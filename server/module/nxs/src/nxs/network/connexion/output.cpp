@@ -10,8 +10,9 @@ namespace nxs{namespace network
     boost::asio::io_service output_connexion::ios;
 
     output_connexion::output_connexion(std::string ip, int port) :
-        connexion(protocol::create(this, protocol::nex)),
-        _socket(ios), _timer(output_connexion::ios)
+        connexion(connexion::output, protocol::create(this, protocol::nex)),
+        _socket(ios),
+        _timer(output_connexion::ios)
     {
         init();
         _ip = ip;
@@ -23,9 +24,10 @@ namespace nxs{namespace network
         _socket.close();
     }
 
-    output_connexion::output_connexion() :connexion(protocol::create(this, protocol::nex)),
-      _socket(ios),
-      _timer(output_connexion::ios)
+    output_connexion::output_connexion() :
+        connexion(connexion::output, protocol::create(this, protocol::nex)),
+        _socket(ios),
+        _timer(output_connexion::ios)
     {
         init();
     }
@@ -34,7 +36,6 @@ namespace nxs{namespace network
     {
         _ip = "127.0.0.1";
         _port = 50;
-        _iotype = 0;
         _alive = 0;
         _socket.close();
     }
@@ -78,7 +79,7 @@ namespace nxs{namespace network
         {
             _alive = 1;
             if (_callback_connect) _callback_connect();
-            data_read();
+            read();
         }
         else socket_error(status);
     }
@@ -88,10 +89,10 @@ namespace nxs{namespace network
     {
         if (!status && _alive)
         {
-            _buffer.size(bytes_transferred);
-            if (_callback_data_read) _callback_data_read(_buffer);
+            buffer().reserve(bytes_transferred);
+            if (_callback_data_read) _callback_data_read(buffer());
             // read next data
-            data_read();
+            read();
         }
         else socket_error(status);
     }
@@ -112,11 +113,11 @@ namespace nxs{namespace network
     }
 
     // data_read
-    void output_connexion::data_read()
+    void output_connexion::read()
     {
         if (!_alive) return;
         //clear buffer
-        _socket.async_read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()),
+        _socket.async_read_some(boost::asio::buffer(buffer().address(), buffer().capacity()),
                                 boost::bind(&output_connexion::socket_read, this,
                                             boost::asio::placeholders::error,
                                             boost::asio::placeholders::bytes_transferred)
@@ -131,21 +132,17 @@ namespace nxs{namespace network
         {
             boost::system::error_code error;
 
-            int data_size = _socket.read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()), error);
-            _buffer.size(data_size);
-            std::cout << "\nGET " << data_size << " ";
-            std::cout.write(_buffer.data(), _buffer.size());
-            protocol().output_read(_buffer);
+            int data_size = _socket.read_some(boost::asio::buffer(buffer().address(), buffer().capacity()), error);
+            buffer().reserve(data_size);
+            protocol().read();
             if (protocol().input().data_complete() || error) break;
         }
-
     }
 
-    void output_connexion::data_send(const char* data, int data_size)
+    void output_connexion::send(const char* data, int data_size)
     {
         if (!_alive) return;
-        boost::asio::async_write(_socket,
-                                 boost::asio::buffer(data, data_size),
+        boost::asio::async_write(_socket, boost::asio::buffer(data, data_size),
                                  boost::bind(&output_connexion::socket_send, this,
                                              boost::asio::placeholders::error,
                                              boost::asio::placeholders::bytes_transferred)
@@ -156,8 +153,6 @@ namespace nxs{namespace network
     {
         output_connexion::ios.run();
     }
-
-    const connexion::buffer_type& output_connexion::buffer() const { return _buffer; }
 
     std::string output_connexion::ip() { return _ip; }
     int output_connexion::port() { return _port; }

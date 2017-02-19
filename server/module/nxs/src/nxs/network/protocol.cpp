@@ -2,7 +2,7 @@
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/protocol/http.hpp>
 #include <nxs/network/protocol/ws.hpp>
-#include <nxs/network/buffer.hpp>
+#include <nxs/network/connexion.hpp>
 #include <nxs/core.hpp>
 #include <nxs/error.hpp>
 #include <string.h>
@@ -15,21 +15,28 @@ namespace nxs{namespace network
 
     protocol::~protocol() {}
 
-    void protocol::input_process()
+    void protocol::process()
     {
-        nxs::execute(*this);
-        // send output
-        if (_input.is_finished() || _input.data_complete()) { output_send(_output); }
+        // input connexion
+        if (connexion().iotype() == connexion::input)
+        {
+            nxs::execute(*this);
+            // send output
+            if (input().is_finished() || input().data_complete()) { send(_output); }
+        }
     }
 
-    void protocol::data_send(const char* data, size_t data_size) {}
     void protocol::error_send(const std::string& message)
     {
-        _input.clear();
-        _input.finish(true);
-        _output.set("nxs::error;");
-        _output.add(message);
-        output_send(_output);
+        if (connexion().iotype() == connexion::input)
+        {
+            _input.clear();
+            _input.finish(true);
+            _output.set("nxs::error;");
+            _output.add(message);
+            send(_output);
+        }
+        else nxs_error << message << log::network;
     }
 
     user& protocol::user() { return _user; }

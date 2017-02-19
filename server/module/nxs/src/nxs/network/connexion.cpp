@@ -3,9 +3,10 @@
 
 namespace nxs{namespace network
 {
-    connexion::connexion(network::protocol* p) : _protocol(p)
-    {
-    }
+    connexion::connexion(iotype_t iotype, network::protocol* p) :
+        _protocol(p),
+        _iotype(iotype)
+    {}
 
     connexion::~connexion()
     {
@@ -13,21 +14,22 @@ namespace nxs{namespace network
         _protocol = nullptr;
     }
 
-    void connexion::data_send(const std::string& data)
+    void connexion::send(const std::string& data)
     {
-        data_send(data.c_str(), data.size());
+        send(data.c_str(), data.size());
     }
 
     int connexion::id() const { return _id; }
     int connexion::iotype() const { return _iotype; }
     bool connexion::alive() const { return _alive; }
+    connexion::buffer_type& connexion::buffer() { return _buffer; }
     protocol& connexion::protocol() const
     {
         if (_protocol == nullptr) nxs_error << log::system;
         return *_protocol;
     }
 
-    void connexion::protocol_set(const buffer_type& buffer)
+    void connexion::protocol_detect(const buffer_type& buffer)
     {
         _protocol = protocol::create(this, buffer);
     }

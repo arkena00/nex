@@ -3,7 +3,6 @@
 
 #include <nxs/network/socket.hpp>
 #include <nxs/network/connexion.hpp>
-#include <nxs/network/buffer.hpp>
 
 namespace nxs{namespace network
 {
@@ -13,8 +12,6 @@ namespace nxs{namespace network
     {
     private:
         boost::asio::ip::tcp::socket _socket;
-
-        buffer_type _buffer;
 
         std::string _ip_client;
         std::string _ip_local;
@@ -34,18 +31,16 @@ namespace nxs{namespace network
         void close();
 
         boost::asio::ip::tcp::socket& socket();
-        const buffer_type& buffer() const;
 
         const std::string& ip_client() const;
         const std::string& ip_local() const;
 
-        virtual void data_read();
-        virtual void data_send(const char* data, int data_size);
+        virtual void read();
+        virtual void send(const char* data, int data_size);
 
         static input_connexion* create(boost::asio::io_service& ios);
         static const input_connexion& get(int id);
         static bool exist(int id);
-
     };
 }} // nxs::network
 

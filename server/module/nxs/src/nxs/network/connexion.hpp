@@ -3,6 +3,7 @@
 
 #include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
+#include <nxs/network/buffer.hpp>
 #include <string>
 
 namespace nxs{namespace network
@@ -11,32 +12,34 @@ namespace nxs{namespace network
 
     class NXS_SHARED connexion
     {
+    public:
+        using buffer_type = setup<connexion>::buffer_type;
+        enum iotype_t { input, output };
+
     private:
         protocol* _protocol;
+        buffer_type _buffer;
+        iotype_t _iotype;
 
     protected:
         int _id;
-        int _iotype;
         bool _alive;
 
     public:
-        using buffer_type = setup<connexion>::buffer_type;
-        enum { input, output };
-
-        connexion(protocol* p = nullptr);
+        connexion(iotype_t iotype, protocol* p = nullptr);
 
         virtual ~connexion();
-        virtual const buffer_type& buffer() const = 0;
-        virtual void data_read() = 0;
-        virtual void data_send(const char* data, int data_size) = 0;
+        virtual void read() = 0;
+        virtual void send(const char* data, int data_size) = 0;
 
-        void data_send(const std::string& data);
+        void send(const std::string& data);
 
         int id() const;
         int iotype() const;
         bool alive() const;
         protocol& protocol() const;
-        void protocol_set(const buffer_type& buffer);
+        buffer_type& buffer();
+        void protocol_detect(const buffer_type& buffer);
         bool has_protocol() const;
     };
 }} // nxs::network

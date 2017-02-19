@@ -28,13 +28,10 @@ namespace nxs{namespace network
 
         void input_complete(bool n);
 
-        virtual void input_read(const buffer_type&) = 0;
-        virtual void input_send(const request&) = 0;
-        virtual void output_read(const buffer_type&) = 0;
-        virtual void output_send(const request&) = 0;
+        virtual void read() = 0;
+        virtual void send(const request&) = 0;
 
-        virtual void input_process();
-        virtual void data_send(const char* data, size_t data_size);
+        virtual void process();
         virtual void error_send(const std::string& message);
 
         nxs::user& user();

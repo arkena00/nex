@@ -14,15 +14,15 @@ namespace nxs{namespace network
 
     }
 
-    void http::input_read(const buffer_type& buf)
+    void http::read()
     {
         try {
-        std::string str_data = std::string(buf.data(), buf.size());
+        std::string str_data = std::string(connexion().buffer().data(), connexion().buffer().size());
         if (str_data.find("/favicon.ico") != std::string::npos)
         {
             output().set("nxs::response;");
             output().file_add("nex.ico");
-            output_send(output());
+            send(output());
             return;
         }
         int s = str_data.find("/", 0) + 1;
@@ -34,15 +34,12 @@ namespace nxs{namespace network
         output().set("nxs::response;");
         input_complete(true);
 
-        input_process();
+        process();
 
         } catch (const std::exception& e) { return error_send(e.what()); }
     }
 
-    void http::input_send(const request&) {}
-    void http::output_read(const buffer_type&) {}
-
-    void http::output_send(const request& req)
+    void http::send(const request& req)
     {
         if (!req.data_count()) send_string("<i>no output</i>");
         const network::data& output_data = req.data_const(0);
@@ -63,12 +60,12 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().data_send(header.c_str(), header.size());
+        connexion().send(header.c_str(), header.size());
 
         // send data
         if (output_data.target() == network::data::memory)
         {
-            connexion().data_send(output_data.get<std::string>().c_str(), output_data.size());
+            connexion().send(output_data.get<std::string>().c_str(), output_data.size());
         }
         else
         {
@@ -78,7 +75,7 @@ namespace nxs{namespace network
             while (!file.eof())
             {
                 file.read(buffer.data(), 1024);
-                connexion().data_send(buffer.data(), file.gcount());
+                connexion().send(buffer.data(), file.gcount());
             }
             file.close();
         }
@@ -92,7 +89,7 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().data_send(header.c_str(), header.size());
-        connexion().data_send(data.c_str(), data.size());
+        connexion().send(header.c_str(), header.size());
+        connexion().send(data.c_str(), data.size());
     }
 }} // nxs

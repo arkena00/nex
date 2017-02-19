@@ -3,15 +3,15 @@
 
 #include <nxs/network/socket.hpp>
 #include <nxs/network/connexion.hpp>
-#include <nxs/network/buffer.hpp>
 
 namespace nxs{namespace network
 {
     class output_connexion : public connexion
     {
     private:
+        static boost::asio::io_service ios;
+
         boost::asio::ip::tcp::socket _socket;
-        connexion::buffer_type _buffer;
         std::string _ip;
         int _port;
         boost::asio::deadline_timer _timer;
@@ -40,20 +40,15 @@ namespace nxs{namespace network
         void data_send_callback_set(std::function<void(size_t)>);
         void error_callback_set(std::function<void(const char*)>);
 
-        virtual void data_read();
+        virtual void read();
         void sync_data_read();
-        virtual void data_send(const char* data, int data_size);
+        virtual void send(const char* data, int data_size);
 
         void run();
 
-        virtual const buffer_type& buffer() const;
-
-        // get
         std::string ip();
         int port();
 
-        // static
-        static boost::asio::io_service ios;
         static output_connexion* create();
 
     };

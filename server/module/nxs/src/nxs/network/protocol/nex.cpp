@@ -22,49 +22,30 @@ namespace nxs{namespace network
         protocol(cnx)
     {}
 
-    // read from input connexion
-    void nex::input_read(const buffer_type& buf)
+    // read
+    void nex::read()
     {
         try {
         // process new request
         if (input().is_finished() || input().data_complete())
         {
-            input().set(std::string(buf.data(), buf.size()));
+            input().set(std::string(connexion().buffer().data(), connexion().buffer().size()));
             output().set("nxs::response;");
             input().validate();
             input_complete(true); // data complete, can be changed by headers
             header::preprocess_all(*this);
         }
         header::process_all(*this);
-        input_process();
+        process();
 
-        } catch (const std::exception& e) { return error_send(e.what()); }
+        } catch (const std::exception& e) { error_send(e.what()); }
     }
 
-    void nex::input_send(const request&) {}
-
-    // read from output connexion
-    void nex::output_read(const buffer_type& buf)
-    {
-         try {
-        // process new request
-        if (input().is_finished() || input().data_complete())
-        {
-            input().set(std::string(buf.data(), buf.size()));
-            output().set("nxs::response;");
-            input_complete(true); // data complete, can be changed by headers
-            header::preprocess_all(*this);
-        }
-        header::process_all(*this);
-
-        } catch (const std::exception& e) { nxs_log << e.what() << log::network; }
-    }
-
-    void nex::output_send(const request& req)
+    void nex::send(const request& req)
     {
         std::string str_request = nds::encoder::encode<std::string>(req);
         // send request
-        connexion().data_send(str_request.c_str(), str_request.size());
+        connexion().send(str_request.c_str(), str_request.size());
 
         // send all data
         for (size_t i = 0; i< req.data_count(); i++)
@@ -73,7 +54,7 @@ namespace nxs{namespace network
             // send data
             if (output_data.target() == network::data::memory)
             {
-                connexion().data_send(output_data.get<std::string>().c_str(), output_data.size());
+                connexion().send(output_data.get<std::string>().c_str(), output_data.size());
             }
             else
             {
@@ -83,7 +64,7 @@ namespace nxs{namespace network
                 while (!file.eof())
                 {
                     file.read(buffer.data(), 1024);
-                    connexion().data_send(buffer.data(), file.gcount());
+                    connexion().send(buffer.data(), file.gcount());
                 }
                 file.close();
             }

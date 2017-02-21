@@ -1,17 +1,20 @@
 #include <nxs/network/connexion/input.hpp>
+#include <nxs/network/server.hpp>
 #include <nxs/network/protocol.hpp>
+#include <nxs/network/protocol/nex.hpp>
+#include <nxs/network/protocol/http.hpp>
+#include <nxs/network/protocol/ws.hpp>
 #include <nxs/log.hpp>
 
 using boost::asio::ip::tcp;
 
 namespace nxs{namespace network
 {
-    int input_connexion::id_ = 0;
-    std::map<int, input_connexion*> input_connexion::list_;
+    size_t input_connexion::id_ = 0;
 
-    input_connexion::input_connexion(boost::asio::io_service& ios) :
-        connexion(connexion::input),
-        _socket(ios)
+    input_connexion::input_connexion(const server& server) :
+        _server(server),
+        _socket(server.ios())
     {
         id_++;
         _id = id_;
@@ -19,10 +22,6 @@ namespace nxs{namespace network
     }
     input_connexion::~input_connexion()
     {
-        // delete cnx pointer
-        input_connexion::list_.erase(_id);
-        // delete user pointer
-        nxs_log << "connexion closed " << _ip_client << _id << log::network;
     }
 
     // load connexion
@@ -31,9 +30,6 @@ namespace nxs{namespace network
         // client ip
         _ip_client = _socket.remote_endpoint().address().to_string();
         _ip_local = _socket.local_endpoint().address().to_string();
-
-        // link id to cnx pointer
-        input_connexion::list_[_id] = this;
 
         //nxs::event("connexion_open", "id=" + to_string(_id) + ";ip=" + _ip_client + ";");
         nxs_log << "connexion incoming " << _ip_client << _id << log::network;
@@ -76,10 +72,7 @@ namespace nxs{namespace network
     // socket close
     void input_connexion::socket_close(const boost::system::error_code& status)
     {
-        _alive = 0;
-        _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-        _socket.close();
-        delete this;
+        close();
     }
 
     // data_read
@@ -101,11 +94,34 @@ namespace nxs{namespace network
     }
 
     // close connexion
-    void input_connexion::close() {}
-
-    input_connexion* input_connexion::create(boost::asio::io_service& ios)
+    void input_connexion::close()
     {
-        return new input_connexion(ios);
+        _alive = 0;
+        _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+        _socket.close();
+        _server.connexion_close(id());
+        nxs_log << "connexion closed " << _ip_client << _id << log::network;
+    }
+
+    void input_connexion::protocol_detect(const buffer_type& buffer)
+    {
+        // nex
+        if (strncmp(buffer.data(), "NEX", 3) == 0) protocol_set<nex<io::input>>();
+        // http
+        else if (strncmp(buffer.data(), "GET", 3) == 0 || strncmp(buffer.data(), "POST", 4) == 0)
+        {
+            // ws
+            std::string str_data = std::string(buffer.data(), buffer.size());
+            if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) protocol_set<ws>();
+            protocol_set<http<io::input>>();
+        }
+        // no protocol found, disconnect
+        else nxs_error << "protocol_unknown\n" << std::string(buffer.data(), buffer.size());
+    }
+
+    input_connexion* input_connexion::create(const server& server)
+    {
+        return new input_connexion(server);
     }
 
     boost::asio::ip::tcp::socket& input_connexion::socket() { return _socket; }

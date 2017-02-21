@@ -2,15 +2,16 @@
 #define NETWORK_CONNEXION_INPUT_H_NXS
 
 #include <nxs/network/socket.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 
 namespace nxs{namespace network
 {
-    class protocol;
+    class server;
 
-    class input_connexion : public connexion
+    class input_connexion : public basic_connexion<io::input>
     {
     private:
+        const server& _server;
         boost::asio::ip::tcp::socket _socket;
 
         std::string _ip_client;
@@ -21,11 +22,10 @@ namespace nxs{namespace network
         void socket_close(const boost::system::error_code& status);
 
     public:
-        static int id_;
-        static std::map<int, input_connexion*> list_;
+        static size_t id_;
 
-        input_connexion(boost::asio::io_service& ios);
-        virtual ~input_connexion();
+        input_connexion(const server& server);
+        ~input_connexion();
 
         void load();
         void close();
@@ -38,9 +38,9 @@ namespace nxs{namespace network
         virtual void read();
         virtual void send(const char* data, int data_size);
 
-        static input_connexion* create(boost::asio::io_service& ios);
-        static const input_connexion& get(int id);
-        static bool exist(int id);
+        void protocol_detect(const buffer_type& buffer);
+
+        static input_connexion* create(const server& server);
     };
 }} // nxs::network
 

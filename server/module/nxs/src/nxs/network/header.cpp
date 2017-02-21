@@ -1,6 +1,6 @@
 #include <nxs/network/header.hpp>
 #include <nxs/network/protocol/nex.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/command.hpp>
@@ -33,31 +33,15 @@ namespace nxs
     header::code header::id() const { return _id; }
     const std::string& header::name() const { return _name; }
 
-    void header::preprocess_all(network::nex& nex)
-    {
-        for (auto hid : list_)
-        {
-            if (nex.input().header_exist(hid)) nex.input().header(hid).preprocess(nex);
-        }
-    }
-
-    void header::process_all(network::nex& nex)
-    {
-        for (auto hid : list_)
-        {
-            if (nex.input().header_exist(hid)) nex.input().header(hid).process(nex);
-        }
-    }
-
     namespace headers
     {
-        void data_size::preprocess(network::nex& nex)
+        void data_size::preprocess(network::protocol& nex)
         {
             _data_index = 0;
             _data_offset = 0;
 
             try {
-            nex.input_complete(false);
+            nex.transfer_complete(false);
             // data target, default target is memory
             int target = data_target::memory;
             if (nex.input().header_exist<headers::data_target>()) target = nex.input().header<headers::data_target>().value();
@@ -93,9 +77,9 @@ namespace nxs
             } catch (const std::exception& e) { nxs_error << "header data_size init fail :" << e.what(); }
         }
 
-        void data_size::process(network::nex& nex)
+        void data_size::process(network::protocol& nex)
         {
-            if (nex.input().data_complete()) return;
+            if (nex.transfer_complete()) return;
 
             network::data& current = nex.input().data(_data_index);
             size_t write_size = nex.connexion().buffer().size() - _data_offset;
@@ -111,7 +95,7 @@ namespace nxs
                 {
                     _data_index = 0;
                     _data_offset = 0;
-                    nex.input_complete(true);
+                    nex.transfer_complete(true);
                     return;
                 }
                 _data_offset += write_size;
@@ -122,7 +106,7 @@ namespace nxs
             _data_offset = 0;
         }
 
-        void user_name::preprocess(network::nex& nex)
+        void user_name::preprocess(network::protocol& nex)
         {
             //std::cout << "\nINIT USER : " << nex.input().header<headers::user_name>().value();
         }

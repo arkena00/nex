@@ -9,10 +9,12 @@
 #include <nds/encoder.hpp>
 #include <nxs/setup/request.hpp>
 #include <nxs/share.hpp>
+#include <nxs/nex.hpp>
+#include <nxs/network/io.hpp>
 
 namespace nxs
 {
-    namespace network { class nex; }
+    namespace network { template<io::type> class nex; }
 
     class NXS_SHARED header
     {
@@ -49,14 +51,16 @@ namespace nxs
 
         virtual header& operator=(const header&) = 0;
 
-        virtual void preprocess(network::nex&) {}
-        virtual void process(network::nex&) {}
+        virtual void preprocess(network::protocol&) {}
+         virtual void process(network::protocol&) {}
 
         template<unsigned char H = 0>
         static void init();
 
-        static void preprocess_all(network::nex&);
-        static void process_all(network::nex&);
+        template<io::type IO_Type>
+        static void preprocess_all(network::nex<IO_Type>&);
+        template<io::type IO_Type>
+        static void process_all(network::nex<IO_Type>&);
         static std::unique_ptr<header> make(header::code id);
         static std::unique_ptr<header> make(const std::string& name);
     };
@@ -73,9 +77,9 @@ namespace nxs
         header_basic(header::code id, const std::string& name);
         header_basic(header::code id, const std::string& name, const T& value);
 
-        virtual void add_linear(const linear_type& linear_data) override;
-        virtual linear_type value_linear() override;
-        virtual header& operator=(const header&) override;
+        void add_linear(const linear_type& linear_data) override;
+        linear_type value_linear() override;
+        header& operator=(const header&) override;
 
         void add(const T& value);
         const T& value() const;
@@ -93,9 +97,9 @@ namespace nxs
         header_basic(header::code id, const std::string& name, const T& value);
         virtual ~header_basic() {}
 
-        virtual void add_linear(const linear_type& linear_data) override;
-        virtual linear_type value_linear() override;
-        virtual header& operator=(const header&) override;
+        void add_linear(const linear_type& linear_data) override;
+        linear_type value_linear() override;
+        header& operator=(const header&) override;
 
         void add(const T& value);
         const T& value(size_t index = 0) const;
@@ -120,8 +124,8 @@ namespace nxs
             data_size() : header_basic(id() , name()) {}
             data_size(size_t value) : header_basic(id() , name(), value) { }
 
-            virtual void preprocess(network::nex&) override;
-            virtual void process(network::nex&) override;
+            void preprocess(network::protocol&) override;
+            void process(network::protocol&) override;
         };
         namespace detail { template<> struct initializer<header::data_size> { using type = headers::data_size; }; }
 
@@ -146,7 +150,7 @@ namespace nxs
             user_name() : header_basic(id() , name()) {}
             user_name(const std::string& value) : header_basic(id() , name(), value) {}
 
-            virtual void preprocess(network::nex&) override;
+            void preprocess(network::protocol&) override;
         };
         namespace detail { template<> struct initializer<header::user_name> { using type = headers::user_name; }; }
 

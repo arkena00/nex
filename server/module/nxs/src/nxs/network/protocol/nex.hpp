@@ -1,19 +1,23 @@
 #ifndef NETWORK_PROTOCOL_NEX_H_NXS
 #define NETWORK_PROTOCOL_NEX_H_NXS
 
-#include <nxs/network/protocol.hpp>
-#include <nxs/network/header.hpp>
+#include <nxs/network/protocol/basic.hpp>
 
 namespace nxs{namespace network
 {
-    class nex : public protocol
+    template<io::type IO_Type>
+    class nex : public basic_protocol<IO_Type>
     {
     public:
-        nex(network::connexion* cnx);
+        nex(network::connexion& cnx) :
+            basic_protocol<IO_Type>(cnx)
+        {}
 
-        virtual void read();
-        virtual void send(const request&);
+        void read();
+        void send(const request&);
     };
 }} // nxs::network
+
+#include "nex.tpp"
 
 #endif // NETWORK_PROTOCOL_NEX_H_NXS

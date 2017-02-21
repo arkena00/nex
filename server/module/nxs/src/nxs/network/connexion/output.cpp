@@ -1,7 +1,8 @@
 #include <nxs/network/connexion/output.hpp>
 #include <nxs/network/protocol.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/buffer.hpp>
+#include <nxs/network/protocol/nex.hpp>
 
 namespace nxs{namespace network
 {
@@ -10,7 +11,7 @@ namespace nxs{namespace network
     boost::asio::io_service output_connexion::ios;
 
     output_connexion::output_connexion(std::string ip, int port) :
-        connexion(connexion::output, protocol::create(this, protocol::nex)),
+        basic_connexion(protocol::create<network::nex<io::output>>(*this)),
         _socket(ios),
         _timer(output_connexion::ios)
     {
@@ -25,7 +26,7 @@ namespace nxs{namespace network
     }
 
     output_connexion::output_connexion() :
-        connexion(connexion::output, protocol::create(this, protocol::nex)),
+        basic_connexion(protocol::create<network::nex<io::output>>(*this)),
         _socket(ios),
         _timer(output_connexion::ios)
     {
@@ -135,7 +136,7 @@ namespace nxs{namespace network
             int data_size = _socket.read_some(boost::asio::buffer(buffer().address(), buffer().capacity()), error);
             buffer().reserve(data_size);
             protocol().read();
-            if (protocol().input().data_complete() || error) break;
+            if (protocol().transfer_complete() || error) break;
         }
     }
 
@@ -157,4 +158,3 @@ namespace nxs{namespace network
     std::string output_connexion::ip() { return _ip; }
     int output_connexion::port() { return _port; }
 }} // nxs::network
-

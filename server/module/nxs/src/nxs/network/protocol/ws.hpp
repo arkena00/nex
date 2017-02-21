@@ -1,16 +1,16 @@
 #ifndef NETWORK_PROTOCOL_WS_H_NXS
 #define NETWORK_PROTOCOL_WS_H_NXS
 
-#include <nxs/network/protocol.hpp>
+#include <nxs/network/protocol/basic.hpp>
 
 namespace nxs{namespace network
 {
-    class ws : public protocol
+    class ws : public basic_protocol<io::input>
     {
     private:
         bool _handshake_done;
     public:
-        ws(network::connexion* cnx);
+        ws(network::connexion& cnx);
 
         virtual void read();
         virtual void send(const request&);

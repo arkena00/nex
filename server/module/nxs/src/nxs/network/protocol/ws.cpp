@@ -1,13 +1,13 @@
 #include <nxs/network/protocol/ws.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/crypto/botan.hpp>
 
 namespace nxs{namespace network
 {
 
-    ws::ws(network::connexion* cnx) :
-        protocol(cnx),
+    ws::ws(network::connexion& cnx) :
+        basic_protocol(cnx),
         _handshake_done(0)
     {}
 

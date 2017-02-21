@@ -3,24 +3,9 @@
 
 // core include
 #include <nxs/share.hpp>
+#include <nxs/nex.hpp>
 #include <nxs/error.hpp>
 #include <string>
-
-// nex interface
-namespace nxs
-{
-    class request;
-    class user;
-
-    class NXS_SHARED nex
-    {
-    public:
-        virtual ~nex() {}
-        virtual nxs::user& user() = 0;
-        virtual request& input() = 0;
-        virtual request& output() = 0;
-    };
-} // nxs
 
 namespace nxs
 {

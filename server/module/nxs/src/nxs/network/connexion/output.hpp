@@ -2,11 +2,11 @@
 #define NETWORK_CONNEXION_OUTPUT_H_NXS
 
 #include <nxs/network/socket.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 
 namespace nxs{namespace network
 {
-    class output_connexion : public connexion
+    class output_connexion : public basic_connexion<io::output>
     {
     private:
         static boost::asio::io_service ios;

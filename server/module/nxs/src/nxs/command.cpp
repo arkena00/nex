@@ -28,7 +28,7 @@ namespace nxs
 
     void command::execute(nxs::nex& nex) const
     {
-        if (!nex.input().data_complete() && wait_transfer()) return;
+        if (!nex.transfer_complete() && wait_transfer()) return;
         address()(nex);
     }
 

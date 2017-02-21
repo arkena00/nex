@@ -1,5 +1,5 @@
 #include <nxs/network/protocol/http.hpp>
-#include <nxs/network/connexion.hpp>
+#include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/error.hpp>
 #include <fstream>
@@ -9,12 +9,8 @@ namespace fs = boost::filesystem;
 
 namespace nxs{namespace network
 {
-    http::http(network::connexion* cnx) : protocol(cnx)
-    {
-
-    }
-
-    void http::read()
+    template<>
+    void http<io::input>::read()
     {
         try {
         std::string str_data = std::string(connexion().buffer().data(), connexion().buffer().size());
@@ -32,16 +28,21 @@ namespace nxs{namespace network
         input().set(str_request);
         input().validate();
         output().set("nxs::response;");
-        input_complete(true);
+        transfer_complete(true);
 
         process();
 
-        } catch (const std::exception& e) { return error_send(e.what()); }
+        } catch (const std::exception& e) { return error(e.what()); }
     }
 
-    void http::send(const request& req)
+    template<>
+    void http<io::input>::send(const request& req)
     {
-        if (!req.data_count()) send_string("<i>no output</i>");
+        if (!req.data_count())
+        {
+            send_string("<i>no output</i>");
+            return;
+        }
         const network::data& output_data = req.data_const(0);
 
         std::string type = "text/html";
@@ -81,7 +82,8 @@ namespace nxs{namespace network
         }
     }
 
-    void http::send_string(const std::string& data)
+    template<>
+    void http<io::input>::send_string(const std::string& data)
     {
         std::string header = "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/html\r\n"

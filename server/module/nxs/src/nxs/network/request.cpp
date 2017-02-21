@@ -28,9 +28,7 @@ namespace nxs
         _command_name = "";
         _size = 0;
         _valid = false;
-        _finished = false;
         _data.clear();
-        _data_complete = false;
         _header_list.clear();
         _param_list.clear();
     }
@@ -89,9 +87,6 @@ namespace nxs
         _valid = true;
     }
 
-    bool request::is_finished() const { return _finished; }
-    void request::finish(bool n) { _finished = n; }
-
     nxs::param& request::param(const std::string& name) { return _param_list[name]; }
     std::string& request::param_value(const std::string& name, int index)  { return _param_list[name][index]; }
 
@@ -117,7 +112,5 @@ namespace nxs
     }
 
     size_t request::data_count() const { return _data.size(); }
-    bool request::data_complete() const { return _data_complete; }
-
 } // nxs
 

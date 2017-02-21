@@ -16,6 +16,25 @@ namespace nxs
         init<H_id + 1>(); // if you get error here, the class for header::code enum is not found
     }
 
+    template<io::type IO_Type>
+    void header::preprocess_all(network::nex<IO_Type>& nex)
+    {
+        for (auto hid : list_)
+        {
+            if (nex.input().header_exist(hid)) nex.input().header(hid).preprocess(nex);
+        }
+    }
+
+    template<io::type IO_Type>
+    void header::process_all(network::nex<IO_Type>& nex)
+    {
+        for (auto hid : list_)
+        {
+            if (nex.input().header_exist(hid)) nex.input().header(hid).process(nex);
+        }
+    }
+
+
     // single value header
     template<class T>
     header_basic<T>::header_basic(header::code id, const std::string& name) :

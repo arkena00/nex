@@ -8,6 +8,8 @@
 #include <array>
 #include <vector>
 #include <functional>
+#include <thread>
+#include <mutex>
 
 #define nxs_log nxs::log::add(NXS_LINE, NXS_FUNC_NAME)
 #define nxs_warning nxs::log::add(NXS_LINE, NXS_FUNC_NAME) << nxs::log::warning
@@ -22,7 +24,8 @@ namespace nxs
         enum mod { none, list = 1 };
 
     public:
-        static log* instance_;
+        thread_local static log* instance_;
+        static std::mutex locker_;
         static std::array<std::string, 3> type_str_;
         static std::array<std::string, 3> level_str_;
 

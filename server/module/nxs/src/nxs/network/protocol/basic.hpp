@@ -29,16 +29,16 @@ namespace nxs{namespace network
         basic_protocol(network::connexion& cnx);
         virtual ~basic_protocol();
 
-        bool transfer_complete() const;
-        void transfer_complete(bool n);
-        bool process_complete() const;
-        void process_complete(bool n);
-
         virtual void read() = 0;
         virtual void send(const request&) = 0;
 
         virtual void process();
         virtual void error(const std::string& message);
+
+        bool transfer_complete() const;
+        void transfer_complete(bool n);
+        bool process_complete() const;
+        void process_complete(bool n);
 
         nxs::user& user() override;
         request& input() override;

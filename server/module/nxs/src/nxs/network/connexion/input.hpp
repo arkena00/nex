@@ -11,8 +11,10 @@ namespace nxs{namespace network
     class input_connexion : public basic_connexion<io::input>
     {
     private:
-        const server& _server;
+        server& _server;
+    #ifndef NXS_IMPORTED
         boost::asio::ip::tcp::socket _socket;
+    #endif
 
         std::string _ip_client;
         std::string _ip_local;
@@ -22,9 +24,7 @@ namespace nxs{namespace network
         void socket_close(const boost::system::error_code& status);
 
     public:
-        static size_t id_;
-
-        input_connexion(const server& server);
+        input_connexion(server& server);
         ~input_connexion();
 
         void load();
@@ -39,8 +39,6 @@ namespace nxs{namespace network
         virtual void send(const char* data, int data_size);
 
         void protocol_detect(const buffer_type& buffer);
-
-        static input_connexion* create(const server& server);
     };
 }} // nxs::network
 

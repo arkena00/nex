@@ -10,18 +10,15 @@ using boost::asio::ip::tcp;
 
 namespace nxs{namespace network
 {
-    size_t input_connexion::id_ = 0;
-
-    input_connexion::input_connexion(const server& server) :
+    input_connexion::input_connexion(server& server) :
         _server(server),
         _socket(server.ios())
     {
-        id_++;
-        _id = id_;
         _alive = 1;
     }
     input_connexion::~input_connexion()
     {
+        nxs_log << "connexion closed " << _ip_client << id() << log::network;
     }
 
     // load connexion
@@ -32,7 +29,7 @@ namespace nxs{namespace network
         _ip_local = _socket.local_endpoint().address().to_string();
 
         //nxs::event("connexion_open", "id=" + to_string(_id) + ";ip=" + _ip_client + ";");
-        nxs_log << "connexion incoming " << _ip_client << _id << log::network;
+        nxs_log << "connexion incoming " << _ip_client << id() << log::network;
         read();
     }
 
@@ -100,7 +97,6 @@ namespace nxs{namespace network
         _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
         _socket.close();
         _server.connexion_close(id());
-        nxs_log << "connexion closed " << _ip_client << _id << log::network;
     }
 
     void input_connexion::protocol_detect(const buffer_type& buffer)
@@ -117,11 +113,6 @@ namespace nxs{namespace network
         }
         // no protocol found, disconnect
         else nxs_error << "protocol_unknown\n" << std::string(buffer.data(), buffer.size());
-    }
-
-    input_connexion* input_connexion::create(const server& server)
-    {
-        return new input_connexion(server);
     }
 
     boost::asio::ip::tcp::socket& input_connexion::socket() { return _socket; }

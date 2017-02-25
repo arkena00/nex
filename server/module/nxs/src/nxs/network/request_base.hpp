@@ -27,9 +27,6 @@ namespace nxs
         request_base(module_typec module_type, const std::string& module_name, const std::string& command_name);
 
     public:
-        request_base(request_base&&) { ///TODO
-        }
-
         module_typec module_type() const;
         const std::string& module_name() const;
         const std::string& command_name() const;
@@ -42,6 +39,7 @@ namespace nxs
         template<class H, class T> void header_add(T value);
         template<class H> H& header();
         nxs::header& header(nxs::header::code id) const { return *_header_list.at(id).get(); }
+        const header_list& header_get() const;
 
         template<class H> auto header_value(size_t index = 0) const;
         template<class H> auto header_value() const;

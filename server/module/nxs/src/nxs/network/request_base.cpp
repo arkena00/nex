@@ -3,6 +3,7 @@
 namespace nxs
 {
     request_base::request_base() : _module_type(unknown) {}
+
     request_base::request_base(module_typec module_type, const std::string& module_name, const std::string& command_name) :
         _module_type(module_type),
         _module_name(module_name),
@@ -18,6 +19,7 @@ namespace nxs
         return _module_name + ":" + _command_name;
     }
 
+     const request_base::header_list& request_base::header_get() const { return _header_list; }
      size_t request_base::header_count() const { return _header_list.size(); }
      bool request_base::header_exist(header::code id) const { return _header_list.count(id); }
 

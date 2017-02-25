@@ -16,7 +16,8 @@ namespace nxs
         else _header_list.insert(std::make_pair(H::id(), std::make_unique<H>(value)));
     }
 
-    template<class H> H& request_base::header() { return *static_cast<H*>(_header_list[H::id()].get()); }
+    template<class H>
+    H& request_base::header() { return *static_cast<H*>(_header_list[H::id()].get()); }
 
     template<class H>
     auto request_base::header_value(size_t index) const

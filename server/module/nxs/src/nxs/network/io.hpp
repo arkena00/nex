@@ -8,6 +8,6 @@ namespace nxs
     public:
         enum type { input, output };
     };
-} // nxs::network
+} // nxs
 
 #endif // NETWORK_IO_H_NXS

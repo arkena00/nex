@@ -16,8 +16,10 @@ namespace nxs
 
     class NXS_SHARED command : public request_base
     {
+        using Command_List = std::map<std::string, command>;
+
     private:
-        static std::map<std::string, command> list_;
+        static Command_List list_;
 
         int _id;
         nxs::param_list _param_list;
@@ -46,8 +48,8 @@ namespace nxs
                        const std::string& default_value = "",
                        const std::string& format = "");
 
-        static std::map<std::string, command>& list();
         static command& add(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn);
+        static const Command_List& get();
         static const command& get(const std::string& full_command);
         static bool exist(const std::string& full_command);
         static void init();

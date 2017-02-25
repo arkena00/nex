@@ -3,75 +3,34 @@
 #include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/buffer.hpp>
 #include <nxs/network/protocol/nex.hpp>
+#include <nxs/network/client.hpp>
 
 namespace nxs{namespace network
 {
     using boost::asio::ip::tcp;
-    // static
-    boost::asio::io_service output_connexion::ios;
 
-    output_connexion::output_connexion(std::string ip, int port) :
+    output_connexion::output_connexion(client& client) :
         basic_connexion(protocol::create<network::nex<io::output>>(*this)),
-        _socket(ios),
-        _timer(output_connexion::ios)
-    {
-        init();
-        _ip = ip;
-        _port = port;
-        connect(_ip, _port);
-    }
+        _client(client),
+        _socket(client.ios()),
+        _timer(client.ios()),
+        _ip("127.0.0.1"),
+        _port(50)
+    {}
+
     output_connexion::~output_connexion()
     {
         _socket.close();
+        nxs_log << "connexion closed" << _ip << ":" << _port << id() << log::network;
     }
 
-    output_connexion::output_connexion() :
-        basic_connexion(protocol::create<network::nex<io::output>>(*this)),
-        _socket(ios),
-        _timer(output_connexion::ios)
-    {
-        init();
-    }
-
-    void output_connexion::init()
-    {
-        _ip = "127.0.0.1";
-        _port = 50;
-        _alive = 0;
-        _socket.close();
-    }
-
-    output_connexion* output_connexion::create()
-    {
-        return new output_connexion;
-    }
+    void output_connexion::load() {}
 
     // callback
-    void output_connexion::connect_callback_set(std::function<void()> fn) { _callback_connect = fn; }
-    void output_connexion::data_read_callback_set(std::function<void(connexion::buffer_type)> fn) { _callback_data_read = fn; }
-    void output_connexion::data_send_callback_set(std::function<void(size_t)> fn) { _callback_data_send = fn; }
-    void output_connexion::error_callback_set(std::function<void(const char*)> fn) { _callback_error = fn; }
-
-    void output_connexion::connect(std::string ip, int port, int time_out)
-    {
-        init();
-
-        _ip = ip;
-        _port = port;
-
-        tcp::endpoint endpoint(boost::asio::ip::address::from_string(_ip), _port);
-        _socket.async_connect(endpoint, boost::bind(&output_connexion::socket_connect, this, boost::asio::placeholders::error));
-    }
-
-    void output_connexion::sync_connect(std::string ip, int port)
-    {
-        init();
-        _ip = ip;
-        _port = port;
-        tcp::endpoint endpoint(boost::asio::ip::address::from_string(_ip), _port);
-        _socket.connect(endpoint);
-        _alive = 1;
-    }
+    void output_connexion::on_connect(std::function<void()> fn) { _on_connect = fn; }
+    void output_connexion::on_read(std::function<void(connexion::buffer_type&)> fn) { _on_read = fn; }
+    void output_connexion::on_send(std::function<void(size_t)> fn) { _on_send = fn; }
+    void output_connexion::on_error(std::function<void(const char*)> fn) { _on_error = fn; }
 
     // socket connect
     void output_connexion::socket_connect(const boost::system::error_code& status)
@@ -79,7 +38,11 @@ namespace nxs{namespace network
         if (!status)
         {
             _alive = 1;
-            if (_callback_connect) _callback_connect();
+            if (_on_connect)
+            {
+                nxs_log << "connexion open" << _ip << ":" << _port << id() << log::network;
+                _on_connect();
+            }
             read();
         }
         else socket_error(status);
@@ -91,7 +54,7 @@ namespace nxs{namespace network
         if (!status && _alive)
         {
             buffer().reserve(bytes_transferred);
-            if (_callback_data_read) _callback_data_read(buffer());
+            if (_on_read) _on_read(buffer());
             // read next data
             read();
         }
@@ -102,7 +65,7 @@ namespace nxs{namespace network
     {
         if (!status && _alive)
         {
-            if (_callback_data_send) _callback_data_send(bytes_transferred);
+            if (_on_send) _on_send(bytes_transferred);
         }
         else socket_error(status);
     }
@@ -110,7 +73,26 @@ namespace nxs{namespace network
     void output_connexion::socket_error(const boost::system::error_code& status)
     {
         _alive = 0;
-        if (_callback_error) _callback_error(status.message().c_str());
+        if (_on_error) _on_error(status.message().c_str());
+    }
+
+    void output_connexion::connect(std::string ip, int port, int time_out)
+    {
+        _ip = ip;
+        _port = port;
+
+        tcp::endpoint endpoint(boost::asio::ip::address::from_string(_ip), _port);
+        _socket.async_connect(endpoint, boost::bind(&output_connexion::socket_connect, this, boost::asio::placeholders::error));
+    }
+
+    void output_connexion::sync_connect(std::string ip, int port)
+    {
+        _ip = ip;
+        _port = port;
+        tcp::endpoint endpoint(boost::asio::ip::address::from_string(_ip), _port);
+        _socket.connect(endpoint);
+        _alive = 1;
+        nxs_log << "connexion open" << _ip << ":" << _port << id() << log::network;
     }
 
     // data_read
@@ -125,7 +107,7 @@ namespace nxs{namespace network
         );
     }
 
-    void output_connexion::sync_data_read()
+    void output_connexion::sync_read()
     {
         if (!_alive) return;
 
@@ -150,11 +132,6 @@ namespace nxs{namespace network
         );
     }
 
-    void output_connexion::run()
-    {
-        output_connexion::ios.run();
-    }
-
-    std::string output_connexion::ip() { return _ip; }
-    int output_connexion::port() { return _port; }
+    const std::string& output_connexion::ip() const { return _ip; }
+    int output_connexion::port() const { return _port; }
 }} // nxs::network

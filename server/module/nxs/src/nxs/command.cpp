@@ -6,13 +6,15 @@
 
 namespace nxs
 {
-    std::map<std::string, command> command::list_;
+    using Command_List = std::map<std::string, command>;
+    Command_List command::list_;
 
     template<>
     void command::init_loop<command::size_>() {}
 
     command::command(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn) :
         request_base(request_base::module, module, name),
+        _id(0),
         _address(fn),
         _wait_transfer(true)
     {}
@@ -38,8 +40,6 @@ namespace nxs
         _param_list.add(p);
     }
 
-    std::map<std::string, command>& command::list() { return list_; }
-
     command& command::add(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn)
     {
         nxs::command cmd(module, name, fn);
@@ -47,6 +47,8 @@ namespace nxs
         list_.insert(std::make_pair(command_name, std::move(cmd)));
         return list_.at(command_name);
     }
+
+    const Command_List& command::get() { return list_; }
 
     const command& command::get(const std::string& full_command_name)
     {

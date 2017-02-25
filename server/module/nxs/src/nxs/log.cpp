@@ -5,7 +5,8 @@ namespace nxs
 {
     std::array<std::string, 3> log::type_str_ = { "system", "network", "database" };
     std::array<std::string, 3> log::level_str_ = { "note", "warning", "error" };
-    log* log::instance_ = nullptr;
+    thread_local log* log::instance_ = nullptr;
+    std::mutex log::locker_;
 
     log::log() :
         _level(level::note),
@@ -20,8 +21,11 @@ namespace nxs
         std::string message = "[" + source  + ":" + type_str_[type] + "] " + str_level + " - " + _output + "\n";
         if (_level != log::note) message += "at " + _line + "\nin " + _func + "\n";
 
+
+        locker_.lock();
         std::cout << message;
         if (_redirect) _redirect(_output);
+        locker_.unlock();
 
         clear();
     }
@@ -49,7 +53,7 @@ namespace nxs
 
     log& log::operator<<(int data)
     {
-        _output += std::to_string(data);
+        _output += std::to_string(data) + " ";
         return *this;
     }
 

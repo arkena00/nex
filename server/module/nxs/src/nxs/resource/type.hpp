@@ -1,12 +1,15 @@
 #ifndef RESOURCE_TYPE_H_NXS
 #define RESOURCE_TYPE_H_NXS
 
+#include <nxs/serialize.hpp>
 #include <nxs/database.hpp>
 
 namespace nxs
 {
     class type : public db::entity<nxs::type>
     {
+        nxs_serialize(_name & _image & _description & _author)
+
     private:
         std::string _name;
         std::string _image;
@@ -18,6 +21,7 @@ namespace nxs
     public:
         static const db::tables::type& db_ref;
 
+        type() = default;
         type(const db::line&);
         type(int id);
 

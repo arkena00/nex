@@ -43,6 +43,7 @@ namespace nxs{namespace network
         std::vector<char> _data;
     public:
         memory_data();
+        memory_data(const char* v_data, size_t data_size);
         memory_data(const std::string&);
         template<class T, nxs::enable_if<std::is_arithmetic<T>::value>...>
         memory_data(T data);

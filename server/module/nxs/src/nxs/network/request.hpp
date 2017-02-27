@@ -30,6 +30,8 @@ namespace nxs
         std::vector<std::unique_ptr<network::data>> _data;
 
     public:
+        using linear_type = std::string;
+
         request();
         request(const std::string& str_request);
 
@@ -48,6 +50,7 @@ namespace nxs
         void add(T data);
         void add(const network::hdd_data& data);
         void add(const network::memory_data& data);
+        void add(const request::linear_type& data);
 
         void file_add(const std::string& path);
         network::data& data(size_t index = 0);

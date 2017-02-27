@@ -16,6 +16,7 @@ namespace ndb
         bool _exist;
 
     public:
+        entity();
         entity(const line<Engine>&);
         entity(int id);
 

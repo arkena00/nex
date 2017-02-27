@@ -1,6 +1,7 @@
 #ifndef RESOURCE_H_NXS
 #define RESOURCE_H_NXS
 
+#include <nxs/serialize.hpp>
 #include <nxs/database.hpp>
 #include <nxs/resource/type.hpp>
 
@@ -11,6 +12,8 @@ namespace nxs
         using Entity = db::entity<nxs::resource>;
         using Type_List = std::vector<nxs::type>;
         using Type_List_Str = std::map<std::string, int>;
+
+        nxs_serialize(Entity::_id & _name & _type)
     private:
         // nxs::user& _user;
         std::string _name;
@@ -22,6 +25,8 @@ namespace nxs
 
     public:
         static const db::tables::resource& db_ref;
+
+        resource() = default;
         resource(int id);
         resource(const db::line&);
 

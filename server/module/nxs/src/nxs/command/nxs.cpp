@@ -11,7 +11,6 @@
 #include <nxs/network/server.hpp>
 #include <nxs/network/client.hpp>
 #include <nxs/network/connexion/output.hpp>
-
 #include <nxs/config.hpp>
 
 namespace nxs
@@ -29,8 +28,8 @@ namespace nxs
             std::stringstream res;
             std::string br = "\n";
             res << "# nex server info";
-            //res << br << "server name : " << nxs::config::network_server_name;
-            //res << br << "download path : " << nxs::config::network_download_path;
+            res << br << "server name : " << nxs::config::network_server_name;
+            res << br << "download path : " << nxs::config::network_download_path;
             //res << br << "server connexions : " << network::server::connexion_count();
 
             res << br << br << "# server commands" << br;
@@ -50,18 +49,19 @@ namespace nxs
             nex.output().add(res.str());
         }
 
+
+
         static void test(nxs::nex& nex)
         {
-            /*size_t cnx_id = network::client::connexion_add();
-            network::output_connexion& cnx = network::client::connexion(cnx_id);
+            nxs::resource r(1);
 
-            cnx.on_connect([&](){
-                                     std::cout << "CONNECT OK";
+            std::string zz = nxs::serialize(r);
+            std::cout << "\n__" << zz;
+            nxs::resource test = nxs::unserialize<nxs::resource>(zz);
+            std::cout << "____________" << test.name() <<" : "<< test.id();
 
-                                     });
-            cnx.connect("127.0.0.1", 5050);
+            nex.output().add(r);
 
-*/
 
             //nex.output().file_add("d:/ads.txt");
 

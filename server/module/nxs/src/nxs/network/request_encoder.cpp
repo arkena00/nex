@@ -19,7 +19,7 @@ namespace nds
     template<> std::string encoder::encode<std::string, nxs::header>(const std::string& v) { return v; }
 
     template<>
-    std::string encoder::encode<std::string>(const nxs::request& req)
+    std::string encoder::encode<std::string, encoders::global>(const nxs::request& req)
     {
         string str_input = "NEX:" + req._version + "/";
 

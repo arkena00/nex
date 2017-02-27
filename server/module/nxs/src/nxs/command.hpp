@@ -2,7 +2,6 @@
 #define COMMAND_H_NXS
 
 #include <nxs/share.hpp>
-#include <nxs/constant.hpp>
 #include <nxs/network/request_base.hpp>
 #include <nxs/network/param.hpp>
 #include <map>

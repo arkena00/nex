@@ -1,112 +1,60 @@
 #ifndef NDS_ENCODER_H_NDS
 #define NDS_ENCODER_H_NDS
 
+#include <nds/trait.hpp>
+
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 #include <nxs/share.hpp>
-#include <iostream>
 
 namespace nds
 {
-    namespace encoders { class global; }
+    namespace encoders { class global{}; }
 
     class NXS_SHARED encoder
     {
     public:
-        template<typename Enc, typename T>
-        static void encode(Enc& e, T& t, unsigned int version = 0)
-        {
-            t.encode(e, version);
-        }
+        //////// DECODE
+        // decode in / out
+        template<class Encoder = encoders::global, class Linear_Type, class T>
+        static void decode(const Linear_Type& in, T& out);
 
+        // decode for non Encoder class
+        template<class T, class Encoder = encoders::global, size_t Version = 1, class Linear_Type>
+        static std::enable_if_t<!std::is_base_of<encoder, Encoder>::value, T>
+        decode(const Linear_Type& in);
 
-        template<class Encoder = encoders::global, class Linear_type, class T>
-        static void decode(const Linear_type& in, T& out);
+        // decode for Encoder class
+        template<class T, class Encoder, size_t Version = 1, class Linear_Type>
+        static std::enable_if_t<std::is_base_of<encoder, Encoder>::value, T>
+        decode(const Linear_Type& in);
 
-        template<class T, class Encoder = encoders::global, size_t Version = 1, class Linear_type>
-        static T decode(const Linear_type& in);
+        //////// ENCODE
+        // encode in / out
+        template<class Encoder, class T, class Linear_Type>
+        static void encode(const T& in, Linear_Type& out);
 
-        template<class Encoder = encoders::global, class T, class Linear_type>
-        static void encode(const T& in, Linear_type& out);
+        //
+        template<class Linear_Type, class Encoder, size_t Version = 1, class T>
+        static Linear_Type encode(const T& in);
 
-        template<class Linear_type, class Encoder = encoders::global, size_t Version = 1, class T>
-        static Linear_type encode(const T& in);
-    };
+        // encode for Encoder class
+        template<class Encoder, class T>
+        static std::enable_if_t<std::is_base_of<encoder, Encoder>::value, typename Encoder::linear_type>
+        encode(const T& in);
 
+        // encode for non Encoder class
+        template<class Encoder, class T>
+        static std::enable_if_t<!std::is_base_of<encoder, Encoder>::value, Encoder>
+        encode(const T& in);
 
-    template<class Encoder, class T>
-    typename Encoder::Linear_type NXS_SHARED encode(T& data)
-    {
-        Encoder enc;
-        return enc.encode(data);
-    }
-
-    template<class Encoder, class T, class Linear_type>
-    T NXS_SHARED decode(Linear_type& data)
-    {
-        Encoder enc;
-        return enc.decode(data);
-    }
-
-
-    namespace encoders
-    {
-        /*
-        class NXS_SHARED boost_text
-        {
-        public:
-            using Linear_type = std::string;
-
-            template<class T>
-            Linear_type encode(T& t)
-            {
-                std::stringstream _buffer;
-                boost::archive::text_oarchive ar(_buffer);
-                encoder::encode(ar, t);
-                return _buffer.str();
-            }
-
-            template<class T>
-            T decode(const Linear_type& data)
-            {
-                T t;
-                std::stringstream _buffer(data);
-                boost::archive::text_iarchive ar(_buffer);
-                encoder::encode(ar, t);
-                return t;
-            }
-        };*/
-
-    } // encoders
-
-
-
-
-
-
-
-
-
-
-
-    struct custom
-    {
-        int u;
-        custom() : u(999) {}
-        friend class access;
-        template<class E> void encode(E& enc, unsigned int version) { enc & u; }
-    };
-
-    struct test
-    {
-        int a;
-        std::string b;
-        custom c;
-
-        friend class access;
-        template<class E> void encode(E& enc, unsigned int version) { enc & a & b & c; }
-
-        test() : a(555), b("test") {}
-
+        // encode T with T::Linear_Type
+        template<class T>
+        static typename T::linear_type encode(const T& in);
     };
 } // nds
+
+#include "encoder.tpp"
 
 #endif // NDS_ENCODER_H_NDS

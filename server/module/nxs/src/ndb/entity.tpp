@@ -1,6 +1,12 @@
 namespace ndb
 {
     template<class T, class Engine>
+    entity<T, Engine>::entity() :
+        _id(0),
+        _exist(false)
+    {}
+
+    template<class T, class Engine>
     entity<T, Engine>::entity(const line<Engine>& data) :
         _id(data[T::db_ref.id]),
         _exist(true)

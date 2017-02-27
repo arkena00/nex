@@ -23,6 +23,10 @@ namespace nxs{namespace network
 
     // memory
     memory_data::memory_data() : data(data::memory) {}
+    memory_data::memory_data(const char* v_data, size_t data_size) : data(data::memory)
+    {
+        add(v_data, data_size);
+    }
     memory_data::memory_data(const std::string& v) : data(data::memory)
     {
         add(v.c_str(), v.size());

@@ -1,14 +1,14 @@
 #include <nxs/error.hpp>
-#include <nxs/network/header.hpp>
+#include <nxs/serialize.hpp>
 #include <string>
 #include <memory>
 
 namespace nxs
 {
+    // default function to add data, serialize data
     template<class T>
     void request::add(T v_data)
     {
-        _data.push_back(std::make_unique<network::memory_data>(v_data));
-        header_add<headers::data_size>(_data.back().get()->size());
+        add(nxs::serialize(v_data));
     }
 } // nxs

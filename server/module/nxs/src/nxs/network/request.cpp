@@ -1,5 +1,4 @@
 #include <nxs/network/request.hpp>
-#include <nxs/constant.hpp>
 #include <nxs/error.hpp>
 #include <nxs/command.hpp>
 #include <nds/encoder.hpp>
@@ -93,6 +92,13 @@ namespace nxs
     void request::add(const network::memory_data& d) { _data.push_back(std::make_unique<network::memory_data>(d)); }
     void request::add(const network::hdd_data& d) { _data.push_back(std::make_unique<network::hdd_data>(d)); }
 
+    // add serialized data
+    void request::add(const request::linear_type& data)
+    {
+        _data.push_back(std::make_unique<network::memory_data>(data.c_str(), data.size()));
+        header_add<headers::data_size>(data.size());
+    }
+
     void request::file_add(const std::string& path)
     {
         _data.push_back(std::make_unique<network::hdd_data>(path));
@@ -105,6 +111,7 @@ namespace nxs
         if (index >= _data.size()) nxs_error << "request data out of range";
         return *_data[index];
     }
+
     const network::data& request::data_const(size_t index) const
     {
         if (index >= _data.size()) nxs_error << "request data out of range";

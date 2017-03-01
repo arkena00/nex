@@ -65,7 +65,7 @@ namespace nds
 {
     template<> NXS_SHARED std::string encoder::encode<std::string, nxs::header>(const std::vector<size_t>& value_list);
     template<> NXS_SHARED std::string encoder::encode<std::string, nxs::header>(const std::string& v);
-    template<> NXS_SHARED std::string encoder::encode<std::string>(const nxs::request& req);
+    template<> NXS_SHARED std::string encoder::encode<std::string, encoders::global>(const nxs::request& req);
 
     template<> NXS_SHARED size_t encoder::decode<size_t, nxs::header>(const std::string& v);
     template<> NXS_SHARED std::string encoder::decode<std::string, nxs::header>(const std::string& v);

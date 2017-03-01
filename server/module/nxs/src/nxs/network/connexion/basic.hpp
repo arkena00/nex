@@ -11,10 +11,8 @@
 
 namespace nxs{namespace network
 {
-    template<io::type IO_Type> class basic_protocol;
-
     template<io::type IO_Type>
-    class NXS_SHARED basic_connexion : public connexion
+    class NXS_SHARED basic_connexion : virtual public connexion
     {
     public:
         using buffer_type = setup<connexion>::buffer_type;
@@ -35,22 +33,21 @@ namespace nxs{namespace network
     public:
         basic_connexion(std::unique_ptr<network::protocol> = nullptr);
 
-        virtual ~basic_connexion();
-        virtual void load() = 0;
+        virtual ~basic_connexion() =  default;
         virtual void read() = 0;
         virtual void send(const char* data, int data_size) = 0;
 
         void send(const std::string& data);
 
-        size_t id() const;
+        size_t id() const override;
         constexpr io::type iotype() const;
         bool is_alive() const;
-        network::protocol& protocol();
-        buffer_type& buffer();
+        network::protocol& protocol() override;
+        buffer_type& buffer() override;
         bool has_protocol() const;
     };
 }} // nxs::network
 
 #include "basic.tpp"
 
-#endif // NETWORK_CONNEXION_BASE_H_NXS
+#endif // NETWORK_CONNEXION_BASIC_H_NXS

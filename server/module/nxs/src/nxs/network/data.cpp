@@ -5,6 +5,8 @@
 
 namespace nxs{namespace network
 {
+    template std::string data::get<std::string>() const;
+
     data::data(data::targetc target) :
         _target(target),
         _size(0),
@@ -39,8 +41,7 @@ namespace nxs{namespace network
         _data.insert(_data.end(), data_ptr, data_ptr + data_size);
     }
 
-    template<>
-    std::string memory_data::get<std::string>() const { return std::string(_data.data(), _data.size()); }
+    template<> std::string memory_data::get<std::string>() const { return std::string(_data.data(), _data.size()); }
 
     template<>
     const char* memory_data::get<const char*>() const { return _data.data(); }

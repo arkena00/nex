@@ -12,9 +12,8 @@ namespace nxs{namespace network
     {
     private:
         server& _server;
-    #ifndef NXS_IMPORTED
+
         boost::asio::ip::tcp::socket _socket;
-    #endif
 
         std::string _ip_client;
         std::string _ip_local;
@@ -35,8 +34,8 @@ namespace nxs{namespace network
         const std::string& ip_client() const;
         const std::string& ip_local() const;
 
-        virtual void read();
-        virtual void send(const char* data, int data_size);
+        void read() override;
+        void send(const char* data, int data_size) override;
 
         void protocol_detect(const buffer_type& buffer);
     };

@@ -17,8 +17,6 @@ namespace nxs{namespace network
 
     server::~server()
     {
-        _acceptor.cancel();
-        _acceptor.close();
     }
 
     void server::listen()
@@ -30,17 +28,19 @@ namespace nxs{namespace network
 
     void server::accept(input_connexion* cnx, const boost::system::error_code& status)
     {
+        // accept connexion, load and store
         if (!status)
         {
-            // manager load connexion
-            load(cnx);
+            cnx->load();
+            auto ptr = std::unique_ptr<input_connexion>(cnx);
+            connexion_manager::store(std::move(ptr));
         }
         else
         {
             delete cnx;
             nxs_error << "server connexion" << log::network;
         }
-        // create new listening socket
+        // create new listening connexion
         listen();
     }
 

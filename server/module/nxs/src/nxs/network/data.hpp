@@ -68,6 +68,9 @@ namespace nxs{namespace network
         virtual void add(const char* data_ptr, size_t data_size) override;
         template<class T> T get() const;
     };
+
+    template<> std::string NXS_SHARED hdd_data::get<std::string>() const;
+    template<> std::string NXS_SHARED memory_data::get<std::string>() const;
 }} // nxs::network
 
 #include "data.tpp"

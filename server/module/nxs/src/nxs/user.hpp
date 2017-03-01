@@ -1,11 +1,12 @@
 #ifndef USER_H_NXS
 #define USER_H_NXS
 
+#include <nxs/os/share.hpp>
 #include <nxs/database.hpp>
 
 namespace nxs
 {
-    class user
+    class NXS_SHARED user
     {
     private:
         int _id;

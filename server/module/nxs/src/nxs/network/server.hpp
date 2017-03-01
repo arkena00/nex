@@ -12,12 +12,12 @@ namespace nxs{namespace network
     {
     private:
         uint16_t _port;
-    #ifndef NXS_IMPORTED
+
         boost::asio::ip::tcp::acceptor _acceptor;
 
         void listen();
         void accept(input_connexion* cnx, const boost::system::error_code& status);
-    #endif
+
     public:
         server(uint16_t port);
         ~server();

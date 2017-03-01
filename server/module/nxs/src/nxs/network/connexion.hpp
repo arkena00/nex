@@ -13,7 +13,7 @@ namespace nxs{namespace network
     public:
         using buffer_type = setup<connexion>::buffer_type;
 
-        virtual ~connexion() {}
+        virtual ~connexion() = default;
 
         virtual size_t id() const = 0;
         virtual network::protocol& protocol() = 0;

@@ -94,4 +94,21 @@ namespace nxs{namespace network
         connexion().send(header.c_str(), header.size());
         connexion().send(data.c_str(), data.size());
     }
+
+
+    template<>
+    void http<io::output>::read()
+    {
+        try {
+        std::cout << "\nGET HTTP DATA FROM OUTPUT MODE : \n";
+        std::cout.write(connexion().buffer().data(), connexion().buffer().size());
+
+
+        } catch (const std::exception& e) { return error(e.what()); }
+    }
+
+    template<> void http<io::output>::send(const request&)
+    {
+
+    }
 }} // nxs

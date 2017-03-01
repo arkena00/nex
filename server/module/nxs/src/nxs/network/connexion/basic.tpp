@@ -14,11 +14,6 @@ namespace nxs{namespace network
     {}
 
     template<io::type IO_Type>
-    basic_connexion<IO_Type>::~basic_connexion()
-    {
-    }
-
-    template<io::type IO_Type>
     void basic_connexion<IO_Type>::send(const std::string& data)
     {
         send(data.c_str(), data.size());

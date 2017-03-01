@@ -62,7 +62,6 @@ namespace nxs
 
             nex.output().add(r);
 
-
             //nex.output().file_add("d:/ads.txt");
 
             /*

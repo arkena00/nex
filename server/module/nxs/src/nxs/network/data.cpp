@@ -14,8 +14,6 @@ namespace nxs{namespace network
         _capacity(0)
     {}
 
-    data::~data() {}
-
     data::targetc data::target() const { return _target; }
     size_t data::size() const { return _size; }
     size_t data::transfer_size() const { return _transfer_size; }
@@ -29,10 +27,6 @@ namespace nxs{namespace network
     {
         add(v_data, data_size);
     }
-    memory_data::memory_data(const std::string& v) : data(data::memory)
-    {
-        add(v.c_str(), v.size());
-    }
 
     size_t memory_data::size() const { return _data.size(); }
 
@@ -43,8 +37,7 @@ namespace nxs{namespace network
 
     template<> std::string memory_data::get<std::string>() const { return std::string(_data.data(), _data.size()); }
 
-    template<>
-    const char* memory_data::get<const char*>() const { return _data.data(); }
+    template<> const char* memory_data::get<const char*>() const { return _data.data(); }
 
 
     hdd_data::hdd_data(const std::string& path) :
@@ -77,9 +70,7 @@ namespace nxs{namespace network
         else nxs_error << "can't write data";
     }
 
-    template<>
-    std::string hdd_data::get<std::string>() const { return _path; }
-    template<>
-    const char* hdd_data::get<const char*>() const { return _path.c_str(); }
+    template<> std::string hdd_data::get<std::string>() const { return _path; }
+    template<> const char* hdd_data::get<const char*>() const { return _path.c_str(); }
 
 }} // nxs::network

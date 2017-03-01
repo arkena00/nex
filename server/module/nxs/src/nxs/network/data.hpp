@@ -24,7 +24,7 @@ namespace nxs{namespace network
         data(targetc target);
 
     public:
-        virtual ~data();
+        virtual ~data() = default;
 
         targetc target() const;
         virtual size_t size() const;
@@ -36,7 +36,6 @@ namespace nxs{namespace network
         template<class T = std::string> T get() const;
     };
 
-
     class NXS_SHARED memory_data : public data
     {
     private:
@@ -44,13 +43,10 @@ namespace nxs{namespace network
     public:
         memory_data();
         memory_data(const char* v_data, size_t data_size);
-        memory_data(const std::string&);
-        template<class T, nxs::enable_if<std::is_arithmetic<T>::value>...>
-        memory_data(T data);
 
-        virtual size_t size() const override;
+        size_t size() const override;
 
-        virtual void add(const char* data_ptr, size_t data_size) override;
+        void add(const char* data_ptr, size_t data_size) override;
         template<class T> T get() const;
     };
 

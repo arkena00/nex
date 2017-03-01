@@ -9,10 +9,5 @@ namespace nxs{namespace network
         return static_cast<const memory_data*>(this)->get<T>();
     }
 
-    template<class T, nxs::enable_if<std::is_arithmetic<T>::value>...>
-    memory_data::memory_data(T v) : data(data::memory)
-    {
-        std::string a(std::to_string(v));
-        add(a.data(), a.size());
-    }
+
 }} // nxs::network

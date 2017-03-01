@@ -13,14 +13,17 @@ namespace nxs{namespace network
         std::array<char, S> _data;
 
     public:
-        buffer() : _data_size(0) {}
+        buffer();
+        ~buffer() = default;
 
-        auto address() { return &_data; }
-        const char* data() const { return _data.data(); }
-        constexpr size_t capacity() const { return S; }
-        void reserve(size_t n) { _data_size = n; }
-        size_t size() const { return _data_size; }
+        std::array<char, S>* address();
+        const char* data() const;
+        constexpr size_t capacity() const;
+        void reserve(size_t n);
+        size_t size() const;
     };
 }} // nxs::network
+
+#include "buffer.tpp"
 
 #endif // NETWORK_BUFFER_H_NXS

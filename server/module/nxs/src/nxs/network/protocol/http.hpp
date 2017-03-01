@@ -13,8 +13,8 @@ namespace nxs{namespace network
             basic_protocol<IO_Type>(cnx)
         {}
 
-        virtual void read();
-        virtual void send(const request&);
+        void read() override;
+        void send(const request&) override;
 
         void send_string(const std::string&);
     };

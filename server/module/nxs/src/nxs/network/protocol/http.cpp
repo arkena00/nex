@@ -9,6 +9,7 @@ namespace fs = boost::filesystem;
 
 namespace nxs{namespace network
 {
+    // read from input
     template<>
     void http<io::input>::read()
     {
@@ -35,6 +36,7 @@ namespace nxs{namespace network
         } catch (const std::exception& e) { return error(e.what()); }
     }
 
+    // send to input
     template<>
     void http<io::input>::send(const request& req)
     {
@@ -82,6 +84,7 @@ namespace nxs{namespace network
         }
     }
 
+    // send string to input
     template<>
     void http<io::input>::send_string(const std::string& data)
     {
@@ -96,6 +99,7 @@ namespace nxs{namespace network
     }
 
 
+    // read from output
     template<>
     void http<io::output>::read()
     {
@@ -107,6 +111,7 @@ namespace nxs{namespace network
         } catch (const std::exception& e) { return error(e.what()); }
     }
 
+    // send to output
     template<> void http<io::output>::send(const request&)
     {
 

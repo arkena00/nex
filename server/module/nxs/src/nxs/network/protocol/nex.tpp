@@ -3,11 +3,11 @@
 //! \author ads
 //! \date 2016-05-16
 
-//! new input start when all previous data received or previous input marked as finish
-//! execute input when receiving data (can be changed by command)
-//! send output if all data received or input marked as finish
+//! new input start when all previous data received or protocol process is complete
+//! execute input each time receiving data (can be changed by command)
+//! send output if all data received or protocol process is complete
 
-//! NEX:1.0/header_param=header_value;/module::command;param=value; ;
+//! NEX:1.0/header_param=header_value;/module::command;param=value;;
 
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/connexion/basic.hpp>

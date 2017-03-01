@@ -35,7 +35,7 @@ namespace nxs{namespace network
         const std::string& ip_local() const;
 
         void read() override;
-        void send(const char* data, int data_size) override;
+        void send(const char* data, size_t data_size) override;
 
         void protocol_detect(const buffer_type& buffer);
     };

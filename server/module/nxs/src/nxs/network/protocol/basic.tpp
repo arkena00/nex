@@ -1,18 +1,13 @@
 #include <nxs/core.hpp>
-#include <string.h>
 
 namespace nxs{namespace network
 {
-
     template<io::type IO_Type>
     basic_protocol<IO_Type>::basic_protocol(network::connexion& cnx) :
         _connexion(cnx),
         _transfer_complete(true),
         _process_complete(true)
     {}
-
-    template<io::type IO_Type>
-    basic_protocol<IO_Type>::~basic_protocol() {}
 
     template<io::type IO_Type>
     void basic_protocol<IO_Type>::process()

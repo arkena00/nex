@@ -35,10 +35,10 @@ namespace nxs{namespace network
         void connect(const std::string& ip, int port, int time_out = 5) override;
         void sync_connect(const std::string& ip, int port);
 
-        void on_connect(std::function<void()>);
-        void on_read(std::function<void(connexion::buffer_type&)>);
-        void on_send(std::function<void(size_t)>);
-        void on_error(std::function<void(const char*)>);
+        void on_connect(std::function<void()>) override;
+        void on_read(std::function<void(connexion::buffer_type&)>) override;
+        void on_send(std::function<void(size_t)>) override;
+        void on_error(std::function<void(const char*)>) override;
 
         void read() override;
         void sync_read();

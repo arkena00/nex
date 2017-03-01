@@ -81,7 +81,7 @@ namespace nxs{namespace network
         );
     }
 
-    void input_connexion::send(const char* data, int data_size)
+    void input_connexion::send(const char* data, size_t data_size)
     {
         if (!_alive) return;
         boost::asio::async_write(_socket,

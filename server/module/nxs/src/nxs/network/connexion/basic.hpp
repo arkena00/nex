@@ -35,7 +35,7 @@ namespace nxs{namespace network
 
         virtual ~basic_connexion() =  default;
         virtual void read() = 0;
-        virtual void send(const char* data, int data_size) = 0;
+        virtual void send(const char* data, size_t data_size) = 0;
 
         void send(const std::string& data);
 

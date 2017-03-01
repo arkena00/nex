@@ -9,8 +9,6 @@
 
 namespace nxs{namespace network
 {
-    template<size_t> class buffer;
-
     template<io::type IO_Type>
     class NXS_SHARED basic_protocol : public protocol
     {
@@ -27,11 +25,10 @@ namespace nxs{namespace network
         using buffer_type = buffer<setup<network::connexion>::buffer_size>;
 
         basic_protocol(network::connexion& cnx);
-        virtual ~basic_protocol();
+        virtual ~basic_protocol() = default;
 
         virtual void read() = 0;
         virtual void send(const request&) = 0;
-
         virtual void process();
         virtual void error(const std::string& message);
 
@@ -43,13 +40,7 @@ namespace nxs{namespace network
         nxs::user& user() override;
         request& input() override;
         request& output() override;
-        network::connexion& connexion();
-
-        template<class Protocol>
-        static protocol* create(basic_connexion<io::input>* cnx)
-        {
-            return static_cast<basic_protocol<IO_Type>*>(new Protocol(cnx));
-        }
+        network::connexion& connexion() override;
     };
 
     template<> void basic_protocol<io::input>::process();

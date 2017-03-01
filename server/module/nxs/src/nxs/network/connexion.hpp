@@ -17,7 +17,7 @@ namespace nxs{namespace network
 
         virtual size_t id() const = 0;
         virtual network::protocol& protocol() = 0;
-        virtual void send(const char* data, int data_size) = 0;
+        virtual void send(const char* data, size_t data_size) = 0;
         virtual buffer_type& buffer() = 0;
     };
 }} // nxs::network

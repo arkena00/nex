@@ -12,7 +12,9 @@ namespace ui
 
     public:
         explicit tree_item(tree_item* parent = 0);
-        virtual ~tree_item();
+        ~tree_item() = default;
+
+        void node(bool);
 
     };
 } // ui

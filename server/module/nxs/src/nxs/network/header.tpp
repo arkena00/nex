@@ -37,65 +37,65 @@ namespace nxs
 
     // single value header
     template<class T>
-    header_basic<T>::header_basic(header::code id, const std::string& name) :
+    basic_header<T>::basic_header(header::code id, const std::string& name) :
         header(id, name)
     {}
     template<class T>
-    header_basic<T>::header_basic(header::code id, const std::string& name, const T& value) :
+    basic_header<T>::basic_header(header::code id, const std::string& name, const T& value) :
         header(id, name)
     { add(value); }
 
     template<class T>
-    void header_basic<T>::add_linear(const header::linear_type& linear_data) { _value = nds::encoder::decode<T, header>(linear_data); }
+    void basic_header<T>::add_linear(const header::linear_type& linear_data) { _value = nds::encoder::decode<T, header>(linear_data); }
 
     template<class T>
-    header::linear_type header_basic<T>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
+    header::linear_type basic_header<T>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
 
     template<class T>
-    header& header_basic<T>::operator=(const header& other)
+    header& basic_header<T>::operator=(const header& other)
     {
-        _value = static_cast<const header_basic<T>&>(other)._value;
+        _value = static_cast<const basic_header<T>&>(other)._value;
         return *this;
     }
 
     template<class T>
-    void header_basic<T>::add(const T& value) { _value = value; }
+    void basic_header<T>::add(const T& value) { _value = value; }
 
-    template<class T> const T& header_basic<T>::value() const { return _value; }
+    template<class T> const T& basic_header<T>::value() const { return _value; }
 
     // multi value header
     template<class T>
-    header_basic<std::vector<T>>::header_basic(header::code id, const std::string& name) :
+    basic_header<std::vector<T>>::basic_header(header::code id, const std::string& name) :
         header(id, name)
     {}
     template<class T>
-    header_basic<std::vector<T>>::header_basic(header::code id, const std::string& name, const T& value) :
+    basic_header<std::vector<T>>::basic_header(header::code id, const std::string& name, const T& value) :
             header(id, name)
     { add(value); }
 
     template<class T>
-    void header_basic<std::vector<T>>::add_linear(const header::linear_type& linear_data) { _value.push_back(nds::encoder::decode<T, header>(linear_data)); }
+    void basic_header<std::vector<T>>::add_linear(const header::linear_type& linear_data) { _value.push_back(nds::encoder::decode<T, header>(linear_data)); }
 
     template<class T>
-    header::linear_type header_basic<std::vector<T>>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
+    header::linear_type basic_header<std::vector<T>>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
 
     template<class T>
-    header& header_basic<std::vector<T>>::operator=(const header& other)
+    header& basic_header<std::vector<T>>::operator=(const header& other)
     {
-        _value = static_cast<const header_basic<std::vector<T>>&>(other)._value;
+        _value = static_cast<const basic_header<std::vector<T>>&>(other)._value;
         return *this;
     }
 
     template<class T>
-    void header_basic<std::vector<T>>::add(const T& value) { _value.push_back(value); }
+    void basic_header<std::vector<T>>::add(const T& value) { _value.push_back(value); }
 
     template<class T>
-    const T& header_basic<std::vector<T>>::value(size_t index) const
+    const T& basic_header<std::vector<T>>::value(size_t index) const
     {
         if (index >= _value.size()) nxs_error << "value index" << index << "out of range for header" << name();
         return _value[index];
     }
     template<class T>
-    size_t header_basic<std::vector<T>>::size() const { return _value.size(); }
+    size_t basic_header<std::vector<T>>::size() const { return _value.size(); }
 
 } // nxs

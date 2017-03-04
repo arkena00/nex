@@ -17,6 +17,7 @@ namespace nxs
 
         static void get(nxs::nex& nex)
         {
+            size_t source_id = nex.input().param("source_id").value<size_t>();
             nex.output().add(resource::get());
         }
 
@@ -35,7 +36,8 @@ namespace nxs
         command& resource_add = command::add("nxs", "resource_add", &commands<command::resource>::add);
         resource_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");
 
-        command::add("nxs", "resource_get", &commands<command::resource>::get);
+        command& resource_get = command::add("nxs", "resource_get", &commands<command::resource>::get);
+        resource_get.param_add("source_id", param::require, "0");
 
         command& resource_type_add = command::add("nxs", "resource_type_add", &commands<command::resource>::type_add);
         resource_type_add.param_add("id", param::require);

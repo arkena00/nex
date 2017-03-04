@@ -7,8 +7,10 @@ namespace ui
         this->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled | Qt::ItemIsDragEnabled);
     }
 
-    tree_item::~tree_item()
+    void tree_item::node(bool status)
     {
+        QTreeWidgetItem* node = new QTreeWidgetItem(this);
+        addChild(node);
     }
 
 } // ui

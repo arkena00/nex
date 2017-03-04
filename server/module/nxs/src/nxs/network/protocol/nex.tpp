@@ -9,6 +9,8 @@
 
 //! NEX:1.0/header_param=header_value;/module::command;param=value;;
 
+///TODO loop if many request in buffer
+
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/buffer.hpp>

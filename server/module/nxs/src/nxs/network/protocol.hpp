@@ -18,10 +18,12 @@ namespace nxs{namespace network
     class protocol : public nxs::nex
     {
     public:
-        virtual ~protocol() {}
+        virtual ~protocol() = default;
 
         virtual void read() = 0;
         virtual void send(const request&) = 0;
+        virtual void send(request&, std::function<void(nxs::nex&)>) = 0;
+        virtual void send(const std::string&, std::function<void(nxs::nex&)>) = 0;
 
         virtual bool transfer_complete() const = 0;
         virtual void transfer_complete(bool n) = 0;

@@ -14,6 +14,9 @@ namespace nxs{namespace network
         boost::asio::io_service _ios;
 
     public:
+        connexion_manager() = default;
+        connexion_manager(const connexion_manager&) = delete;
+
         void store(std::unique_ptr<Connexion>);
         virtual void run();
 

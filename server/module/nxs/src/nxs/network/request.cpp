@@ -35,8 +35,13 @@ namespace nxs
     void request::set(const std::string& str_request)
     {
         clear();
+        if (str_request.empty())
+        {
+            nds::encoder::decode(std::string("NEX:1.0//nxs::null;;"), *this);
+            return;
+        }
         if (str_request.substr(0, 3) != "NEX") nds::encoder::decode("NEX:1.0//" + str_request + ";", *this);
-        else nds::encoder::decode(str_request, *this);;
+        else nds::encoder::decode(str_request, *this);
     }
 
     size_t request::size() const { return _size; }

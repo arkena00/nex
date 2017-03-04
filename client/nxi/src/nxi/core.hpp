@@ -12,6 +12,7 @@ namespace nxi
 
     public:
         core();
+        core(const core&) = delete;
 
         nxs::network::client& client();
     };

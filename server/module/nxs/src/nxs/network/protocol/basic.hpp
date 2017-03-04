@@ -6,6 +6,7 @@
 #include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/user.hpp>
+#include <deque>
 
 namespace nxs{namespace network
 {
@@ -21,6 +22,8 @@ namespace nxs{namespace network
         request _input;
         request _output;
 
+        std::map<size_t, std::function<void(nxs::nex&)>> _callback;
+
     public:
         using buffer_type = buffer<setup<network::connexion>::buffer_size>;
 
@@ -29,6 +32,9 @@ namespace nxs{namespace network
 
         virtual void read() = 0;
         virtual void send(const request&) = 0;
+        void send(request& req, std::function<void(nxs::nex&)>);
+        void send(const std::string&, std::function<void(nxs::nex&)>);
+
         virtual void process();
         virtual void error(const std::string& message);
 

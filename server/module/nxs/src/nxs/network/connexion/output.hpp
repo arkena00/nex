@@ -2,6 +2,8 @@
 #define NETWORK_CONNEXION_OUTPUT_H_NXS
 
 #include <nxs/network/connexion.hpp>
+#include <string>
+#include <functional>
 
 namespace nxs{namespace network
 {

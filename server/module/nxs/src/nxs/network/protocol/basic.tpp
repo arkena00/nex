@@ -10,11 +10,6 @@ namespace nxs{namespace network
     {}
 
     template<io::type IO_Type>
-    void basic_protocol<IO_Type>::process()
-    {
-    }
-
-    template<io::type IO_Type>
     void basic_protocol<IO_Type>::error(const std::string& message)
     {
         nxs_error << "protocol error" << message << log::network;
@@ -28,6 +23,23 @@ namespace nxs{namespace network
     network::connexion& basic_protocol<IO_Type>::connexion()
     {
         return _connexion;
+    }
+
+    template<io::type IO_Type>
+    void basic_protocol<IO_Type>::send(request& req, std::function<void(nxs::nex&)> fn)
+    {
+        // add req_id to request
+        req.header_add<headers::req_id>();
+        size_t id = req.header_value<headers::req_id>();
+        // link req_id to callback
+        _callback[id] = fn;
+        send(req);
+    }
+    template<io::type IO_Type>
+    void basic_protocol<IO_Type>::send(const std::string& str_request, std::function<void(nxs::nex&)> fn)
+    {
+        nxs::request req(str_request);
+        send(req, fn);
     }
 
     template<io::type IO_Type> bool basic_protocol<IO_Type>::transfer_complete() const { return _transfer_complete; }

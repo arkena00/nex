@@ -23,7 +23,8 @@ namespace nxs
 
         enum code : unsigned char // header init and process executed in enum order
         {
-            user_name = 0,
+            req_id,
+            user_name,
             data_size,
             data_target,
             size_
@@ -41,7 +42,7 @@ namespace nxs
         header(header::code id, const std::string& name);
 
     public:
-        virtual ~header() {}
+        virtual ~header() = default;
 
         header::code id() const;
         const std::string& name() const;
@@ -52,7 +53,7 @@ namespace nxs
         virtual header& operator=(const header&) = 0;
 
         virtual void preprocess(network::protocol&) {}
-         virtual void process(network::protocol&) {}
+        virtual void process(network::protocol&) {}
 
         template<unsigned char H = 0>
         static void init();
@@ -68,14 +69,14 @@ namespace nxs
 
     // single value header
     template<class T>
-    class header_basic : public header
+    class basic_header : public header
     {
     private:
         T _value;
 
     public:
-        header_basic(header::code id, const std::string& name);
-        header_basic(header::code id, const std::string& name, const T& value);
+        basic_header(header::code id, const std::string& name);
+        basic_header(header::code id, const std::string& name, const T& value);
 
         void add_linear(const linear_type& linear_data) override;
         linear_type value_linear() override;
@@ -87,15 +88,15 @@ namespace nxs
 
     // multi value header
     template<class T>
-    class header_basic<std::vector<T>> : public header
+    class basic_header<std::vector<T>> : public header
     {
     private:
         std::vector<T> _value;
 
     public:
-        header_basic(header::code id, const std::string& name);
-        header_basic(header::code id, const std::string& name, const T& value);
-        virtual ~header_basic() {}
+        basic_header(header::code id, const std::string& name);
+        basic_header(header::code id, const std::string& name, const T& value);
+        virtual ~basic_header() {}
 
         void add_linear(const linear_type& linear_data) override;
         linear_type value_linear() override;
@@ -112,7 +113,23 @@ namespace nxs
     {
         namespace detail { template<int T> struct initializer {}; }
 
-        class NXS_SHARED data_size : public header_basic<std::vector<size_t>>
+        // req_id
+        class NXS_SHARED req_id : public basic_header<size_t>
+        {
+        public:
+            constexpr static header::code id() { return header::req_id; }
+            constexpr static const char* name() { return "req_id"; }
+            static size_t id_;
+
+            req_id() : basic_header(id() , name(), id_++) {}
+            req_id(size_t value) : basic_header(id() , name(), value) {}
+
+            void preprocess(network::protocol&) override;
+        };
+        namespace detail { template<> struct initializer<header::req_id> { using type = headers::req_id; }; }
+
+        // data_size
+        class NXS_SHARED data_size : public basic_header<std::vector<size_t>>
         {
         private:
             size_t _data_index;
@@ -121,34 +138,36 @@ namespace nxs
             constexpr static header::code id() { return header::data_size; }
             constexpr static const char* name() { return "data_size"; }
 
-            data_size() : header_basic(id() , name()) {}
-            data_size(size_t value) : header_basic(id() , name(), value) { }
+            data_size() : basic_header(id() , name()) {}
+            data_size(size_t value) : basic_header(id() , name(), value) { }
 
             void preprocess(network::protocol&) override;
             void process(network::protocol&) override;
         };
         namespace detail { template<> struct initializer<header::data_size> { using type = headers::data_size; }; }
 
-        class NXS_SHARED data_target : public header_basic<std::vector<size_t>>
+        // data_target
+        class NXS_SHARED data_target : public basic_header<std::vector<size_t>>
         {
         public:
             constexpr static header::code id() { return header::data_target; }
             constexpr static const char* name() { return "data_target"; }
             enum valuec { hdd = 8, memory = 9 };
 
-            data_target() : header_basic(id() , name()) {}
-            data_target(valuec value) : header_basic(id() , name(), value) {}
+            data_target() : basic_header(id() , name()) {}
+            data_target(valuec value) : basic_header(id() , name(), value) {}
         };
         namespace detail { template<> struct initializer<header::data_target> { using type = headers::data_target; }; }
 
-        class NXS_SHARED user_name : public header_basic<std::string>
+        // user_name
+        class NXS_SHARED user_name : public basic_header<std::string>
         {
         public:
             constexpr static header::code id() { return header::user_name; }
             constexpr static const char* name() { return "user_name"; }
 
-            user_name() : header_basic(id() , name()) {}
-            user_name(const std::string& value) : header_basic(id() , name(), value) {}
+            user_name() : basic_header(id() , name()) {}
+            user_name(const std::string& value) : basic_header(id() , name(), value) {}
 
             void preprocess(network::protocol&) override;
         };

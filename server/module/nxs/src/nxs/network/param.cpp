@@ -7,6 +7,7 @@
 namespace nds
 {
     template<> int encoder::decode<int, nxs::param>(const std::string& v) { return std::stoi(v); }
+    template<> size_t encoder::decode<size_t, nxs::param>(const std::string& v) { return std::stoi(v); }
     template<> std::string encoder::decode<std::string, nxs::param>(const std::string& v) { return v; }
 } // nds
 

@@ -7,17 +7,6 @@ using namespace std;
 
 namespace nds
 {
-    template<> std::string encoder::encode<std::string, nxs::header>(const std::vector<size_t>& value_list)
-    {
-        std::string result = "";
-        for (auto it : value_list)
-        {
-            result += std::to_string(it) + ";";
-        }
-        return result.substr(0, result.size() - 1);
-    }
-    template<> std::string encoder::encode<std::string, nxs::header>(const std::string& v) { return v; }
-
     template<>
     std::string encoder::encode<std::string, encoders::global>(const nxs::request& req)
     {

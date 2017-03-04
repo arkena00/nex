@@ -8,6 +8,21 @@
 #include <nds/encoder.hpp>
 #include <iostream>
 
+namespace nds
+{
+    template<> std::string encoder::encode<std::string, nxs::header>(const std::vector<size_t>& value_list)
+    {
+        std::string result = "";
+        for (auto it : value_list)
+        {
+            result += std::to_string(it) + ";";
+        }
+        return result.substr(0, result.size() - 1);
+    }
+    template<> std::string encoder::encode<std::string, nxs::header>(const std::string& v) { return v; }
+    template<> std::string encoder::encode<std::string, nxs::header>(const size_t& v) { return std::to_string(v); }
+} // nds
+
 namespace nxs
 {
     std::vector<header::code> header::list_;
@@ -35,6 +50,18 @@ namespace nxs
 
     namespace headers
     {
+        size_t req_id::id_ = 0;
+
+        void req_id::preprocess(network::protocol& nex)
+        {
+            // transfer input req_id to output
+            if (nex.input().header_exist<headers::req_id>())
+            {
+                size_t id = nex.input().header_value<headers::req_id>();
+                nex.output().header_add<headers::req_id>(id);
+            }
+        }
+
         void data_size::preprocess(network::protocol& nex)
         {
             _data_index = 0;

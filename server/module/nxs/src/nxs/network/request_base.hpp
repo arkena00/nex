@@ -36,12 +36,13 @@ namespace nxs
         template<class H> bool header_exist() const;
         bool header_exist(nxs::header::code id) const;
         template<class H> void header_exist_check() const;
+        template<class H> void header_add();
         template<class H, class T> void header_add(T value);
         template<class H> H& header();
         nxs::header& header(nxs::header::code id) const { return *_header_list.at(id).get(); }
         const header_list& header_get() const;
 
-        template<class H> auto header_value(size_t index = 0) const;
+        template<class H> auto header_value(size_t index) const;
         template<class H> auto header_value() const;
     };
 } // nxs

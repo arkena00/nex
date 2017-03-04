@@ -7,6 +7,7 @@
 namespace nxs{namespace network
 {
     class output_connexion;
+    template<io::type> class nex;
 
     class NXS_SHARED client : public connexion_manager<output_connexion>
     {
@@ -16,7 +17,7 @@ namespace nxs{namespace network
 
         void run() override;
 
-        template<template<io::type> class Protocol>
+        template<template<io::type> class Protocol = nex>
         output_connexion& connexion_add();
     };
 }} // nxs::network

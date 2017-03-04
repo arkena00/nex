@@ -77,6 +77,11 @@ namespace db
             table_option<>::unique(*this, {name, author});
         }
 
+        connexion::connexion(ndb::model<>& m, ndb::table_option<> option) : table(m, "connexion", option),
+            id(*this, field_option<>::id()),
+            name(*this, field_option<>::unique)
+        {}
+
         resource::resource(ndb::model<>& m) : table(m, "resource"),
             id(*this, field_option<>::id()),
             name(*this),

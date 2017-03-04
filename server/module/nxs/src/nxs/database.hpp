@@ -98,6 +98,14 @@ namespace db
             type(ndb::model<>& m, ndb::table_option<> option = {});
         };
 
+        struct connexion : public ndb::table<>
+        {
+            field<int> id;
+            field<std::string, 64> name;
+
+            connexion(ndb::model<>& m, ndb::table_option<> option = {});
+        };
+
         struct resource : public ndb::table<>
         {
             field<int> id;

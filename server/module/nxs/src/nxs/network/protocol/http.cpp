@@ -4,6 +4,7 @@
 #include <nxs/error.hpp>
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string/replace.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -22,9 +23,23 @@ namespace nxs{namespace network
             send(output());
             return;
         }
+
+        // get request from GET /request...
         int s = str_data.find("/", 0) + 1;
         int e = str_data.find("HTTP", 0) - 1;
         std::string str_request = str_data.substr(s, e - s) + ";";
+
+        // Mattermost
+        _mm = false;
+
+        if (str_data.find("8z99tr61n7biddr1qjc9364oma") != std::string::npos)
+        {
+            int s = str_data.find("text", 0) + 7;
+            int e = str_data.find("trigger_word", 0) - 3;
+            str_request = str_data.substr(s, e - s) + ";";
+            if (str_request.find("__nex") != std::string::npos) str_request = str_request.substr(6);
+            _mm = true;
+        }
 
         input().set(str_request);
         input().validate();
@@ -40,6 +55,15 @@ namespace nxs{namespace network
     template<>
     void http<io::input>::send(const request& req)
     {
+        if (_mm)
+        {
+            mm_send(req.data_const(0).get());
+            return;
+        }
+
+        std::string type = "text/html";
+        std::string header_file = "";
+
         if (!req.data_count())
         {
             send_string("<i>no output</i>");
@@ -47,15 +71,13 @@ namespace nxs{namespace network
         }
         const network::data& output_data = req.data_const(0);
 
-        std::string type = "text/html";
-        std::string header_file = "";
-
         if (output_data.target() == network::data::hdd)
         {
             fs::path p(output_data.get<std::string>());
             header_file = "Content-Disposition: attachment; filename=" + p.filename().generic_string() + "\r\n";
         }
 
+        // make header
         std::string header = "HTTP/1.1 200 OK\r\n"
         "Content-Type:" + type + "\r\n" +
         header_file +
@@ -82,6 +104,27 @@ namespace nxs{namespace network
             }
             file.close();
         }
+    }
+    // MM send
+    template<>
+    void http<io::input>::mm_send(const std::string& in)
+    {
+        std::string data = in;
+        boost::algorithm::replace_all(data, "\n", "\\n");
+        boost::algorithm::replace_all(data, "#", "\\\\#");
+        boost::algorithm::replace_all(data, "\"", "\\\"");
+        std::string output_data = "{\"text\": \"" + data + "\",\"username\": \"nex server\",\"icon_url\": \"http://nex.neuroshok.com/icon/nex.png\"}";
+
+        // make header
+        std::string header = "HTTP/1.1 200 OK\r\n"
+        "Content-Type:application/json\r\n" \
+        "Content-Length:" + std::to_string(output_data.size()) +
+        "\r\n\r\n";
+
+        // send header
+        connexion().send(header.c_str(), header.size());
+
+        connexion().send(output_data.c_str(), output_data.size());
     }
 
     // send string to input

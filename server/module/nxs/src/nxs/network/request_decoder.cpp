@@ -5,11 +5,11 @@
 
 namespace nds
 {
-    template<> size_t encoder::decode<size_t, nxs::header>(const std::string& v) { return std::stoi(v); }
-    template<> std::string encoder::decode<std::string, nxs::header>(const std::string& v) { return v; }
+    template<> size_t encoder<>::decode<size_t, nxs::header>(const std::string& v) { return std::stoi(v); }
+    template<> std::string encoder<>::decode<std::string, nxs::header>(const std::string& v) { return v; }
 
     template<>
-    void encoder::decode(const std::string& str_request, nxs::request& req)
+    void encoder<>::decode(const std::string& str_request, nxs::request& req)
     {
         try {
         size_t version_start = str_request.find(':') + 1;

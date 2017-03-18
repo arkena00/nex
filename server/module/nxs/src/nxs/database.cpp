@@ -37,7 +37,7 @@ namespace db
             table_option<>::unique(*this, {name, author});
         }
 
-        property::property(ndb::model<>& m, ndb::table_option<> option) : table(m, "property", option),
+        property::property(ndb::model<>& m, const ndb::table_option<> option) : table(m, "property", option),
             id(*this, field_option<>::id()),
             name(*this),
             type(*this),

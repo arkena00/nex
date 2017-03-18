@@ -10,7 +10,7 @@
 
 namespace nds
 {
-    template<> std::string encoder::encode<std::string, nxs::header>(const std::vector<size_t>& value_list)
+    template<> std::string encoder<>::encode<std::string, nxs::header>(const std::vector<size_t>& value_list)
     {
         std::string result = "";
         for (auto it : value_list)
@@ -19,8 +19,8 @@ namespace nds
         }
         return result.substr(0, result.size() - 1);
     }
-    template<> std::string encoder::encode<std::string, nxs::header>(const std::string& v) { return v; }
-    template<> std::string encoder::encode<std::string, nxs::header>(const size_t& v) { return std::to_string(v); }
+    template<> std::string encoder<>::encode<std::string, nxs::header>(const std::string& v) { return v; }
+    template<> std::string encoder<>::encode<std::string, nxs::header>(const size_t& v) { return std::to_string(v); }
 } // nds
 
 namespace nxs
@@ -95,7 +95,6 @@ namespace nxs
                         network::memory_data d;
                         d.reserve(data_size);
                         nex.input().add(d);
-
                     }
                 }
                 // init first data

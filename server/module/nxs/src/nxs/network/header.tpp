@@ -46,10 +46,10 @@ namespace nxs
     { add(value); }
 
     template<class T>
-    void basic_header<T>::add_linear(const header::linear_type& linear_data) { _value = nds::encoder::decode<T, header>(linear_data); }
+    void basic_header<T>::add_linear(const header::linear_type& linear_data) { _value = nds::encoder<>::decode<T, header>(linear_data); }
 
     template<class T>
-    header::linear_type basic_header<T>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
+    header::linear_type basic_header<T>::value_linear() { return nds::encoder<>::encode<header::linear_type, header>(_value); }
 
     template<class T>
     header& basic_header<T>::operator=(const header& other)
@@ -74,10 +74,10 @@ namespace nxs
     { add(value); }
 
     template<class T>
-    void basic_header<std::vector<T>>::add_linear(const header::linear_type& linear_data) { _value.push_back(nds::encoder::decode<T, header>(linear_data)); }
+    void basic_header<std::vector<T>>::add_linear(const header::linear_type& linear_data) { _value.push_back(nds::encoder<>::decode<T, header>(linear_data)); }
 
     template<class T>
-    header::linear_type basic_header<std::vector<T>>::value_linear() { return nds::encoder::encode<header::linear_type, header>(_value); }
+    header::linear_type basic_header<std::vector<T>>::value_linear() { return nds::encoder<>::encode<header::linear_type, header>(_value); }
 
     template<class T>
     header& basic_header<std::vector<T>>::operator=(const header& other)

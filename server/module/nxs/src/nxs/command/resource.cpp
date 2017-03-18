@@ -34,7 +34,7 @@ namespace nxs
     void command::initialize<command::resource>()
     {
         command& resource_add = command::add("nxs", "resource_add", &commands<command::resource>::add);
-        resource_add.param_add("name", param::require, "", "[a-z0-9_]{3,}");
+        resource_add.param_add("name", param::require, "", "[a-zA-Z0-9_]{3,}");
 
         command& resource_get = command::add("nxs", "resource_get", &commands<command::resource>::get);
         resource_get.param_add("source_id", param::require, "0");

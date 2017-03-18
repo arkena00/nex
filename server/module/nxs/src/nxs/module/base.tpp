@@ -102,13 +102,13 @@ namespace nxs
     template<class T>
     base_module<T>& base_module<T>::get(int id)
     {
-        if (!is_loaded(id)) nxs_error << T::name_ << "is not loaded :" + id;
+        if (!is_loaded(id)) nxs_error << T::name_ << " is not loaded :" + id;
         return *load_list_id_.at(id).get();
     }
     template<class T>
     base_module<T>& base_module<T>::get(const std::string& name)
     {
-        if (!is_loaded(name)) nxs_error << T::name_ << "is not loaded :" + name;
+        if (!is_loaded(name)) nxs_error << T::name_ << " is not loaded :" + name;
         return get(module_id_.at(name));
     }
 

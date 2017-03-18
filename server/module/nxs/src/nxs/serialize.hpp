@@ -17,13 +17,13 @@ namespace nxs
     template<class T>
     auto serialize(const T& t)
     {
-        return nds::encoder::encode<nds::encoders::boost_text>(t);
+        return nds::encoder<nds::encoders::boost_text>::encode(t);
     }
 
     template<class T, class Linear_Type>
     T unserialize(const Linear_Type& data)
     {
-        return nds::encoder::decode<T, nds::encoders::boost_text>(data);
+        return nds::encoder<nds::encoders::boost_text>::decode<T>(data);
     }
 } // nxs
 

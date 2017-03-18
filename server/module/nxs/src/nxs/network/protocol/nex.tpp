@@ -48,7 +48,7 @@ namespace nxs{namespace network
     {
         using Protocol = basic_protocol<IO_Type>;
 
-        std::string str_request = nds::encoder::encode<std::string, nds::encoders::global>(req);
+        std::string str_request = nds::encoder<>::encode<std::string>(req);
         // send request
         Protocol::connexion().send(str_request.c_str(), str_request.size());
 

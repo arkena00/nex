@@ -108,7 +108,6 @@ namespace nxs
     };
 
 
-
     namespace headers
     {
         namespace detail { template<int T> struct initializer {}; }

@@ -48,7 +48,7 @@ namespace nxs
     template<class T>
     T param::value(int index) const
     {
-        return nds::encoder::decode<T, nxs::param>(_value.at(index));
+        return nds::encoder<>::decode<T, nxs::param>(_value.at(index));
     }
 
 

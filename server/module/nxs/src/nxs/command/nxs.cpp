@@ -106,7 +106,15 @@ namespace nxs
 
             nex.output().add(res.str());
         }
-    };
+
+        static void rabbit(nxs::nex& nex)
+        {
+            std::string out =
+        R"(:rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit:)";
+            nex.output().add(out);
+        }
+
+    }; // commands
 
     template<>
     void command::initialize<command::nxs>()
@@ -127,5 +135,6 @@ namespace nxs
         //test.header_add<headers::data_target>(headers::data_target::memory);
 
         nxs::command::add("nxs", "dbtest", &nxs::commands<command::nxs>::dbtest);
+        nxs::command::add("nxs", "rabbit", &nxs::commands<command::nxs>::rabbit);
     }
 } // nxs

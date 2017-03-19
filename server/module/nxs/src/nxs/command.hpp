@@ -8,7 +8,7 @@
 #include <functional>
 
 namespace nxs
-{e
+{
     class nex;
     class request;
     template<unsigned char> struct commands {};

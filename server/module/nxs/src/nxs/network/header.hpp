@@ -113,7 +113,7 @@ namespace nxs
         namespace detail { template<int T> struct initializer {}; }
 
         // req_id
-        class NXS_SHARED req_id : public basic_header<size_t>
+        class NXS_SHARED req_id : public basic_header<std::size_t>
         {
         public:
             constexpr static header::code id() { return header::req_id; }

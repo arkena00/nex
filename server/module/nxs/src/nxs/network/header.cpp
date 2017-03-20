@@ -1,12 +1,7 @@
 #include <nxs/network/header.hpp>
 #include <nxs/network/protocol/nex.hpp>
-#include <nxs/network/connexion/basic.hpp>
-#include <nxs/network/request.hpp>
-#include <nxs/network/buffer.hpp>
 #include <nxs/command.hpp>
 #include <nxs/config.hpp>
-#include <nds/encoder.hpp>
-#include <iostream>
 
 namespace nds
 {

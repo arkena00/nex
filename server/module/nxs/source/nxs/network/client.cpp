@@ -1,7 +1,4 @@
 #include <nxs/network/client.hpp>
-#include <nxs/network/connexion/output.hpp>
-
-#include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/protocol/http.hpp>
 
 namespace nxs{namespace network
@@ -13,9 +10,6 @@ namespace nxs{namespace network
 
     void client::run()
     {
-        while (true)
-        {
-            ios().run();
-        }
+        ios().run();
     }
 }} // nxs::network

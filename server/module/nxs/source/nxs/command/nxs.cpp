@@ -53,14 +53,6 @@ namespace nxs
 
         static void test(nxs::nex& nex)
         {
-            nxs::resource r(1);
-
-            std::string zz = nxs::serialize(r);
-            std::cout << "\n__" << zz;
-            nxs::resource test = nxs::unserialize<nxs::resource>(zz);
-            std::cout << "____________" << test.name() <<" : "<< test.id();
-
-            nex.output().add(r);
 
             //nex.output().file_add("d:/ads.txt");
 
@@ -74,7 +66,7 @@ namespace nxs
 
             std::string result = R"__(
             <h1>Projet nex</h1>
-            Ce projet a pour but de créer un réseau de données structuré et de fournir des fonctionnalités modulable afin que l'utilisateur puisse gérer depuis une interface client générique et personnalisable toute donnée qu'elle soit local ou réseau.
+            Ce projet a pour but de crï¿½er un rï¿½seau de donnï¿½es structurï¿½ et de fournir des fonctionnalitï¿½s modulable afin que l'utilisateur puisse gï¿½rer depuis une interface client gï¿½nï¿½rique et personnalisable toute donnï¿½e qu'elle soit local ou rï¿½seau.
             <br />
             <br /><img src = 'http://nex.neuroshok.com/image/nex_presentation.jpg' />
             )__";
@@ -85,10 +77,6 @@ namespace nxs
         {
             std::stringstream res;
             try {
-            const auto& t = db::nex.type;
-            const auto& r = db::nex.resource;
-            const auto& u = db::nex.user;
-
 
             nxs::resource test(1);
 

@@ -1,7 +1,6 @@
 #include <nxs/network/connexion/output.hpp>
 #include <nxs/network/protocol.hpp>
 #include <nxs/network/connexion/basic.hpp>
-#include <nxs/network/buffer.hpp>
 #include <nxs/network/protocol/nex.hpp>
 
 namespace nxs{namespace network

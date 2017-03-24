@@ -16,7 +16,7 @@ namespace nxs
 {
     namespace network { template<io::type> class nex; }
 
-    class NXS_SHARED header
+    class header
     {
     public:
         using linear_type = setup<request>::linear_type;
@@ -113,7 +113,7 @@ namespace nxs
         namespace detail { template<int T> struct initializer {}; }
 
         // req_id
-        class NXS_SHARED req_id : public basic_header<std::size_t>
+        class req_id : public basic_header<std::size_t>
         {
         public:
             constexpr static header::code id() { return header::req_id; }
@@ -128,7 +128,7 @@ namespace nxs
         namespace detail { template<> struct initializer<header::req_id> { using type = headers::req_id; }; }
 
         // data_size
-        class NXS_SHARED data_size : public basic_header<std::vector<size_t>>
+        class data_size : public basic_header<std::vector<size_t>>
         {
         private:
             size_t _data_index;
@@ -146,7 +146,7 @@ namespace nxs
         namespace detail { template<> struct initializer<header::data_size> { using type = headers::data_size; }; }
 
         // data_target
-        class NXS_SHARED data_target : public basic_header<std::vector<size_t>>
+        class data_target : public basic_header<std::vector<size_t>>
         {
         public:
             constexpr static header::code id() { return header::data_target; }
@@ -159,7 +159,7 @@ namespace nxs
         namespace detail { template<> struct initializer<header::data_target> { using type = headers::data_target; }; }
 
         // user_name
-        class NXS_SHARED user_name : public basic_header<std::string>
+        class user_name : public basic_header<std::string>
         {
         public:
             constexpr static header::code id() { return header::user_name; }

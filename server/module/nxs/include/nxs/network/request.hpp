@@ -27,7 +27,7 @@ namespace nxs
 
         bool _valid;
 
-        std::vector<std::unique_ptr<network::data>> _data;
+        std::vector<std::shared_ptr<network::data>> _data;
 
     public:
         using linear_type = std::string;

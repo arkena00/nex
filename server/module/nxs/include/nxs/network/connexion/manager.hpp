@@ -6,7 +6,7 @@
 namespace nxs{namespace network
 {
     template<class Connexion>
-    class NXS_SHARED connexion_manager
+    class connexion_manager
     {
     private:
         std::map<int, std::unique_ptr<Connexion>> _connexion_list;

@@ -10,7 +10,7 @@
 namespace nxs
 {
 	std::string NXS_SHARED version();
-    void NXS_SHARED load();
+	NXS_SHARED void load();
 
     void execute(nxs::nex& nex);
 } // nxs

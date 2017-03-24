@@ -15,7 +15,7 @@ namespace nxs
     {
     public:
         enum module_typec { unknown, module, interface };
-        using header_list = std::map<nxs::header::code, std::unique_ptr<nxs::header>>;
+        using header_list = std::map<nxs::header::code, std::shared_ptr<nxs::header>>;
 
     protected:
         module_typec _module_type;

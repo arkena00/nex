@@ -42,8 +42,8 @@ namespace nxs
     command& command::add(const std::string& module, const std::string& name, std::function<void(nxs::nex&)> fn)
     {
         nxs::command cmd(module, name, fn);
-        std::string command_name = cmd.full_command_name();
-        list_.insert(std::make_pair(command_name, std::move(cmd)));
+        const std::string& command_name = cmd.full_command_name();
+        list_.emplace(command_name, std::move(cmd));
         return list_.at(command_name);
     }
 

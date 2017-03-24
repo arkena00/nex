@@ -12,7 +12,7 @@
 namespace nxs{namespace network
 {
     template<io::type IO_Type>
-    class NXS_SHARED basic_connexion : virtual public connexion
+    class basic_connexion : virtual public connexion
     {
     public:
         using buffer_type = setup<connexion>::buffer_type;

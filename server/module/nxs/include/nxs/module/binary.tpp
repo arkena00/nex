@@ -19,7 +19,7 @@ namespace nxs
         try {
         // load module
         Base_module::_is_loaded = true;
-        _handle = NXS_OS_MODULE_LOAD(reinterpret_cast<LPCWSTR>(Base_module::path().c_str()));
+        _handle = NXS_OS_MODULE_LOAD(Base_module::path().c_str());
         if (_handle == 0)
         {
             nxs_log << "file not found : " << Base_module::path();

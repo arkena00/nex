@@ -8,14 +8,15 @@ if(WIN32)
 	list(APPEND LIB_LIST user32 wsock32 ws2_32)
 	if(MSVC)
 		list(APPEND LIB_LIST
-				boost_system-vc140-mt-1_63
-				boost_filesystem-vc140-mt-1_63
-				boost_serialization-vc140-mt-1_63)
+                boost_system-vc140-mt-s-1_63
+                boost_filesystem-vc140-mt-s-1_63
+                boost_serialization-vc140-mt-s-1_63)
 	endif()
 endif()
 
 if(UNIX)
     set(OS "linux")
+    set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 endif()
 
 set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}../../../build/${OS}")

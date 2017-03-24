@@ -4,13 +4,26 @@ project(nex)
 
 # os specific
 if(WIN32)
+    set(OS "win32")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN)
+    list(APPEND LIB_LIST user32 wsock32 ws2_32)
+    if(MSVC)
+        set(CMAKE_CXX_FLAGS "/EHsc /MD")
+        list(APPEND LIB_LIST
+                boost_system-vc140-mt-1_63
+                boost_filesystem-vc140-mt-1_63
+                boost_serialization-vc140-mt-1_63)
+    endif()
 endif()
 
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Profile;" CACHE STRING "" FORCE)
+if(UNIX)
+    set(OS "linux")
+    set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 set(CMAKE_BUILD_TYPE Release )
 
 
@@ -34,15 +47,7 @@ add_executable(${PROJECT_NAME} "source/desktop/main.cpp")
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${OS_DEFINE_LIST} NDB_ENGINE_SQL)
 
 # lib
-set(LIB_LIST
-        nxs
-        user32
-        wsock32
-        ws2_32
-        boost_system-mgw62-mt-s-1_63
-        boost_filesystem-mgw62-mt-s-1_63
-        boost_serialization-mgw62-mt-s-1_63)
-target_link_libraries(${PROJECT_NAME} ${LIB_LIST})
+target_link_libraries(${PROJECT_NAME} ${LIB_LIST} nxs)
 
 set_target_properties(${PROJECT_NAME}
         PROPERTIES

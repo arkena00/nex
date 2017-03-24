@@ -4,18 +4,21 @@ project(nxs)
 # os specific
 if(WIN32)
     set(OS "win32")
+    set(DL_EXT "dll")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN)
 	list(APPEND LIB_LIST user32 wsock32 ws2_32)
 	if(MSVC)
+        set(CMAKE_CXX_FLAGS "/EHsc /MD")
 		list(APPEND LIB_LIST
-                boost_system-vc140-mt-s-1_63
-                boost_filesystem-vc140-mt-s-1_63
-                boost_serialization-vc140-mt-s-1_63)
+                boost_system-vc140-mt-1_63
+                boost_filesystem-vc140-mt-1_63
+                boost_serialization-vc140-mt-1_63)
 	endif()
 endif()
 
 if(UNIX)
     set(OS "linux")
+    set(DL_EXT "so")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 endif()
 
@@ -65,9 +68,6 @@ set_target_properties(nxs
 add_custom_command(
         TARGET nxs POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs.dll
-        ${NEX_BUILD_DIR}/nxs.dll)
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs.${DL_EXT}
+        ${NEX_BUILD_DIR}/nxs.${DL_EXT})
 
-
-		set(CMAKE_CXX_FLAGS_PROFILE "")
-		set(CMAKE_SHARED_LINKER_FLAGS_PROFILE "")

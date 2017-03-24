@@ -2,7 +2,6 @@
 #include "ui/main.hpp"
 #include "ui/tree.hpp"
 #include <ui/tree/item.hpp>
-#include "ui/render/nazara.hpp"
 
 #include <nxs/network/request.hpp>
 #include <nxs/network/protocol.hpp>
@@ -83,9 +82,9 @@ namespace ui
         _engine_stack = new QStackedWidget(this);
         right_layout->addWidget(_engine_stack);
 
-        auto engine = new render::nazara;
+        //auto engine = new render::nazara;
         //engine->load("started");
-        _engine_stack->addWidget(engine);
+        //_engine_stack->addWidget(engine);
 
         // default value
         _address_bar->setText(_url.str().c_str());
@@ -132,17 +131,15 @@ namespace ui
 
     void tab::on_read(nxs::network::connexion::buffer_type& buf)
     {
-        auto nazara = static_cast<ui::render::nazara*>(_engine_stack->widget(0));
-        nazara->load(std::string(connexion().buffer().data(), connexion().buffer().size()));
 
         try {
         connexion().protocol().read();
 
         if (connexion().protocol().transfer_complete())
         {
-            nazara->load(connexion().protocol().input().data(0).get().c_str());
+            //nazara->load(connexion().protocol().input().data(0).get().c_str());
         }
-        } catch (const std::exception& e) { nazara->load(e.what()); }
+        } catch (const std::exception& e) {  }
     }
 
     void tab::on_error()

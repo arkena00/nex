@@ -2,10 +2,14 @@
 
 project(nex)
 
-# os specific
+#########################################################
+#######################  OS SPEC  #######################
+#########################################################
 if(WIN32)
     set(OS "win32")
-    set(OS_DEFINE_LIST NXS_WIN NDB_WIN)
+    set(TARGET_EXT ".exe")
+    set(OS_DEFINE_LIST NXS_WIN NDB_WIN
+            BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
     if(MSVC)
         set(CMAKE_CXX_FLAGS "/EHsc /MD")
@@ -19,6 +23,7 @@ endif()
 if(UNIX)
     set(OS "linux")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
+
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
@@ -27,8 +32,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE Release )
 
 
-################################################## PATH
-# include path
+########################################################
+#######################  PATH  #########################
+########################################################
 set(INCLUDE_LIST
         ../extlib/boost/include
         ../../nds/include
@@ -40,11 +46,16 @@ include_directories(${INCLUDE_LIST})
 link_directories(module/nxs/lib ../extlib/boost/lib/)
 
 
-# binary
+########################################################
+######################  TARGET  ########################
+########################################################
 add_executable(${PROJECT_NAME} "source/desktop/main.cpp")
 
 # define
-target_compile_definitions(${PROJECT_NAME} PUBLIC ${OS_DEFINE_LIST} NDB_ENGINE_SQL)
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+        ${OS_DEFINE_LIST}
+        NDB_ENGINE_SQL
+        BOOST_ERROR_CODE_HEADER_ONLY)
 
 # lib
 target_link_libraries(${PROJECT_NAME} ${LIB_LIST} nxs)
@@ -61,5 +72,5 @@ set_target_properties(${PROJECT_NAME}
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/nex.exe
-        ${CMAKE_CURRENT_SOURCE_DIR}/build/win32/nex.exe)
+        ${CMAKE_CURRENT_SOURCE_DIR}/bin/nex${TARGET_EXT}
+        ${CMAKE_CURRENT_SOURCE_DIR}/build/win32/nex${TARGET_EXT})

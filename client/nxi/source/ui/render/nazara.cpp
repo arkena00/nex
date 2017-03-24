@@ -1,4 +1,7 @@
-#include "nazara.hpp"
+/*
+
+
+#include <ui/render/nazara.hpp>
 #include <NDK/Systems/RenderSystem.hpp>
 #include <NDK/Components/CameraComponent.hpp>
 #include <NDK/Components/GraphicsComponent.hpp>
@@ -78,10 +81,10 @@ namespace ui{namespace render
         model_node.Scale(0.2, 0.2, 0.2);
 
 
-        _canvas.SetSize({GetWidth(), GetHeight()});
+        _canvas.SetSize({(float)GetWidth(), (float)GetHeight()});
         // textarea
         _label = _canvas.Add<Ndk::TextAreaWidget>();
-        _label->SetSize({GetWidth(), GetHeight()});
+        _label->SetSize({(float)GetWidth(), (float)GetHeight()});
         _label->Center();
         _label->SetText("TEXT AREA");
         _label->EnableBackground(true);
@@ -89,14 +92,14 @@ namespace ui{namespace render
         _label->SetBackgroundColor(Nz::Color(240, 240, 240));
         _label->SetTextColor(Nz::Color(0, 0, 0));
 
-/*
+
         Ndk::LabelWidget* test = _canvas.Add<Ndk::LabelWidget>();
         test->Center();
         test->SetBackgroundColor(Nz::Color(200, 200, 200));
         test->SetSize({300.f, 300.f});
         test->UpdateText(Nz::SimpleTextDrawer::Draw("data", 24, Nz::TextStyle_Regular, Nz::Color(0, 0, 0)));
         test->UpdateText(Nz::SimpleTextDrawer::Draw("aze", 24, Nz::TextStyle_Regular, Nz::Color(0, 0, 0)));
-        */
+
     }
 
     nazara::~nazara()
@@ -154,3 +157,6 @@ namespace ui{namespace render
         Display();
     }
 }} // ui::render
+
+
+*/

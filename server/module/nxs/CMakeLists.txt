@@ -1,24 +1,26 @@
 ﻿cmake_minimum_required(VERSION 3.1)
 
 project(nxs)
-# os specific
+
+#########################################################
+#######################  OS SPEC  #######################
+#########################################################
 if(WIN32)
     set(OS "win32")
-    set(DL_EXT "dll")
-    set(OS_DEFINE_LIST NXS_WIN NDB_WIN)
-	list(APPEND LIB_LIST user32 wsock32 ws2_32)
-	if(MSVC)
-        set(CMAKE_CXX_FLAGS "/EHsc /MD")
-		list(APPEND LIB_LIST
+    set(TARGET_EXT ".dll")
+    set(OS_DEFINE_LIST NXS_WIN NDB_WIN BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
+    list(APPEND LIB_LIST user32 wsock32 ws2_32)
+    if(MSVC)
+        list(APPEND LIB_LIST
                 boost_system-vc140-mt-1_63
                 boost_filesystem-vc140-mt-1_63
                 boost_serialization-vc140-mt-1_63)
-	endif()
+    endif()
 endif()
 
 if(UNIX)
     set(OS "linux")
-    set(DL_EXT "so")
+    set(TARGET_EXT ".so")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 endif()
 
@@ -29,8 +31,9 @@ set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 set(CMAKE_BUILD_TYPE Release )
 
-################################################## PATH
-# include path
+########################################################
+#######################  PATH  #########################
+########################################################
 set(INCLUDE_LIST
         ../../../extlib/boost/include
         include
@@ -41,7 +44,9 @@ include_directories(${INCLUDE_LIST})
 # lib path
 link_directories(../../../extlib/boost/lib/)
 
-# source
+########################################################
+######################  TARGET  ########################
+########################################################
 file(GLOB_RECURSE SOURCE_LIST "source/*.cpp")
 file(GLOB_RECURSE NDB_SOURCE_LIST "../../../../ndb/source/ndb/*.cpp"  "../../../../ndb/source/ndb/*.c")
 
@@ -68,6 +73,6 @@ set_target_properties(nxs
 add_custom_command(
         TARGET nxs POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs.${DL_EXT}
-        ${NEX_BUILD_DIR}/nxs.${DL_EXT})
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs${TARGET_EXT}
+        ${NEX_BUILD_DIR}/nxs${TARGET_EXT})
 

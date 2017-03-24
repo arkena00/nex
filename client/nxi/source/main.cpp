@@ -13,12 +13,11 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Nz::Initializer<Ndk::Sdk> n;
 
-    nxi::core nxc;
+    //nxi::core nxc;
 
-    nxs::load();
-    ui::load(app, nxc);
+    //nxs::load();
+    //ui::load(app, nxc);
 
     app.exec();
 

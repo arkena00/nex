@@ -16,7 +16,7 @@
 
 namespace nxs
 {
-    class NXS_SHARED log
+    class log
     {
     public:
         enum type { system, network, database };

@@ -3,6 +3,7 @@
 
 #include <nxs/network/protocol/basic.hpp>
 
+/*
 namespace nxs{namespace network
 {
     class ws : public basic_protocol<io::input>
@@ -20,7 +21,7 @@ namespace nxs{namespace network
         void data_send(const char* data, size_t data_size);
     };
 }} // nxs::network
-
+*/
 
 #endif // NETWORK_PROTOCOL_WS_H_NXS
 

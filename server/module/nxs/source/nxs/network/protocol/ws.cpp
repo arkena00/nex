@@ -1,8 +1,5 @@
 #include <nxs/network/protocol/ws.hpp>
-#include <nxs/network/connexion/basic.hpp>
-#include <nxs/network/buffer.hpp>
-#include <nxs/crypto/botan.hpp>
-
+/*
 namespace nxs{namespace network
 {
 
@@ -128,3 +125,5 @@ namespace nxs{namespace network
         connexion().send((char*)response, response_size);
     }
 }} // nxs::network
+
+ */

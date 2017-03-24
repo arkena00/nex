@@ -55,7 +55,7 @@ namespace nxs
         return list_.at(full_command_name);
     }
 
-    bool command::exist(const std::string& full_command_name) { return list_.count(full_command_name) > false ? true : false; }
+    bool command::exist(const std::string& full_command_name) { return list_.count(full_command_name) > 0; }
 
     void command::init()
     {

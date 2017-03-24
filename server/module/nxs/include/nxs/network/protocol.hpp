@@ -4,6 +4,7 @@
 #include <nxs/nex.hpp>
 #include <nxs/network/io.hpp>
 #include <memory>
+#include <functional>
 
 namespace nxs
 {

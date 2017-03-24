@@ -1,18 +1,28 @@
 ﻿cmake_minimum_required(VERSION 3.1)
 
 project(nxs)
-
-set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}../../../build/win32")
-
 # os specific
 if(WIN32)
+    set(OS "win32")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN)
+	list(APPEND LIB_LIST user32 wsock32 ws2_32)
+	if(MSVC)
+		list(APPEND LIB_LIST
+				boost_system-vc140-mt-1_63
+				boost_filesystem-vc140-mt-1_63
+				boost_serialization-vc140-mt-1_63)
+	endif()
 endif()
 
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Profile;" CACHE STRING "" FORCE)
+if(UNIX)
+    set(OS "linux")
+endif()
+
+set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}../../../build/${OS}")
+
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 set(CMAKE_BUILD_TYPE Release )
 
 ################################################## PATH
@@ -38,13 +48,6 @@ add_library(nxs SHARED ${SOURCE_LIST} ${NDB_SOURCE_LIST})
 target_compile_definitions(nxs PUBLIC ${OS_DEFINE_LIST} NDB_ENGINE_SQL)
 
 # lib
-set(LIB_LIST
-        user32
-        wsock32
-        ws2_32
-        boost_system-mgw62-mt-s-1_63
-        boost_filesystem-mgw62-mt-s-1_63
-        boost_serialization-mgw62-mt-s-1_63)
 target_link_libraries(nxs ${LIB_LIST})
 
 set_target_properties(nxs
@@ -63,3 +66,7 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs.dll
         ${NEX_BUILD_DIR}/nxs.dll)
+
+
+		set(CMAKE_CXX_FLAGS_PROFILE "")
+		set(CMAKE_SHARED_LINKER_FLAGS_PROFILE "")

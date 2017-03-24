@@ -3,7 +3,6 @@
 #include <nxs/network/protocol.hpp>
 #include <nxs/network/protocol/nex.hpp>
 #include <nxs/network/protocol/http.hpp>
-#include <nxs/network/protocol/ws.hpp>
 #include <nxs/log.hpp>
 
 using boost::asio::ip::tcp;
@@ -108,7 +107,7 @@ namespace nxs{namespace network
         {
             // ws
             std::string str_data = std::string(buffer.data(), buffer.size());
-            if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) protocol_set<ws>();
+            // if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) protocol_set<ws>();
             protocol_set<http<io::input>>();
         }
         // no protocol found, disconnect

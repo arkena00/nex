@@ -6,7 +6,8 @@ namespace nxs{namespace network
     template<class Connexion>
     void connexion_manager<Connexion>::store(std::unique_ptr<Connexion> cnx)
     {
-        _connexion_list[cnx->id()] = std::move(cnx);
+
+        _connexion_list.emplace(cnx.get()->id(), std::move(cnx));
     }
 
     template<class Connexion>

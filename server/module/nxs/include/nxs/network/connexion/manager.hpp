@@ -16,6 +16,7 @@ namespace nxs{namespace network
     public:
         connexion_manager() = default;
         connexion_manager(const connexion_manager&) = delete;
+        virtual ~connexion_manager() = default;
 
         void store(std::unique_ptr<Connexion>);
         virtual void run();

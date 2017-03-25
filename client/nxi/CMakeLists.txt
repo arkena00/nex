@@ -24,7 +24,8 @@ endif()
 if(UNIX)
     set(OS "linux")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
-
+    find_package(Boost 1.62 COMPONENTS boost_system boost_filesystem boost_serialization REQUIRED)
+    list(APPEND LIB_LIST ${Boost_LIBRARIES})
 endif()
 
 ########################################################
@@ -32,10 +33,8 @@ endif()
 ########################################################
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Gui WebEngine WebEngineWidgets)
-QT5_ADD_RESOURCES(image.qrc)
-
-
 
 ########################################################
 #####################  COMPILER  #######################
@@ -65,7 +64,7 @@ link_directories(../../extlib/boost/lib ../../extlib/nazara/lib)
 ########################################################
 ######################  TARGET  ########################
 ########################################################
-file(GLOB_RECURSE SOURCE_LIST "source/*.cpp")
+file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 file(GLOB_RECURSE NDB_SOURCE_LIST "../../../ndb/source/ndb/*.cpp"  "../../../ndb/source/ndb/*.c")
 file(GLOB_RECURSE NXS_SOURCE_LIST "../../server/module/nxs/source/nxs/*.cpp")
 
@@ -80,7 +79,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 ########################################################
 ######################   LINK   ########################
 ########################################################
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Widgets Qt5::Gui Qt5::WebEngine Qt5::WebEngineWidgets)
+target_link_libraries(${PROJECT_NAME} ${LIB_LIST} Qt5::Core Qt5::Widgets Qt5::Gui Qt5::WebEngine Qt5::WebEngineWidgets)
 
 set_target_properties(${PROJECT_NAME}
         PROPERTIES

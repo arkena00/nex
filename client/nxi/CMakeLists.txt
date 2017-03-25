@@ -24,7 +24,7 @@ endif()
 if(UNIX)
     set(OS "linux")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
-    find_package(Boost 1.62 COMPONENTS boost_system boost_filesystem boost_serialization REQUIRED)
+    find_package(Boost 1.62 COMPONENTS system filesystem serialization REQUIRED)
     list(APPEND LIB_LIST ${Boost_LIBRARIES})
 endif()
 

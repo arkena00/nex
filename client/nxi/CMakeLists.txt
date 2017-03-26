@@ -12,7 +12,7 @@ if(WIN32)
             BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
 
-    #set(CMAKE_PREFIX_PATH "C:/Qt/5.9/msvc2015")
+    set(CMAKE_PREFIX_PATH "C:/Qt/5.9/msvc2015")
     if(MSVC)
         list(APPEND LIB_LIST
                 boost_system-vc140-mt-1_63
@@ -68,7 +68,7 @@ file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 file(GLOB_RECURSE NDB_SOURCE_LIST "../../../ndb/source/ndb/*.cpp"  "../../../ndb/source/ndb/*.c")
 file(GLOB_RECURSE NXS_SOURCE_LIST "../../server/module/nxs/source/nxs/*.cpp")
 
-add_executable(${PROJECT_NAME} ${NDB_SOURCE_LIST} ${NXS_SOURCE_LIST} ${SOURCE_LIST})
+add_executable(${PROJECT_NAME} WIN32 ${NDB_SOURCE_LIST} ${NXS_SOURCE_LIST} ${SOURCE_LIST})
 
 # define
 target_compile_definitions(${PROJECT_NAME} PUBLIC

@@ -7,7 +7,6 @@ project(nxs)
 #########################################################
 if(WIN32)
     set(OS "win32")
-    set(TARGET_EXT ".dll")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
     if(MSVC)
@@ -20,7 +19,6 @@ endif()
 
 if(UNIX)
     set(OS "linux")
-    set(TARGET_EXT ".so")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 endif()
 
@@ -73,6 +71,6 @@ set_target_properties(nxs
 add_custom_command(
         TARGET nxs POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs${TARGET_EXT}
-        ${NEX_BUILD_DIR}/nxs${TARGET_EXT})
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs${CMAKE_SHARED_LIBRARY_SUFFIX}
+        ${NEX_BUILD_DIR}/nxs${CMAKE_SHARED_LIBRARY_SUFFIX})
 

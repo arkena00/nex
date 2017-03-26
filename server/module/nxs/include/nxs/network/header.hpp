@@ -16,7 +16,7 @@ namespace nxs
 {
     namespace network { template<io::type> class nex; }
 
-    class header
+    class NXS_SHARED header
     {
     public:
         using linear_type = setup<request>::linear_type;

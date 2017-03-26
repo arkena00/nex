@@ -11,7 +11,7 @@
 namespace nxs{namespace network
 {
     template<io::type IO_Type>
-    class basic_protocol : public protocol
+    class NXS_SHARED basic_protocol : public protocol
     {
      private:
         network::connexion& _connexion;
@@ -53,6 +53,8 @@ namespace nxs{namespace network
     template<> void basic_protocol<io::input>::error(const std::string& message);
 }} // nxs::network
 
-#include "basic.tpp"
+#ifndef NXS_IMPORTED
+    #include "basic.tpp"
+#endif
 
 #endif // NETWORK_PROTOCOL_BASIC_H_NXS

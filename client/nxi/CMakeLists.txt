@@ -7,7 +7,6 @@ project(nxi)
 #########################################################
 if(WIN32)
     set(OS "windows")
-    set(TARGET_EXT ".exe")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN
             BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)

@@ -12,15 +12,15 @@ namespace nxs
     // protected:
     template<class T>
     base_module<T>::base_module(int id) : db::entity<T>(id),
-        _path("./" + T::name_ + "/"),
-        _is_loaded(0)
+        m_path("./" + T::name_ + "/"),
+        m_is_loaded(0)
     {
         hydrate(Entity::data());
     }
     template<class T>
     base_module<T>::base_module(const db::line& data) : db::entity<T>(data),
-        _path("./" + T::name_ + "/"),
-        _is_loaded(0)
+        m_path("./" + T::name_ + "/"),
+        m_is_loaded(0)
     {
         hydrate(Entity::data());
     }
@@ -30,18 +30,18 @@ namespace nxs
     {
         const auto& m = T::db_ref;
         db::result res = db::query() << (m.all()) << (m.id == id());
-        _name = res[m.name];
-        _image = res[m.image];
-        _description = res[m.description];
-        _author = res[m.author];
-        _tag = res[m.tag];
-        _ext = res[m.ext];
+        m_name = res[m.name];
+        m_image = res[m.image];
+        m_description = res[m.description];
+        m_author = res[m.author];
+        m_tag = res[m.tag];
+        m_ext = res[m.ext];
 
-        _path = "./" + T::name_ + "/";
+        m_path = "./" + T::name_ + "/";
         std::string v_ext = ext();
         if (v_ext == "dl") v_ext = NXS_OS_SHARELIBEXT;
-        if (fs::is_directory(_path + name())) _path = _path + name() + "/";
-        _path = _path + name() + T::ext_ + "." + v_ext;
+        if (fs::is_directory(m_path + name())) m_path = m_path + name() + "/";
+        m_path = m_path + name() + T::ext_ + "." + v_ext;
     }
 
 
@@ -50,7 +50,7 @@ namespace nxs
     {
         load_list_id_.erase(id());
         module_id_.erase(name());
-        _is_loaded = 0;
+        m_is_loaded = 0;
     }
 
     template<class T>
@@ -63,15 +63,15 @@ namespace nxs
 
     // public:
     template<class T> int base_module<T>::id() const { return Entity::id(); }
-    template<class T> const std::string& base_module<T>::name() const { return _name; }
-    template<class T> const std::string& base_module<T>::image() const { return _image; }
-    template<class T> const std::string& base_module<T>::description() const { return _description; }
-    template<class T> const std::string& base_module<T>::author() const { return _author; }
-    template<class T> const std::string& base_module<T>::tag() const { return _tag; }
-    template<class T> const std::string& base_module<T>::ext() const { return _ext; }
+    template<class T> const std::string& base_module<T>::name() const { return m_name; }
+    template<class T> const std::string& base_module<T>::image() const { return m_image; }
+    template<class T> const std::string& base_module<T>::description() const { return m_description; }
+    template<class T> const std::string& base_module<T>::author() const { return m_author; }
+    template<class T> const std::string& base_module<T>::tag() const { return m_tag; }
+    template<class T> const std::string& base_module<T>::ext() const { return m_ext; }
 
-    template<class T> const std::string& base_module<T>::path() const { return _path; }
-    template<class T> bool base_module<T>::is_loaded() const { return _is_loaded; }
+    template<class T> const std::string& base_module<T>::path() const { return m_path; }
+    template<class T> bool base_module<T>::is_loaded() const { return m_is_loaded; }
 
     template<class T> void base_module<T>::data_set(const std::string& key, const std::string& value)
     {

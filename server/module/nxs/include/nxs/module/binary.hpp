@@ -13,9 +13,9 @@ namespace nxs
         using Module_load_ptr = int (*)();
 
     private:
-        NXS_OS_MODULE_HANDLE _handle;
-        std::function<int(nxs::nex&)> _main_ptr;
-        std::function<int()> _load_ptr;
+        NXS_OS_MODULE_HANDLE m_handle;
+        std::function<int(nxs::nex&)> m_main_ptr;
+        std::function<int()> m_load_ptr;
 
     public:
         binary_module(int id);

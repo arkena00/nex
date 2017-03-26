@@ -17,19 +17,19 @@ namespace nxs
         using Base_module = base_module<T>;
 
     private:
-        std::string _name;
-        std::string _image;
-        std::string _description;
-        std::string _author;
-        std::string _tag;
-        std::string _ext;
-        std::string _path;
+        std::string m_name;
+        std::string m_image;
+        std::string m_description;
+        std::string m_author;
+        std::string m_tag;
+        std::string m_ext;
+        std::string m_path;
 
     protected:
         static std::map<int, std::unique_ptr<Base_module>> load_list_id_;
         static std::map<std::string, int> module_id_;
 
-        bool _is_loaded;
+        bool m_is_loaded;
 
     private:
         void hydrate(const db::line&);

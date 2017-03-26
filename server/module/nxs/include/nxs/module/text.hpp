@@ -9,7 +9,7 @@ namespace nxs
     class NXS_SHARED text_module : public base_module<T>
     {
     private:
-        std::string _text;
+        std::string m_text;
 
     public:
         text_module(int id);

@@ -21,13 +21,13 @@ namespace nxs
             while (!file.eof())
             {
                 file.read(buffer, 512);
-                _text += std::string(buffer, file.gcount());
+                m_text += std::string(buffer, file.gcount());
             }
             file.close();
         }
         else { nxs_log << "can't open file : " << Base_module::path(); return false; }
 
-        Base_module::_is_loaded = true;
+        Base_module::m_is_loaded = true;
         return true;
     }
 
@@ -35,7 +35,7 @@ namespace nxs
     int text_module<T>::process(nxs::nex& nex)
     {
         try {
-        nex.output().add(_text);
+        nex.output().add(m_text);
         } catch (const std::exception& e) { nxs_error << "module error" << e.what(); }
         return 0;
     }

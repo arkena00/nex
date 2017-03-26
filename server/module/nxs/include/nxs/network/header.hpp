@@ -175,6 +175,6 @@ namespace nxs
     } // headers
 } // nxs
 
-#include "header.tpp"
+#include "header.tcc"
 
 #endif // NETWORK_HEADER_H_NXS

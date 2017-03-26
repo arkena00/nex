@@ -24,6 +24,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "buffer.tpp"
+#include "buffer.tcc"
 
 #endif // NETWORK_BUFFER_H_NXS

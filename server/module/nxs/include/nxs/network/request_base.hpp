@@ -47,7 +47,7 @@ namespace nxs
     };
 } // nxs
 
-#include "request_base.tpp"
+#include "request_base.tcc"
 
 #endif // NETWORK_REQUEST_BASE_H_NXS
 

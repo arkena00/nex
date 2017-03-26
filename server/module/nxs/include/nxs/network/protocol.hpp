@@ -37,6 +37,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "protocol.tpp"
+#include "protocol.tcc"
 
 #endif // NETWORK_PROTOCOL_H_NXS

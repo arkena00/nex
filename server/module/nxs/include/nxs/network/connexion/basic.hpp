@@ -48,6 +48,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "basic.tpp"
+#include "basic.tcc"
 
 #endif // NETWORK_CONNEXION_BASIC_H_NXS

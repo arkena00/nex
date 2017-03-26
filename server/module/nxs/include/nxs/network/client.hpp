@@ -22,6 +22,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "client.tpp"
+#include "client.tcc"
 
 #endif // NETWORK_CLIENT_H_NXS

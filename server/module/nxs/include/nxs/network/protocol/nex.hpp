@@ -18,6 +18,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "nex.tpp"
+#include "nex.tcc"
 
 #endif // NETWORK_PROTOCOL_NEX_H_NXS

@@ -69,6 +69,6 @@ namespace nxs
     };
 } // nxs
 
-#include "base.tpp"
+#include "base.tcc"
 
 #endif // MODULE_BASE_H_NXS

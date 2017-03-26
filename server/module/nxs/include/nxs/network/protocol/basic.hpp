@@ -54,7 +54,7 @@ namespace nxs{namespace network
 }} // nxs::network
 
 #ifndef NXS_IMPORTED
-    #include "basic.tpp"
+    #include "basic.tcc"
 #endif
 
 #endif // NETWORK_PROTOCOL_BASIC_H_NXS

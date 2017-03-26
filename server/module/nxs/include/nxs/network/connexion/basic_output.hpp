@@ -8,7 +8,7 @@
 namespace nxs{namespace network
 {
     template<class Protocol>
-    class basic_output_connexion : public basic_connexion<io::output>, public output_connexion
+    class NXS_SHARED basic_output_connexion : public basic_connexion<io::output>, public output_connexion
     {
     private:
         connexion_manager<output_connexion>& _client;
@@ -49,6 +49,8 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "basic_output.tpp"
+#ifndef NXS_IMPORTED
+    #include "basic_output.tcc"
+#endif
 
 #endif // NETWORK_CONNEXION_BASIC_OUTPUT_H_NXS

@@ -26,6 +26,6 @@ namespace nxs
     };
 } // nxs
 
-#include "common.tpp"
+#include "common.tcc"
 
 #endif // MODULE_COMMON_H_NXS

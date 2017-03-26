@@ -19,6 +19,6 @@ namespace nxs
     };
 } // nxs
 
-#include "text.tpp"
+#include "text.tcc"
 
 #endif // MODULE_TEXT_H_NXS

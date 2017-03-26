@@ -72,6 +72,6 @@ namespace nds
     template<> NXS_SHARED void encoder<>::decode(const std::string& str_request, nxs::request& req);
 } // nds
 
-#include "request.tpp"
+#include "request.tcc"
 
 #endif // NETWORK_REQUEST_H_NXS

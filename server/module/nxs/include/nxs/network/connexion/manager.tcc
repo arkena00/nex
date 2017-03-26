@@ -4,6 +4,11 @@
 namespace nxs{namespace network
 {
     template<class Connexion>
+    connexion_manager<Connexion>::connexion_manager() :
+            m_work(m_ios)
+    {}
+
+    template<class Connexion>
     void connexion_manager<Connexion>::store(std::unique_ptr<Connexion> cnx)
     {
 
@@ -13,13 +18,13 @@ namespace nxs{namespace network
     template<class Connexion>
     void connexion_manager<Connexion>::run()
     {
-        _ios.run();
+         m_ios.run();
     }
 
     template<class Connexion>
     boost::asio::io_service& connexion_manager<Connexion>::ios()
     {
-        return _ios;
+        return  m_ios;
     }
 
     template<class Connexion>

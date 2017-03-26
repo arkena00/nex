@@ -11,10 +11,11 @@ namespace nxs{namespace network
     private:
         std::map<int, std::unique_ptr<Connexion>> _connexion_list;
 
-        boost::asio::io_service _ios;
+        boost::asio::io_service m_ios;
+        boost::asio::io_service::work m_work;
 
     public:
-        connexion_manager() = default;
+        connexion_manager();
         connexion_manager(const connexion_manager&) = delete;
         virtual ~connexion_manager() = default;
 
@@ -30,6 +31,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include "manager.tpp"
+#include "manager.tcc"
 
 #endif // NETWORK_CONNEXION_MANAGER_H_NXS

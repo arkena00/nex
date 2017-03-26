@@ -26,6 +26,6 @@ namespace nxs
     };
 } // nxs
 
-#include "binary.tpp"
+#include "binary.tcc"
 
 #endif // MODULE_BINARY_H_NXS

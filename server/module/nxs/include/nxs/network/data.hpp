@@ -69,6 +69,6 @@ namespace nxs{namespace network
     template<> std::string NXS_SHARED memory_data::get<std::string>() const;
 }} // nxs::network
 
-#include "data.tpp"
+#include "data.tcc"
 
 #endif // NETWORK_DATA_NXS

@@ -9,7 +9,10 @@ namespace ui{namespace render
     {
     public:
         engine(QWidget* parent = nullptr) : QWidget(parent) {}
-        virtual void load(const std::string&) = 0;
+
+        QWidget* widget() { return this; }
+
+        virtual void load(const QString&) = 0;
 
     };
 }} // ui::render

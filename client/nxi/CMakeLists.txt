@@ -25,7 +25,7 @@ if(UNIX)
     set(OS "linux")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
     find_package(Boost 1.62 COMPONENTS system filesystem serialization REQUIRED)
-    list(APPEND LIB_LIST ${Boost_LIBRARIES})
+    list(APPEND LIB_LIST ${Boost_LIBRARIES} pthread dl)
 endif()
 
 ########################################################

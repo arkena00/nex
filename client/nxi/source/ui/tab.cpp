@@ -1,7 +1,8 @@
-#include "ui/tab.hpp"
-#include "ui/main.hpp"
-#include "ui/tree.hpp"
+#include <ui/tab.hpp>
+#include <ui/main.hpp>
+#include <ui/tree.hpp>
 #include <ui/tree/item.hpp>
+#include <ui/render/engine.hpp>
 
 #include <nxs/network/request.hpp>
 #include <nxs/network/protocol.hpp>
@@ -15,7 +16,7 @@
 #include <QTabBar>
 #include <QStackedWidget>
 #include <QDebug>
-#include <thread>
+#include <include/ui/render/web.hpp>
 
 
 namespace ui
@@ -82,9 +83,9 @@ namespace ui
         _engine_stack = new QStackedWidget(this);
         right_layout->addWidget(_engine_stack);
 
-        //auto engine = new render::nazara;
-        //engine->load("started");
-        //_engine_stack->addWidget(engine);
+        auto engine = new render::web;
+        engine->load("started");
+        _engine_stack->addWidget(engine->widget());
 
         // default value
         _address_bar->setText(_url.str().c_str());
@@ -126,20 +127,20 @@ namespace ui
         icon_set(QIcon(":/image/connexion_status_1"));
         auto item = _tree->item_add(_url.host().c_str(), QIcon(":/image/nex"));
         item->node(true);
-         connexion().protocol().send("nxs::version;", [](nxs::nex& nn){  qDebug() << "CALLBACK_VER"; });
+        connexion().protocol().send("nxs::version;", [](nxs::nex& nn){  qDebug() << "CALLBACK_VER"; });
     }
 
     void tab::on_read(nxs::network::connexion::buffer_type& buf)
     {
-
+        auto engine = static_cast<render::engine*>(_engine_stack->widget(_engine_stack->currentIndex()));
         try {
         connexion().protocol().read();
 
         if (connexion().protocol().transfer_complete())
         {
-            //nazara->load(connexion().protocol().input().data(0).get().c_str());
+            engine->load(connexion().protocol().input().data(0).get().c_str());
         }
-        } catch (const std::exception& e) {  }
+        } catch (const std::exception& e) { engine->load(connexion().protocol().input().data(0).get().c_str()); }
     }
 
     void tab::on_error()

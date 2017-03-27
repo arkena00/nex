@@ -6,15 +6,13 @@
 
 namespace ui{namespace render
 {
-    class web : public engine
+    class web : public QWebEngineView, public engine
     {
-    private:
-        QWebEngineView* m_view;
-
     public:
-        web();
-        void load(const QString&) override;
+        web(QWidget* parent);
 
+        void load(const QString&) override;
+        QWidget* widget() override;
     };
 }} // ui::render
 

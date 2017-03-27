@@ -51,8 +51,7 @@ namespace ui
         void address_load();
 
     signals:
-        void transfer_complete(const QString&);
-
+        void engine_load(const QString&);
     };
 
 } // ui

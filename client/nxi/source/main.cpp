@@ -1,29 +1,15 @@
 #include <QApplication>
-#include "ui.hpp"
 #include <nxs/core.hpp>
-#include <nxs/network/client.hpp>
-#include <QDebug>
-
 #include <nxi/core.hpp>
+#include <ui/core.hpp>
 
-using namespace nxs::network;
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    try
-    {
-        nxs::load();
-    } catch (const std::exception& e)
-    {
-        std::cout << "ERROR : " << e.what();
-        return EXIT_FAILURE;
-    }
-
     QApplication app(argc, argv);
 
+    nxs::load();
     nxi::core nxc;
-    ui::load(app, nxc);
-
+    ui::core uic(app, nxc);
 
     return app.exec();
 }

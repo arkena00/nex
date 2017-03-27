@@ -1,16 +1,18 @@
 #include <ui/render/web.hpp>
-#include <iostream>
-
 namespace ui{namespace render
 {
-    web::web() : m_view(new QWebEngineView(this))
+    web::web(QWidget* parent) : QWebEngineView(parent)
     {
-
+        QWebEngineView::show();
     }
 
     void web::load(const QString& data)
     {
-        m_view->setHtml(data);
+        setHtml(data);
     }
 
+    QWidget* web::widget()
+    {
+        return this;
+    }
 }} // ui::render

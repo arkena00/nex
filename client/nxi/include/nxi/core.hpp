@@ -8,10 +8,12 @@ namespace nxi
     class core
     {
     private:
-        nxs::network::client _client;
+        nxs::network::client m_client;
+        std::thread m_client_thread;
 
     public:
         core();
+        ~core();
         core(const core&) = delete;
 
         nxs::network::client& client();

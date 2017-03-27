@@ -21,7 +21,7 @@
 
 namespace ui
 {
-    tab::tab(ui::main* main_window, size_t tab_index) :
+    tab::tab(ui::main *main_window, size_t tab_index) :
         _main(main_window),
         _index(tab_index)
     {
@@ -34,17 +34,17 @@ namespace ui
         cnx.on_error(std::bind(&tab::on_error, this));
 
         // main layout
-        QVBoxLayout* main_layout = new QVBoxLayout(this);
-        QHBoxLayout* top_layout = new QHBoxLayout;
-        QHBoxLayout* interface_layout = new QHBoxLayout;
-        QHBoxLayout* middle_layout = new QHBoxLayout;
-        QVBoxLayout* left_layout = new QVBoxLayout;
-        QVBoxLayout* right_layout = new QVBoxLayout;
-        QHBoxLayout* bot_layout = new QHBoxLayout;
+        QVBoxLayout *main_layout      = new QVBoxLayout(this);
+        QHBoxLayout *top_layout       = new QHBoxLayout;
+        QHBoxLayout *interface_layout = new QHBoxLayout;
+        QHBoxLayout *middle_layout    = new QHBoxLayout;
+        QVBoxLayout *left_layout      = new QVBoxLayout;
+        QVBoxLayout *right_layout     = new QVBoxLayout;
+        QHBoxLayout *bot_layout       = new QHBoxLayout;
         // splitter
-        QSplitter* splitter = new QSplitter(this);
-        QWidget* left_side = new QWidget(this);
-        QWidget* right_side = new QWidget(this);
+        QSplitter   *splitter         = new QSplitter(this);
+        QWidget     *left_side        = new QWidget(this);
+        QWidget     *right_side       = new QWidget(this);
 
         // layouts
         main_layout->addLayout(top_layout);
@@ -83,10 +83,10 @@ namespace ui
         _engine_stack = new QStackedWidget(this);
         right_layout->addWidget(_engine_stack);
 
-        auto engine = new render::web;
+        auto engine = new render::web(this);
         engine->load("started");
         _engine_stack->addWidget(engine->widget());
-        QObject::connect(this, &tab::transfer_complete, engine, &render::engine::load);
+        QObject::connect(this, &tab::engine_load, engine, &render::engine::load);
 
         // default value
         _address_bar->setText(_url.str().c_str());
@@ -104,54 +104,78 @@ namespace ui
 
     void tab::address_load()
     {
-        const std::string& address_text = _address_bar->text().toStdString();
-        _url = nxs::network::url(address_text);
-
-        // connexion alive, send command
-        if (connexion().is_alive())
+        try
         {
-            connexion().protocol().send(_url.command());
-        }
-        else
+            const std::string& address_text = _address_bar->text().toStdString();
+            _url = nxs::network::url(address_text);
+
+            // connexion alive, send command
+            if (connexion().is_alive())
+            {
+                title_set("loading...");
+                connexion().protocol().send(_url.command());
+            } else
+            {
+                title_set("connecting...");
+                connexion().connect(_url.host(), _url.port());
+            }
+
+            // loading
+            icon_set(QIcon(":/image/connexion_status_idle"));
+        } catch (const std::exception& e)
         {
-            title_set("connecting...");
-            connexion().connect(_url.host(), _url.port());
+            emit engine_load(e.what());
         }
-
-        // loading
-
-        icon_set(QIcon(":/image/connexion_status_idle"));
     }
 
     void tab::on_connect()
     {
         icon_set(QIcon(":/image/connexion_status_1"));
+        title_set("connected");
         auto item = _tree->item_add(_url.host().c_str(), QIcon(":/image/nex"));
         item->node(true);
     }
 
-    void tab::on_read(nxs::network::connexion::buffer_type& buf)
+    void tab::on_read(nxs::network::connexion::buffer_type &buf)
     {
-        try {
-        connexion().protocol().read();
-
-        if (connexion().protocol().transfer_complete())
+        try
         {
-            emit transfer_complete(connexion().protocol().input().data(0).get().c_str());
+            if (connexion().protocol().transfer_complete())
+            {
+                title_set("complete");
+                emit engine_load(connexion().protocol().input().data(0).get().c_str());
+            }
         }
-        } catch (const std::exception& e) {/* engine->load(connexion().protocol().input().data(0).get().c_str());*/ }
+        catch (const std::exception& e)
+        {
+            emit engine_load(e.what());
+        }
     }
 
     void tab::on_error()
     {
         icon_set(QIcon(":/image/connexion_status_0"));
+        engine_load("connexion error");
     }
 
 
-    nxs::network::output_connexion& tab::connexion() { return _main->client().connexion(_connexion_id); }
+    nxs::network::output_connexion &tab::connexion()
+    {
+        return _main->client().connexion(_connexion_id);
+    }
 
-    void tab::icon_set(const QIcon& icon) { tabbar().setTabIcon(_index, icon); }
-    void tab::title_set(const std::string& title) { tabbar().setTabText(_index, title.c_str()); }
+    void tab::icon_set(const QIcon &icon)
+    {
+        tabbar().setTabIcon(_index, icon);
+    }
 
-    QTabBar& tab::tabbar() const { return _main->tabbar(); }
+    void tab::title_set(const std::string &title)
+    {
+        tabbar().setTabText(_index, title.c_str());
+    }
+
+    QTabBar &tab::tabbar() const
+    {
+        return _main->tabbar();
+    }
 } // ui

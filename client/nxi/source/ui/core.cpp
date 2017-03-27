@@ -1,13 +1,11 @@
-#include "ui.hpp"
-#include "ui/main.hpp"
-
+#include <ui/core.hpp>
 #include <QApplication>
-#include <QWindow>
 #include <QFile>
 
 namespace ui
 {
-    void load(QApplication& app, nxi::core& nxc)
+    core::core(QApplication& app, nxi::core& nxc) :
+        m_main(nxc)
     {
         // load qss
         QFile qss_file(":/style.qss");
@@ -15,8 +13,6 @@ namespace ui
         QString qss = QLatin1String(qss_file.readAll());
         app.setStyleSheet(qss);
 
-        // create main window
-        auto win = new ui::main(nxc);
-        win->show();
+        m_main.show();
     }
 } // ui

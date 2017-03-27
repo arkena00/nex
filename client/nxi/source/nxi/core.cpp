@@ -3,12 +3,18 @@
 
 namespace nxi
 {
-    core::core()
+    core::core() :
+        m_client_thread(&nxs::network::client::run, &m_client)
+    {}
+
+    core::~core()
     {
-        // create nxs::client to manage output connexions
-        std::thread client_thread(&nxs::network::client::run, &_client);
-        client_thread.detach();
+        m_client.stop();
+        m_client_thread.join();
     }
 
-    nxs::network::client& core::client() { return _client; }
+    nxs::network::client &core::client()
+    {
+        return m_client;
+    }
 } // nxi

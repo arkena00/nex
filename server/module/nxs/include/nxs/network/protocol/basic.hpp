@@ -53,8 +53,6 @@ namespace nxs{namespace network
     template<> void basic_protocol<io::input>::error(const std::string& message);
 }} // nxs::network
 
-#ifndef NXS_IMPORTED
-    #include "basic.tcc"
-#endif
+#include "basic.tcc"
 
 #endif // NETWORK_PROTOCOL_BASIC_H_NXS

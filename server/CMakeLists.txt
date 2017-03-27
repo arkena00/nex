@@ -6,13 +6,12 @@ project(nex)
 #######################  OS SPEC  #######################
 #########################################################
 if(WIN32)
-    set(OS "win32")
-    set(TARGET_EXT ".exe")
+    set(OS_NAME windows)
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN
             BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
     if(MSVC)
-        set(CMAKE_CXX_FLAGS "/EHsc /MD")
+        set(OS_COMPILER_FLAG "/EHsc /MT")
         list(APPEND LIB_LIST
                 boost_system-vc140-mt-1_63
                 boost_filesystem-vc140-mt-1_63
@@ -21,15 +20,18 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    set(OS "linux")
+    set(OS_NAME linux)
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 set(CMAKE_BUILD_TYPE Release )
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS ${OS_COMPILER_FLAG})
+
+set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/${OS_NAME}")
+set(NK_PATH "../../")
 
 
 ########################################################
@@ -37,8 +39,8 @@ set(CMAKE_BUILD_TYPE Release )
 ########################################################
 set(INCLUDE_LIST
         ../extlib/boost/include
-        ../../nds/include
-        ../../ndb/include
+        ${NK_PATH}/nds/include
+        ${NK_PATH}/ndb/include
         module/nxs/include)
 include_directories(${INCLUDE_LIST})
 
@@ -49,28 +51,22 @@ link_directories(module/nxs/lib ../extlib/boost/lib/)
 ########################################################
 ######################  TARGET  ########################
 ########################################################
-add_executable(${PROJECT_NAME} "source/desktop/main.cpp")
+file(GLOB_RECURSE NXS_SOURCE_LIST "module/nxs/source/*.cpp")
+file(GLOB_RECURSE NDB_SOURCE_LIST "${NK_PATH}/ndb/source/ndb/*.cpp"  "${NK_PATH}/ndb/source/ndb/*.c")
+add_executable(nex ${NXS_SOURCE_LIST} ${NDB_SOURCE_LIST} "source/desktop/main.cpp")
 
 # define
-target_compile_definitions(${PROJECT_NAME} PUBLIC
+target_compile_definitions(nex PUBLIC
         ${OS_DEFINE_LIST}
-        NDB_ENGINE_SQL
-        BOOST_ERROR_CODE_HEADER_ONLY)
+        NDB_ENGINE_SQL)
 
 # lib
-target_link_libraries(${PROJECT_NAME} ${LIB_LIST} nxs)
+target_link_libraries(nex ${LIB_LIST})
 
-set_target_properties(${PROJECT_NAME}
+set_target_properties(nex
         PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+        ARCHIVE_OUTPUT_DIRECTORY "${NEX_BUILD_DIR}"
+        LIBRARY_OUTPUT_DIRECTORY "${NEX_BUILD_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY "${NEX_BUILD_DIR}"
         OUTPUT_NAME  "nex"
         )
-
-# post build
-add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/nex${TARGET_EXT}
-        ${CMAKE_CURRENT_SOURCE_DIR}/build/win32/nex${TARGET_EXT})

@@ -6,10 +6,10 @@
 
 namespace ui{namespace render
 {
-    class web : public QWebEngineView, public engine
+    class web : public engine
     {
     private:
-        QWebEngineView m_view;
+        QWebEngineView* m_view;
 
     public:
         web();

@@ -50,6 +50,9 @@ namespace ui
     public slots:
         void address_load();
 
+    signals:
+        void transfer_complete(const QString&);
+
     };
 
 } // ui

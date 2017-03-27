@@ -6,7 +6,7 @@ project(nxs)
 #######################  OS SPEC  #######################
 #########################################################
 if(WIN32)
-    set(OS "win32")
+    set(OS_NAME "windows")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
     if(MSVC)
@@ -18,11 +18,11 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    set(OS "linux")
+    set(OS_NAME "linux")
     set(OS_DEFINE_LIST NXS_UNIX NDB_UNIX)
 endif()
 
-set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}../../../build/${OS}")
+set(NEX_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}../../../build/${OS_NAME}")
 
 set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
@@ -65,12 +65,3 @@ set_target_properties(nxs
         OUTPUT_NAME  "nxs"
         PREFIX ""
         )
-
-
-# post build
-add_custom_command(
-        TARGET nxs POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/nxs${CMAKE_SHARED_LIBRARY_SUFFIX}
-        ${NEX_BUILD_DIR}/nxs${CMAKE_SHARED_LIBRARY_SUFFIX})
-

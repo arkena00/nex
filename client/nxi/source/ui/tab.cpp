@@ -86,6 +86,7 @@ namespace ui
         auto engine = new render::web;
         engine->load("started");
         _engine_stack->addWidget(engine->widget());
+        QObject::connect(this, &tab::transfer_complete, engine, &render::engine::load);
 
         // default value
         _address_bar->setText(_url.str().c_str());
@@ -127,20 +128,18 @@ namespace ui
         icon_set(QIcon(":/image/connexion_status_1"));
         auto item = _tree->item_add(_url.host().c_str(), QIcon(":/image/nex"));
         item->node(true);
-        connexion().protocol().send("nxs::version;", [](nxs::nex& nn){  qDebug() << "CALLBACK_VER"; });
     }
 
     void tab::on_read(nxs::network::connexion::buffer_type& buf)
     {
-        auto engine = static_cast<render::engine*>(_engine_stack->widget(_engine_stack->currentIndex()));
         try {
         connexion().protocol().read();
 
         if (connexion().protocol().transfer_complete())
         {
-            engine->load(connexion().protocol().input().data(0).get().c_str());
+            emit transfer_complete(connexion().protocol().input().data(0).get().c_str());
         }
-        } catch (const std::exception& e) { engine->load(connexion().protocol().input().data(0).get().c_str()); }
+        } catch (const std::exception& e) {/* engine->load(connexion().protocol().input().data(0).get().c_str());*/ }
     }
 
     void tab::on_error()

@@ -67,7 +67,7 @@ file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 file(GLOB_RECURSE NDB_SOURCE_LIST "../../../ndb/source/ndb/*.cpp"  "../../../ndb/source/ndb/*.c")
 file(GLOB_RECURSE NXS_SOURCE_LIST "../../server/module/nxs/source/nxs/*.cpp")
 
-add_executable(${PROJECT_NAME} WIN32 ${NDB_SOURCE_LIST} ${NXS_SOURCE_LIST} ${SOURCE_LIST})
+add_executable(${PROJECT_NAME} ${NDB_SOURCE_LIST} ${NXS_SOURCE_LIST} ${SOURCE_LIST})
 
 # define
 target_compile_definitions(${PROJECT_NAME} PUBLIC

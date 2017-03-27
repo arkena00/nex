@@ -49,8 +49,6 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#ifndef NXS_IMPORTED
-    #include "basic_output.tcc"
-#endif
+#include "basic_output.tcc"
 
 #endif // NETWORK_CONNEXION_BASIC_OUTPUT_H_NXS

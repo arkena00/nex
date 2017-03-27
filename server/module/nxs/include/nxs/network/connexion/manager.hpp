@@ -21,6 +21,7 @@ namespace nxs{namespace network
 
         void store(std::unique_ptr<Connexion>);
         virtual void run();
+        virtual void stop();
 
         boost::asio::io_service& ios();
 

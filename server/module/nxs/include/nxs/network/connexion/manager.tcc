@@ -22,6 +22,12 @@ namespace nxs{namespace network
     }
 
     template<class Connexion>
+    void connexion_manager<Connexion>::stop()
+    {
+        m_ios.stop();
+    }
+
+    template<class Connexion>
     boost::asio::io_service& connexion_manager<Connexion>::ios()
     {
         return  m_ios;

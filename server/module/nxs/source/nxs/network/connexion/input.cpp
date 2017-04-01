@@ -10,10 +10,9 @@ using boost::asio::ip::tcp;
 namespace nxs{namespace network
 {
     input_connexion::input_connexion(server& server) :
-        _server(server),
-        _socket(server.ios())
+        basic_connexion(server.ios()),
+        _server(server)
     {
-        _alive = 1;
     }
     input_connexion::~input_connexion()
     {
@@ -23,6 +22,7 @@ namespace nxs{namespace network
     // load connexion
     void input_connexion::load()
     {
+        _alive = true;
         // client ip
         _ip_client = _socket.remote_endpoint().address().to_string();
         _ip_local = _socket.local_endpoint().address().to_string();
@@ -35,9 +35,10 @@ namespace nxs{namespace network
     // socket read
     void input_connexion::socket_read(const boost::system::error_code& status, size_t bytes_transferred)
     {
+        if (!_alive) return;
+
         buffer().reserve(bytes_transferred);
 
-        if (!_alive) return;
         if (!status)
         {
             try {
@@ -113,8 +114,4 @@ namespace nxs{namespace network
         // no protocol found, disconnect
         else nxs_error << "protocol_unknown\n" << std::string(buffer.data(), buffer.size());
     }
-
-    boost::asio::ip::tcp::socket& input_connexion::socket() { return _socket; }
-    const std::string& input_connexion::ip_client() const { return _ip_client; }
-    const std::string& input_connexion::ip_local() const { return _ip_local; }
 }} // nxs::network

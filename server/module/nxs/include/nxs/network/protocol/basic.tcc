@@ -12,7 +12,11 @@ namespace nxs{namespace network
     template<io::type IO_Type>
     void basic_protocol<IO_Type>::error(const std::string& message)
     {
-        nxs_error << "protocol error" << message << log::network;
+        process_complete(true);
+        _input.clear();
+        _output.set("nxs::error;");
+        _output.add(message);
+        nxs_log << "protocol error" << message << log::network;
     }
 
     template<io::type IO_Type> user& basic_protocol<IO_Type>::user() { return _user; }
@@ -35,6 +39,7 @@ namespace nxs{namespace network
         _callback[id] = fn;
         send(req);
     }
+
     template<io::type IO_Type>
     void basic_protocol<IO_Type>::send(const std::string& str_request, std::function<void(nxs::nex&)> fn)
     {

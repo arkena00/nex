@@ -26,19 +26,20 @@ namespace nxs{namespace network
     {
         using Protocol = basic_protocol<IO_Type>;
 
-        try {
-        // process new request
-        if (Protocol::process_complete() || Protocol::transfer_complete())
+        try
         {
-            Protocol::input().set(std::string(Protocol::connexion().buffer().data(), Protocol::connexion().buffer().size()));
-            Protocol::output().set("nxs::response;");
-            Protocol::input().validate();
-            Protocol::process_complete(false); // process not completed, can be changed by commands to terminate a request
-            Protocol::transfer_complete(true); // data complete, can be changed by headers
-            header::preprocess_all(*this);
-        }
-        header::process_all(*this);
-        Protocol::process();
+            // process new request
+            if (Protocol::process_complete() || Protocol::transfer_complete())
+            {
+                Protocol::input().set(std::string(Protocol::connexion().buffer().data(), Protocol::connexion().buffer().size()));
+                Protocol::output().set("nxs::response;");
+                Protocol::input().validate();
+                Protocol::process_complete(false); // process not completed, can be changed by commands to terminate a request
+                Protocol::transfer_complete(true); // data complete, can be changed by headers
+                header::preprocess_all(*this);
+            }
+            header::process_all(*this);
+            Protocol::process();
 
         } catch (const std::exception& e) { Protocol::error(e.what()); }
     }
@@ -49,11 +50,15 @@ namespace nxs{namespace network
         using Protocol = basic_protocol<IO_Type>;
 
         std::string str_request = nds::encoder<>::encode<std::string>(req);
+
+        Protocol::connexion().send(memory_data::make(str_request));
         // send request
-        Protocol::connexion().send(str_request.c_str(), str_request.size());
+        // Protocol::connexion().send(str_request.c_str(), str_request.size());
+
+
 
         // send all data
-        for (size_t i = 0; i< req.data_count(); i++)
+        for (size_t i = 0; i < req.data_count(); i++)
         {
             const network::data& output_data = req.data_const(i);
             // send data

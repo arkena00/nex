@@ -13,7 +13,7 @@ namespace nxs{namespace network
         virtual void connect(const std::string& ip, int port, int time_out = 0) = 0;
 
         virtual void on_connect(std::function<void()>) = 0;
-        virtual void on_read(std::function<void(connexion::buffer_type&)>) = 0;
+        virtual void on_read(std::function<void(output_connexion&)>) = 0;
         virtual void on_send(std::function<void(size_t)>) = 0;
         virtual void on_error(std::function<void(const char*)>) = 0;
     };

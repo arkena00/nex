@@ -4,10 +4,13 @@
 #include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
 #include <nxs/network/connexion.hpp>
+#include <nxs/network/socket.hpp>
 #include <nxs/network/io.hpp>
 #include <nxs/network/buffer.hpp>
+#include <nxs/network/data.hpp>
 #include <memory>
 #include <string>
+#include <deque>
 
 namespace nxs{namespace network
 {
@@ -21,21 +24,29 @@ namespace nxs{namespace network
         static size_t id_;
 
         size_t _id;
-        std::unique_ptr<network::protocol> _protocol;
-        buffer_type _buffer;
+
+        void socket_send(const boost::system::error_code& status, size_t bytes_transferred);
 
     protected:
         bool _alive;
+        boost::asio::ip::tcp::socket _socket;
+        std::unique_ptr<network::protocol> _protocol;
+        buffer_type _buffer;
+
+        std::deque<network::data_ptr> _output_buffer;
 
         template<class Protocol>
         void protocol_set();
 
     public:
-        basic_connexion(std::unique_ptr<network::protocol> = nullptr);
+        basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> = nullptr);
 
-        virtual ~basic_connexion() =  default;
+        virtual ~basic_connexion() = default;
         virtual void read() = 0;
         virtual void send(const char* data, size_t data_size) = 0;
+
+        void send(network::data_ptr);
+        void send();
 
         void send(const std::string& data);
 
@@ -45,6 +56,8 @@ namespace nxs{namespace network
         network::protocol& protocol() override;
         buffer_type& buffer() override;
         bool has_protocol() const;
+
+        boost::asio::ip::tcp::socket& socket();
     };
 }} // nxs::network
 

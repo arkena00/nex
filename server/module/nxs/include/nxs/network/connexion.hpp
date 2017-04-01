@@ -3,10 +3,13 @@
 
 #include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
+#include <memory>
 
 namespace nxs{namespace network
 {
     class protocol;
+    class data;
+    using data_ptr = std::shared_ptr<data>;
 
     class NXS_SHARED connexion
     {
@@ -20,6 +23,7 @@ namespace nxs{namespace network
         virtual buffer_type& buffer() = 0;
         virtual bool is_alive() const = 0;
         virtual void send(const char* data, size_t data_size) = 0;
+        virtual void send(network::data_ptr) = 0;
     };
 }} // nxs::network
 

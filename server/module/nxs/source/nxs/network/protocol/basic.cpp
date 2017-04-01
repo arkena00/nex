@@ -25,7 +25,7 @@ namespace nxs{namespace network
         send(_output);
     }
 
-    // process output when all complete, call the callback if req_id exist
+    // process read data from output connexion when all complete, call the callback if req_id exist
     template<>
     void basic_protocol<io::output>::process()
     {

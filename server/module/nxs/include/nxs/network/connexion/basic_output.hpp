@@ -13,13 +13,12 @@ namespace nxs{namespace network
     private:
         connexion_manager<output_connexion>& _client;
 
-        boost::asio::ip::tcp::socket _socket;
         boost::asio::deadline_timer _timer;
 
         std::string _ip;
         int _port;
         std::function<void()> _on_connect;
-        std::function<void(connexion::buffer_type&)> _on_read;
+        std::function<void(output_connexion&)> _on_read;
         std::function<void(size_t)> _on_send;
         std::function<void(const char*)> _on_error;
 
@@ -36,13 +35,13 @@ namespace nxs{namespace network
         void sync_connect(const std::string& ip, int port);
 
         void on_connect(std::function<void()>) override;
-        void on_read(std::function<void(connexion::buffer_type&)>) override;
-        void on_send(std::function<void(size_t)>) override;
+        void on_read(std::function<void(output_connexion&)>) override;
+        void on_send(std::function<void(unsigned int)>) override;
         void on_error(std::function<void(const char*)>) override;
 
         void read() override;
         void sync_read();
-        void send(const char* data, size_t data_size);
+        void send(const char* data, size_t data_size) override;
 
         const std::string& ip() const;
         int port() const;

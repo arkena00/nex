@@ -106,9 +106,9 @@ namespace nxs
             size_t write_size = nex.connexion().buffer().size() - _data_offset;
 
             // end of current data
-            if (current.transfer_size() + write_size >= current.capacity())
+            if (current.transfer_size() + write_size >= current.size())
             {
-                write_size = write_size - (current.transfer_size() + write_size - current.capacity());
+                write_size = write_size - (current.transfer_size() + write_size - current.size());
                 current.add(nex.connexion().buffer().data() + _data_offset, write_size);
                 // next data
                 _data_index++;

@@ -9,7 +9,7 @@ namespace nxs{namespace network
     class output_connexion;
     template<io::type> class nex;
 
-    class NXS_SHARED client : public connexion_manager<output_connexion>
+    class client : public connexion_manager<output_connexion>
     {
     public:
         client() = default;

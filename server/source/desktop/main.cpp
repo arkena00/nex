@@ -12,47 +12,14 @@ int main()
 {
     try
     {
-        //nxs::load();
+        nxs::load();
         nxs::network::client client;
-        //nxs::network::server server(50);
-        std::thread client_thread(&nxs::network::client::run, &client);
+        nxs::network::server server(50);
 
+        server.run();
 
-
-/*
-    nxs::network::output_connexion& http = client.connexion_add<nxs::network::http>();
-    http.connect("37.59.107.118", 80, 0);
-    http.on_connect([&](){
-                       std::string req = "GET / HTTP/1.1\r\nUser-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)\r\nHost: www.neuroshok.com\r\n\r\n";
-                        http.send(req.c_str(), req.size());
-                    });
-
-    http.on_read([&](nxs::network::connexion::buffer_type& b) {
-                       http.protocol().read();
-                       //if (http.protocol().transfer_complete()) std::cout << http.protocol().input().data(0).get();
-                    });*/
-
-
-        output_connexion& nex_cnx = client.connexion_add<nex>();
-        nex_cnx.on_connect([&]()
-                           {
-                               nex_cnx.protocol().send(nxs::request("nxs::version;"));
-                               std::cout << "\nconnected";
-                           });
-
-        nex_cnx.on_read([&](nxs::network::connexion::buffer_type &b)
-                        {
-                            std::cout << "\nread";
-                        });
-
-
-        nex_cnx.connect("127.0.0.1", 5050, 0);
-
-
-        client_thread.join();
-
-        std::cout << "\ndone";
-
+        //std::thread client_thread(&nxs::network::client::run, &client);
+        //client_thread.join();
 
     } catch (const std::exception &e)
     {

@@ -40,12 +40,12 @@ namespace ui
             tree_item *parent_item = static_cast<tree_item *>(in_item);
             parent_item->takeChildren();
 
-            _tab->connexion().protocol().send("nxs::resource_get;", [parent_item, this](nxs::nex &nex)
+            _tab->connexion().protocol().send("nxs::resource_get;", [parent_item, this](nxs::nex& nex)
             {
                 std::vector<nxs::resource> res_list = nxs::unserialize<std::vector<nxs::resource>>(
                 nex.input().data(0).get());
 
-                for (auto &res : res_list)
+                for (auto& res : res_list)
                 {
                     tree_item *item = new tree_item(parent_item);
                     item->setText(0, res.name().c_str());

@@ -17,21 +17,31 @@
 #include <QStackedWidget>
 #include <QDebug>
 #include <include/ui/render/web.hpp>
-
+#include <QMetaMethod>
 
 namespace ui
 {
-    tab::tab(ui::main *main_window, size_t tab_index) :
+    tab::tab(ui::main* main_window, size_t tab_index) :
         _main(main_window),
         _index(tab_index)
     {
         // create new connexion
-        nxs::network::output_connexion& cnx = _main->client().connexion_add();
+        using output_connexion = nxs::network::output_connexion;
+        output_connexion& cnx = _main->client().connexion_add();
         _connexion_id = cnx.id();
         // bind connexion events
-        cnx.on_connect(std::bind(&tab::on_connect, this));
-        cnx.on_read(std::bind(&tab::on_read, this, cnx.buffer()));
-        cnx.on_error(std::bind(&tab::on_error, this));
+        cnx.on_connect([this]() { emit event_connect();});
+        cnx.on_error([this](const char*) { emit event_transfer_error();});
+        cnx.on_read([this](output_connexion& out)
+                    {
+                        emit engine_load(out.protocol().input().data(0).get().c_str());
+                    }
+        );
+
+        QObject::connect(this, &tab::event_connect, this, &tab::on_connect, Qt::QueuedConnection);
+        QObject::connect(this, &tab::event_transfer_progress, this, &tab::on_transfer_progress, Qt::QueuedConnection);
+        QObject::connect(this, &tab::event_transfer_error, this, &tab::on_transfer_error, Qt::QueuedConnection);
+
 
         // main layout
         QVBoxLayout *main_layout      = new QVBoxLayout(this);
@@ -90,6 +100,8 @@ namespace ui
 
         // default value
         _address_bar->setText(_url.str().c_str());
+
+        title_set(std::to_string(_connexion_id));
     }
 
     tab::~tab()
@@ -112,11 +124,13 @@ namespace ui
             // connexion alive, send command
             if (connexion().is_alive())
             {
-                title_set("loading...");
-                connexion().protocol().send(_url.command());
-            } else
+                //title_set("loading...");
+                nxs::request req(_url.command());
+                connexion().protocol().send(req);
+            }
+            else
             {
-                title_set("connecting...");
+                //title_set("connecting...");
                 connexion().connect(_url.host(), _url.port());
             }
 
@@ -136,23 +150,12 @@ namespace ui
         item->node(true);
     }
 
-    void tab::on_read(nxs::network::connexion::buffer_type &buf)
+    void tab::on_transfer_progress(unsigned int n)
     {
-        try
-        {
-            if (connexion().protocol().transfer_complete())
-            {
-                title_set("complete");
-                emit engine_load(connexion().protocol().input().data(0).get().c_str());
-            }
-        }
-        catch (const std::exception& e)
-        {
-            emit engine_load(e.what());
-        }
+
     }
 
-    void tab::on_error()
+    void tab::on_transfer_error()
     {
         icon_set(QIcon(":/image/connexion_status_0"));
         engine_load("connexion error");
@@ -178,4 +181,5 @@ namespace ui
     {
         return _main->tabbar();
     }
+
 } // ui

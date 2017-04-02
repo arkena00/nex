@@ -36,7 +36,7 @@ namespace nxs{namespace network
 
         void on_connect(std::function<void()>) override;
         void on_read(std::function<void(output_connexion&)>) override;
-        void on_send(std::function<void(unsigned int)>) override;
+        void on_send(std::function<void(size_t)>) override;
         void on_error(std::function<void(const char*)>) override;
 
         void read() override;

@@ -8,7 +8,7 @@ project(nxi)
 if(WIN32)
     set(OS "windows")
     set(OS_DEFINE_LIST NXS_WIN NDB_WIN
-            BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB)
+            BOOST_DATE_TIME_NO_LIB BOOST_REGEX_NO_LIB _WIN32_WINDOWS=0x0501)
     list(APPEND LIB_LIST user32 wsock32 ws2_32)
 
     set(CMAKE_PREFIX_PATH "C:/Qt/5.9/msvc2015")

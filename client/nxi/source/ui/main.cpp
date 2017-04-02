@@ -9,17 +9,6 @@
 #include <QVBoxLayout>
 #include <QTabBar>
 
-struct zeta
-{
-    std::string aze;
-    int test;
-
-public:
-    zeta(std::string aze) : aze(aze)
-    {}
-
-};
-
 namespace ui
 {
     main::main(nxi::core& nxc) : _nxc(nxc)

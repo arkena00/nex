@@ -37,21 +37,25 @@ namespace ui
         ~tab();
 
         void load(const nxs::network::url&);
+        void address_load();
 
         void on_connect();
-        void on_read(nxs::network::connexion::buffer_type&);
-        void on_error();
+        void on_transfer_progress(unsigned int);
+        void on_transfer_error();
+
         nxs::network::output_connexion& connexion();
 
         void title_set(const std::string&);
         void icon_set(const QIcon&);
         QTabBar& tabbar() const;
 
-    public slots:
-        void address_load();
 
     signals:
         void engine_load(const QString&);
+        void event_connect();
+        void event_transfer_complete();
+        void event_transfer_progress(int);
+        void event_transfer_error();
     };
 
 } // ui

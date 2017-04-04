@@ -32,6 +32,7 @@ namespace nxs{namespace network
         if (!status)
         {
             cnx->load();
+            // cnx->on_close([]() { this->connexion_close(cnx->id()); } );
             auto ptr = std::unique_ptr<input_connexion>(cnx);
             connexion_manager::store(std::move(ptr));
         }

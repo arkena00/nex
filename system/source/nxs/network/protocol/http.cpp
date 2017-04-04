@@ -85,15 +85,16 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header.c_str(), header.size());
+        connexion().send(header);
 
         // send data
         if (output_data.target() == network::data::memory)
         {
-            connexion().send(output_data.get<std::string>().c_str(), output_data.size());
+            connexion().send(output_data.get<std::string>());
         }
         else
         {
+            /*
             std::ifstream file(output_data.get<std::string>(), std::ios::binary | std::ios::in);
             if (!file.is_open()) nxs_error << "data_hdd_read";
             std::array<char, 1024> buffer;
@@ -102,7 +103,7 @@ namespace nxs{namespace network
                 file.read(buffer.data(), 1024);
                 connexion().send(buffer.data(), file.gcount());
             }
-            file.close();
+            file.close();*/
         }
     }
     // MM send
@@ -122,9 +123,9 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header.c_str(), header.size());
+        connexion().send(header);
 
-        connexion().send(output_data.c_str(), output_data.size());
+        connexion().send(output_data);
     }
 
     // send string to input
@@ -137,8 +138,8 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header.c_str(), header.size());
-        connexion().send(data.c_str(), data.size());
+        connexion().send(header);
+        connexion().send(data);
     }
 
 

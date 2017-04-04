@@ -21,34 +21,38 @@ namespace nxs{namespace network
         using buffer_type = setup<connexion>::buffer_type;
 
     private:
-        static size_t id_;
-
         size_t _id;
 
-        void socket_send(const boost::system::error_code& status, size_t bytes_transferred);
+        std::function<void()> _on_read;
+        std::function<void(const network::data&)> _on_send;
+        std::function<void(const std::string&)> _on_error;
 
     protected:
+        std::string _ip;
+        uint16_t _port;
         bool _alive;
         boost::asio::ip::tcp::socket _socket;
         std::unique_ptr<network::protocol> _protocol;
         buffer_type _buffer;
-
-        std::deque<network::data_ptr> _output_buffer;
+        size_t _output_progress_size;
+        std::deque<network::data_ptr> _output_data;
 
         template<class Protocol>
         void protocol_set();
+        void protocol_detect();
+
+        void read();
+        void send();
 
     public:
         basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> = nullptr);
-
         virtual ~basic_connexion() = default;
-        virtual void read() = 0;
-        virtual void send(const char* data, size_t data_size) = 0;
 
         void send(network::data_ptr);
-        void send();
 
-        void send(const std::string& data);
+        void on_read(std::function<void()>) override;
+        void on_send(std::function<void(const network::data&)>, size_t progress_size) override;
+        void on_error(std::function<void(const std::string&)>) override;
 
         size_t id() const override;
         constexpr io::type iotype() const;
@@ -56,6 +60,8 @@ namespace nxs{namespace network
         network::protocol& protocol() override;
         buffer_type& buffer() override;
         bool has_protocol() const;
+        const std::string& ip() const;
+        uint16_t port() const;
 
         boost::asio::ip::tcp::socket& socket();
     };

@@ -56,7 +56,7 @@ namespace nxs{namespace network
         // Protocol::connexion().send(str_request.c_str(), str_request.size());
 
 
-
+/*
         // send all data
         for (size_t i = 0; i < req.data_count(); i++)
         {
@@ -64,7 +64,7 @@ namespace nxs{namespace network
             // send data
             if (output_data.target() == network::data::memory)
             {
-                Protocol::connexion().send(output_data.get<std::string>().c_str(), output_data.size());
+                Protocol::connexion().send(output_data.get().c_str(), output_data.size());
             }
             else
             {
@@ -78,6 +78,6 @@ namespace nxs{namespace network
                 }
                 file.close();
             }
-        }
+        }*/
     }
 }} // nxs::network

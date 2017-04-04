@@ -1,83 +1,95 @@
 #include <nxs/error.hpp>
 #include <nxs/network/protocol.hpp>
+#include <nxs/network/protocol/nex.hpp>
+#include <nxs/network/protocol/http.hpp>
 #include <iostream>
 
 namespace nxs{namespace network
 {
     template<io::type IO_Type>
-    size_t basic_connexion<IO_Type>::id_ = 0;
-
-    template<io::type IO_Type>
     basic_connexion<IO_Type>::basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> p) :
-        _id(++id_),
+        _id((size_t)reinterpret_cast<void*>(this)),
         _protocol(std::move(p)),
         _alive(false),
-        _socket(ios)
+        _socket(ios),
+        _output_progress_size(setup<connexion>::output_progress_size)
     {}
 
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::socket_send(const boost::system::error_code& status, size_t bytes_transferred)
+    void basic_connexion<IO_Type>::read()
     {
-        if (!status && _alive)
-        {
-            auto& data = *_output_buffer.front().get();
-            data.transfer_add(bytes_transferred);
-            std::cout << "\ntransfer progress " << data.transfer_progress();
-            if (data.transfer_complete())
-            {
-                _output_buffer.pop_front();
-            }
-            // keep sending data
-            send();
-        }
-        else std::cout << "________ERROR";
-    }
+        if (!_alive) return;
 
+        auto socket_read = [this](const boost::system::error_code& err, std::size_t transfer_size)
+        {
+            if (!err && _alive)
+            {
+                buffer().reserve(transfer_size);
+
+                if (!err)
+                {
+                    try
+                    {
+                        if (IO_Type == io::input) protocol_detect();
+
+                        protocol().read();
+
+                        if (_on_read) _on_read();
+
+                        // read next data
+                        read();
+
+                    } catch (const std::exception& e)
+                    {
+                        nxs_log << e.what() << log::network;
+                        // socket_close(status);
+                    }
+                }
+            }
+            else std::cout << "________ERROR";
+        };
+
+        _socket.async_read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()), socket_read);
+    }
 
     template<io::type IO_Type>
     void basic_connexion<IO_Type>::send()
     {
         // all data sent
-        if (_output_buffer.size() == 0) return;
+        if (_output_data.size() == 0) return;
 
         // send front data
-        auto& data = *_output_buffer.front().get();
+        auto& data = *_output_data.front().get();
 
-        boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()),
-                             boost::bind(&basic_connexion<IO_Type>::socket_send, this,
-                                         boost::asio::placeholders::error,
-                                         boost::asio::placeholders::bytes_transferred)
-        );
+        auto progress = [this, &data](const boost::system::error_code& err, std::size_t transfer_size) -> std::size_t
+        {
+            data.transfer_set(transfer_size);
+            if (_on_send) _on_send(data);
+            return err ? 0 : _output_progress_size;
+        };
+        auto data_complete = [this, &data](const boost::system::error_code& err, std::size_t transfer_size)
+        {
+            if (!err && _alive)
+            {
+                _output_data.pop_front();
+                // send next data
+                send();
+            }
+            else std::cout << "________ERROR";
+        };
+
+        boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()), progress, data_complete );
     }
 
     template<io::type IO_Type>
     void basic_connexion<IO_Type>::send(network::data_ptr d)
     {
         bool start_send = false;
-        if (_output_buffer.size() == 0) start_send = true;
-        _output_buffer.push_back(d);
-        // start to send data if output data was empty
+        if (_output_data.size() == 0) start_send = true;
+        _output_data.push_back(d);
+        // start to send data if output buffer queue was empty
         if (start_send) send();
-    }
-
-
-    template<io::type IO_Type>
-    void basic_connexion<IO_Type>::send(const std::string& data)
-    {
-        send(data.c_str(), data.size());
-    }
-
-    template<io::type IO_Type> size_t basic_connexion<IO_Type>::id() const { return _id; }
-    template<io::type IO_Type> constexpr io::type basic_connexion<IO_Type>::iotype() const { return IO_Type; }
-    template<io::type IO_Type> bool basic_connexion<IO_Type>::is_alive() const { return _alive; }
-    template<io::type IO_Type> typename basic_connexion<IO_Type>::buffer_type& basic_connexion<IO_Type>::buffer() { return _buffer; }
-
-    template<io::type IO_Type>
-    network::protocol& basic_connexion<IO_Type>::protocol()
-    {
-        if (_protocol.get() == nullptr) nxs_error << log::system;
-        return *_protocol.get();
     }
 
     template<io::type IO_Type>
@@ -89,6 +101,86 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
+    void basic_connexion<IO_Type>::protocol_detect()
+    {
+        if (has_protocol()) return;
+
+        // nex
+        if (strncmp(_buffer.data(), "NEX", 3) == 0) protocol_set<nex<io::input>>();
+            // http
+        else if (strncmp(_buffer.data(), "GET", 3) == 0 || strncmp(_buffer.data(), "POST", 4) == 0)
+        {
+            // ws
+            std::string str_data = std::string(_buffer.data(), _buffer.size());
+            // if (str_data.find("Sec-WebSocket-Key:") != std::string::npos) protocol_set<ws>();
+            protocol_set<http<io::input>>();
+        }
+            // no protocol found, disconnect
+        else nxs_error << "protocol_unknown\n" << std::string(_buffer.data(), _buffer.size());
+    }
+
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::on_read(std::function<void()> fn)
+    {
+        _on_read = fn;
+    }
+
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::on_send(std::function<void(const network::data&)> fn, std::size_t progress_size)
+    {
+        _output_progress_size = progress_size;
+        _on_send = fn;
+    }
+
+    template<io::type IO_Type> void basic_connexion<IO_Type>::on_error(std::function<void(const std::string&)> fn)
+    {
+        _on_error = fn;
+    }
+
+    template<io::type IO_Type>
+    size_t basic_connexion<IO_Type>::id() const
+    {
+        return _id;
+    }
+
+    template<io::type IO_Type>
+    constexpr io::type basic_connexion<IO_Type>::iotype() const
+    {
+        return IO_Type;
+    }
+
+    template<io::type IO_Type>
+    bool basic_connexion<IO_Type>::is_alive() const
+    {
+        return _alive;
+    }
+
+    template<io::type IO_Type>
+    typename basic_connexion<IO_Type>::buffer_type &basic_connexion<IO_Type>::buffer()
+    {
+        return _buffer;
+    }
+
+    template<io::type IO_Type>
+    const std::string& basic_connexion<IO_Type>::ip() const
+    {
+        return _ip;
+    }
+
+    template<io::type IO_Type>
+    uint16_t basic_connexion<IO_Type>::port() const
+    {
+        return _port;
+    }
+
+    template<io::type IO_Type>
+    network::protocol& basic_connexion<IO_Type>::protocol()
+    {
+        if (_protocol.get() == nullptr) nxs_error << log::system;
+        return *_protocol.get();
+    }
+
+    template<io::type IO_Type>
     bool basic_connexion<IO_Type>::has_protocol() const
     {
         if (_protocol.get() == nullptr) return false;
@@ -96,5 +188,8 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    boost::asio::ip::tcp::socket& basic_connexion<IO_Type>::socket() { return _socket; }
+    boost::asio::ip::tcp::socket &basic_connexion<IO_Type>::socket()
+    {
+        return _socket;
+    }
 }} // nxs::network

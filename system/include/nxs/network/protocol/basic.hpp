@@ -3,7 +3,6 @@
 
 #include <nxs/setup/connexion.hpp>
 #include <nxs/network/protocol.hpp>
-#include <nxs/network/connexion/basic.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/user.hpp>
 #include <deque>

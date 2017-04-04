@@ -36,6 +36,7 @@ namespace nxs{namespace network
 
         targetc target() const;
         void transfer_add(size_t n);
+        void transfer_set(size_t n);
         float transfer_progress() const;
         bool transfer_complete() const;
 

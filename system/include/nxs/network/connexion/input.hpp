@@ -13,25 +13,11 @@ namespace nxs{namespace network
     private:
         server& _server;
 
-        std::string _ip_client;
-        std::string _ip_local;
-
-        void socket_read(const boost::system::error_code& status, size_t bytes_transferred);
-        void socket_send(const boost::system::error_code& status, size_t bytes_transferred);
-        void socket_close(const boost::system::error_code& status);
-
     public:
         input_connexion(server& server);
         ~input_connexion();
 
         void load();
-        void close();
-
-        void read() override;
-        void send(const char* data, size_t data_size) override;
-        void send(network::data_ptr)   {}
-
-        void protocol_detect(const buffer_type& buffer);
     };
 }} // nxs::network
 

@@ -21,7 +21,9 @@ namespace nxs{namespace network
             {
                 cnx->on_close([this, id = cnx->id()]()
                               {
-                                  this->connexion_delete(id);}
+                                  nxs_log << "connexion closed " << id << log::network;
+                                  this->connexion_delete(id);
+                              }
                 );
                 auto cnx_ptr = std::unique_ptr<input_connexion>(cnx);
                 connexion_manager::store(std::move(cnx_ptr));

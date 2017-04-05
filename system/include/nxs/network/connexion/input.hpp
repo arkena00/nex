@@ -10,7 +10,6 @@ namespace nxs{namespace network
     {
     public:
         input_connexion(boost::asio::io_service& ios);
-        ~input_connexion();
 
         void accept(boost::asio::ip::tcp::acceptor&, const std::function<void(const boost::system::error_code&)>&);
         void load();

@@ -56,6 +56,8 @@ namespace nxs{namespace network
         // Protocol::connexion().send(str_request.c_str(), str_request.size());
 
 
+
+
 /*
         // send all data
         for (size_t i = 0; i < req.data_count(); i++)

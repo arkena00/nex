@@ -103,7 +103,7 @@ namespace nxs{namespace network
         }
         _alive = false;
         if (_on_close) _on_close();
-        nxs_log << "connexion closed " << id() << log::network;
+        nxs_log << "connexion closed " << _id << log::network;
     }
 
     template<io::type IO_Type>

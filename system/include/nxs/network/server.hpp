@@ -12,6 +12,7 @@ namespace nxs{namespace network
     {
     private:
         uint16_t _port;
+        boost::asio::ip::tcp::acceptor _acceptor;
 
         void listen();
 

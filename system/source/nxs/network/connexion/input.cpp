@@ -9,9 +9,8 @@ using boost::asio::ip::tcp;
 
 namespace nxs{namespace network
 {
-    input_connexion::input_connexion(boost::asio::io_service& ios, uint16_t port) :
-        basic_connexion(ios),
-        _acceptor(ios, tcp::endpoint(tcp::v4(), port))
+    input_connexion::input_connexion(boost::asio::io_service& ios) :
+        basic_connexion(ios)
     {}
 
     input_connexion::~input_connexion()
@@ -19,9 +18,9 @@ namespace nxs{namespace network
         nxs_log << "connexion closed " << ip() << id() << log::network;
     }
 
-    void input_connexion::accept(const std::function<void(const boost::system::error_code&)>& fn)
+    void input_connexion::accept(boost::asio::ip::tcp::acceptor& acceptor, const std::function<void(const boost::system::error_code&)>& fn)
     {
-        _acceptor.async_accept(_socket, [this, fn](const boost::system::error_code& err)
+        acceptor.async_accept(_socket, [this, fn](const boost::system::error_code& err)
         {
             fn(err);
         });

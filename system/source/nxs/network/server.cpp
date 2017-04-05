@@ -5,15 +5,16 @@ using boost::asio::ip::tcp;
 namespace nxs{namespace network
 {
     server::server(uint16_t port) :
-        _port(port)
+        _port(port),
+        _acceptor(ios(), tcp::endpoint(tcp::v4(), port))
     {}
 
     void server::listen()
     {
         // create new connexion
-        input_connexion* cnx = new input_connexion(this->ios(), _port);
+        input_connexion* cnx = new input_connexion(this->ios());
 
-        cnx->accept([this, cnx](const boost::system::error_code& err)
+        cnx->accept(_acceptor, [this, cnx](const boost::system::error_code& err)
         {
             // accept connexion, load and store
             if (!err)

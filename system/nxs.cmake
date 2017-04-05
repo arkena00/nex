@@ -3,7 +3,9 @@
 ########################################################
 if(WIN32)
     set(NK_OS_NAME "windows")
-    set(NXS_OS_DEFINE_LIST -DNXS_WIN -DNDB_WIN -DBOOST_DATE_TIME_NO_LIB -DBOOST_REGEX_NO_LIB -D_WIN32_WINDOWS=0x0501)
+    set(NXS_OS_DEFINE_LIST -DNXS_WIN -DNDB_WIN
+            -DBOOST_DATE_TIME_NO_LIB -DBOOST_REGEX_NO_LIB
+            -D_WIN32_WINDOWS=0x0501 -D_WINSOCK_DEPRECATED_NO_WARNINGS)
     list(APPEND NXS_LIB_LIST user32 wsock32 ws2_32)
     if(MSVC)
         list(APPEND NXS_LIB_LIST

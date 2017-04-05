@@ -48,7 +48,7 @@ namespace nxs{namespace network
     }
 
     template<class Connexion>
-    void connexion_manager<Connexion>::connexion_close(size_t id)
+    void connexion_manager<Connexion>::connexion_delete(size_t id)
     {
         if (connexion_manager<Connexion>::connexion_exist(id)) _connexion_list.erase(id);
     }

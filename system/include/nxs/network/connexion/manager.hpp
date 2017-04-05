@@ -26,7 +26,7 @@ namespace nxs{namespace network
         boost::asio::io_service& ios();
 
         Connexion& connexion(size_t id) const;
-        void connexion_close(size_t id);
+        void connexion_delete(size_t id);
         bool connexion_exist(size_t id) const;
         size_t connexion_count() const;
     };

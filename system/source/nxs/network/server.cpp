@@ -1,48 +1,39 @@
 #include <nxs/network/server.hpp>
-#include <nxs/network/connexion/input.hpp>
-#include <nxs/core.hpp>
-#include <nxs/log.hpp>
-#include <iostream>
 
 using boost::asio::ip::tcp;
-
-///FIXME crash when ios().run() never called
 
 namespace nxs{namespace network
 {
     server::server(uint16_t port) :
-        _port(port),
-        _acceptor(ios(), tcp::endpoint(tcp::v4(), port))
+        _port(port)
     {}
-
-    server::~server()
-    {
-    }
 
     void server::listen()
     {
         // create new connexion
-        input_connexion* cnx = new input_connexion(*this);
-        _acceptor.async_accept(cnx->socket(), boost::bind(&server::accept, this, cnx, boost::asio::placeholders::error));
-    }
+        input_connexion* cnx = new input_connexion(this->ios(), _port);
 
-    void server::accept(input_connexion* cnx, const boost::system::error_code& status)
-    {
-        // accept connexion, load and store
-        if (!status)
+        cnx->accept([this, cnx](const boost::system::error_code& err)
         {
-            cnx->load();
-            // cnx->on_close([]() { this->connexion_close(cnx->id()); } );
-            auto ptr = std::unique_ptr<input_connexion>(cnx);
-            connexion_manager::store(std::move(ptr));
-        }
-        else
-        {
-            delete cnx;
-            nxs_error << "server connexion" << log::network;
-        }
-        // create new listening connexion
-        listen();
+            // accept connexion, load and store
+            if (!err)
+            {
+                cnx->on_close([this, id = cnx->id()]()
+                              {
+                                  this->connexion_delete(id);}
+                );
+                auto cnx_ptr = std::unique_ptr<input_connexion>(cnx);
+                connexion_manager::store(std::move(cnx_ptr));
+                cnx->load();
+            }
+            else
+            {
+                delete cnx;
+                nxs_error << "server connexion" << log::network;
+            }
+            // create new listening connexion
+            listen();
+        });
     }
 
     void server::run()

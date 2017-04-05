@@ -12,16 +12,14 @@ namespace nxs{namespace network
     class NXS_SHARED basic_output_connexion : public basic_connexion<io::output>, public output_connexion
     {
     private:
-        connexion_manager<output_connexion>& _client;
-
         boost::asio::deadline_timer _timer;
 
         std::function<void()> _on_connect;
 
     public:
-        basic_output_connexion(connexion_manager<output_connexion>&);
+        basic_output_connexion(boost::asio::io_service&);
 
-        virtual void on_connect(std::function<void()>) override;
+        void on_connect(std::function<void()>) override;
 
         void connect(const std::string& ip, uint16_t port, int time_out = 5) override;
 

@@ -15,7 +15,6 @@ namespace nxs{namespace network
         _output_progress_size(setup<connexion>::output_progress_size)
     {}
 
-
     template<io::type IO_Type>
     void basic_connexion<IO_Type>::read()
     {
@@ -23,31 +22,25 @@ namespace nxs{namespace network
 
         auto socket_read = [this](const boost::system::error_code& err, std::size_t transfer_size)
         {
-            if (!err && _alive)
+            if (!_alive) return;
+            if (!err)
             {
                 buffer().reserve(transfer_size);
-
-                if (!err)
+                try
                 {
-                    try
-                    {
-                        if (IO_Type == io::input) protocol_detect();
+                    if (IO_Type == io::input) protocol_detect();
+                    protocol().read();
 
-                        protocol().read();
-
-                        if (_on_read) _on_read();
-
-                        // read next data
-                        read();
-
-                    } catch (const std::exception& e)
-                    {
-                        nxs_log << e.what() << log::network;
-                        // socket_close(status);
-                    }
+                    if (_on_read) _on_read();
+                    // read next data
+                    read();
+                } catch (const std::exception& e)
+                {
+                    nxs_log << e.what() << log::network;
+                    close();
                 }
             }
-            else std::cout << "________ERROR";
+            else error(err);
         };
 
         _socket.async_read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()), socket_read);
@@ -76,7 +69,7 @@ namespace nxs{namespace network
                 // send next data
                 send();
             }
-            else std::cout << "________ERROR";
+            else error(err);
         };
 
         boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()), progress, data_complete );
@@ -90,6 +83,26 @@ namespace nxs{namespace network
         _output_data.push_back(d);
         // start to send data if output buffer queue was empty
         if (start_send) send();
+    }
+
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::error(const boost::system::error_code& err)
+    {
+        _alive = false;
+        if (_on_error) _on_error(err.message());
+        close();
+    }
+
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::close()
+    {
+        if (_alive)
+        {
+            _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+            _socket.close();
+        }
+        _alive = false;
+        if (_on_close) _on_close();
     }
 
     template<io::type IO_Type>
@@ -132,9 +145,16 @@ namespace nxs{namespace network
         _on_send = fn;
     }
 
-    template<io::type IO_Type> void basic_connexion<IO_Type>::on_error(std::function<void(const std::string&)> fn)
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::on_error(std::function<void(const std::string&)> fn)
     {
         _on_error = fn;
+    }
+
+    template<io::type IO_Type>
+    void basic_connexion<IO_Type>::on_close(std::function<void()> fn)
+    {
+        _on_close = fn;
     }
 
     template<io::type IO_Type>
@@ -162,15 +182,15 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    const std::string& basic_connexion<IO_Type>::ip() const
+    std::string basic_connexion<IO_Type>::ip() const
     {
-        return _ip;
+        return _socket.remote_endpoint().address().to_string();
     }
 
     template<io::type IO_Type>
     uint16_t basic_connexion<IO_Type>::port() const
     {
-        return _port;
+        return _socket.remote_endpoint().port();
     }
 
     template<io::type IO_Type>
@@ -186,10 +206,10 @@ namespace nxs{namespace network
         if (_protocol.get() == nullptr) return false;
         return true;
     }
-
+/*
     template<io::type IO_Type>
     boost::asio::ip::tcp::socket &basic_connexion<IO_Type>::socket()
     {
         return _socket;
-    }
+    }*/
 }} // nxs::network

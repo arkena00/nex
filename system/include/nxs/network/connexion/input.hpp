@@ -11,12 +11,13 @@ namespace nxs{namespace network
     class input_connexion : public basic_connexion<io::input>
     {
     private:
-        server& _server;
+        boost::asio::ip::tcp::acceptor _acceptor;
 
     public:
-        input_connexion(server& server);
+        input_connexion(boost::asio::io_service& ios, uint16_t port);
         ~input_connexion();
 
+        void accept(const std::function<void(const boost::system::error_code&)>&);
         void load();
     };
 }} // nxs::network

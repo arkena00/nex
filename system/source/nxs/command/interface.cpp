@@ -15,7 +15,7 @@ namespace nxs
             {
                 result += "<br />" + std::to_string(m.id()) + " " + m.name() + " " + m.author();
             }
-            nex.output().add(result);
+            nex.output().add(std::move(result));
         }
 
         static void add(nxs::nex& nex)
@@ -25,7 +25,7 @@ namespace nxs
             int mid = interface::add(nex.input().param("name").value(), ext);
             if (interface::load(mid, ext)) result = "interface loaded";
             else result = "unable to load interface";
-            nex.output().add(result);
+            nex.output().add(std::move(result));
         }
     };
 

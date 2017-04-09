@@ -45,31 +45,29 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void nex<IO_Type>::send(const request& req)
+    void nex<IO_Type>::send(request& req)
     {
         using Protocol = basic_protocol<IO_Type>;
 
         std::string str_request = nds::encoder<>::encode<std::string>(req);
 
-        Protocol::connexion().send(memory_data::make(str_request));
         // send request
-        // Protocol::connexion().send(str_request.c_str(), str_request.size());
+        Protocol::connexion().send_move(str_request);
 
 
-
-
-/*
         // send all data
         for (size_t i = 0; i < req.data_count(); i++)
         {
-            const network::data& output_data = req.data_const(i);
+            const network::data& output_data = req.data(i);
+            // req.data_get(i);
             // send data
             if (output_data.target() == network::data::memory)
             {
-                Protocol::connexion().send(output_data.get().c_str(), output_data.size());
+                //Protocol::connexion().send(output_data);
             }
             else
             {
+                /*
                 std::ifstream file(output_data.get<std::string>(), std::ios::binary | std::ios::in);
                 if (!file.is_open()) nxs_error << "data_hdd_read";
                 std::array<char, 1024> buffer;
@@ -78,8 +76,8 @@ namespace nxs{namespace network
                     file.read(buffer.data(), 1024);
                     Protocol::connexion().send(buffer.data(), file.gcount());
                 }
-                file.close();
+                file.close();*/
             }
-        }*/
+        }
     }
 }} // nxs::network

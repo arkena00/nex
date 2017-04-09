@@ -35,7 +35,6 @@ namespace nxs
         request();
         request(const std::string& str_request);
 
-        //request(const request&) {}
 
         void clear();
         void set(const std::string& str_request);
@@ -46,15 +45,18 @@ namespace nxs
         nxs::param& param(const std::string& name);
         std::string& param_value(const std::string& name, int index = 0);
 
+        //template<class T>
+        //void add(T data);
+        void add(network::hdd_data&& data);
         template<class T>
-        void add(T data);
-        void add(const network::hdd_data& data);
-        void add(const network::memory_data& data);
+        void add(network::memory_data<T>&& data);
+        //void add(network::data&& data);
+        void add(request::linear_type&& data);
         void add(const request::linear_type& data);
 
         void file_add(const std::string& path);
         network::data& data(size_t index = 0);
-        const network::data& data_const(size_t index = 0) const;
+        std::shared_ptr<network::data> data_shared(size_t index = 0);
         size_t data_count() const;
     };
 } // nxs

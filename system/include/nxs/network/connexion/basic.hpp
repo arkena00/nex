@@ -26,7 +26,7 @@ namespace nxs{namespace network
         std::unique_ptr<network::protocol> _protocol;
         buffer_type _buffer;
         size_t _output_progress_size;
-        std::deque<network::data_ptr> _output_data;
+        std::deque<network::shared_data> _output_data;
 
         std::function<void()> _on_read;
         std::function<void(const network::data&)> _on_send;
@@ -48,9 +48,9 @@ namespace nxs{namespace network
 
     public:
         basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> = nullptr);
-        virtual ~basic_connexion() = default;
+        ~basic_connexion();
 
-        void send(network::data_ptr) override;
+        void send(network::shared_data) override;
 
         void on_read(std::function<void()>) override;
         void on_send(std::function<void(const network::data&)>, size_t progress_size) override;

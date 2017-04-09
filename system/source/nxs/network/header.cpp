@@ -82,14 +82,14 @@ namespace nxs
                         network::hdd_data d(nxs::config::network_download_path + "__tmp" + std::to_string(nex.connexion().id()) + std::to_string(i));
                         d.tmp(true);
                         d.reserve(data_size);
-                        nex.input().add(d);
+                        nex.input().add(std::move(d));
                     }
                     // memory data
                     else
                     {
-                        network::memory_data d;
+                        network::memory_data<std::vector<char>> d;
                         d.reserve(data_size);
-                        nex.input().add(d);
+                        nex.input().add(std::move(d));
                     }
                 }
                 // init first data

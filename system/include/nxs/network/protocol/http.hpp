@@ -16,19 +16,19 @@ namespace nxs{namespace network
         {}
 
         void read() override;
-        void send(const request&) override;
+        void send(request&) override;
 
-        void send_string(const std::string&);
+        void send_string(std::string&&);
         void mm_send(const std::string&);
     };
 
     template<> void http<io::input>::read();
-    template<> void http<io::input>::send(const request&);
-    template<> void http<io::input>::send_string(const std::string&);
+    template<> void http<io::input>::send(request&);
+    template<> void http<io::input>::send_string(std::string&&);
     template<> void http<io::input>::mm_send(const std::string& data);
 
     template<> void http<io::output>::read();
-    template<> void http<io::output>::send(const request&);
+    template<> void http<io::output>::send(request&);
 }} // nxs::network
 
 #endif // NETWORK_PROTOCOL_HTTP_H_NXS

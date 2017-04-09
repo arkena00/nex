@@ -22,7 +22,7 @@ namespace nxs{namespace network
         virtual ~protocol() = default;
 
         virtual void read() = 0;
-        virtual void send(const request&) = 0;
+        virtual void send(request&) = 0;
         virtual void send(request&, std::function<void(nxs::nex&)>) = 0;
         virtual void send(const std::string&, std::function<void(nxs::nex&)>) = 0;
 

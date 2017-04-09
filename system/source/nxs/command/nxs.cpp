@@ -46,31 +46,18 @@ namespace nxs
                 }*/
             }
 
-            nex.output().add(res.str());
+            nex.output().add(std::move(res.str()));
         }
 
 
 
         static void test(nxs::nex& nex)
         {
+            std::string result = "";
 
-            //nex.output().file_add("d:/ads.txt");
 
-            /*
-            std::string result = R"__(
-            <form enctype="multipart/form-data" action="/nxs::test;;" method="post">
-                <input id="file" type="file" />
-                <input type = "submit" />
-            </form>
-            )__";*/
 
-            std::string result = R"__(
-            <h1>Projet nex</h1>
-            Ce projet a pour but de cr�er un r�seau de donn�es structur� et de fournir des fonctionnalit�s modulable afin que l'utilisateur puisse g�rer depuis une interface client g�n�rique et personnalisable toute donn�e qu'elle soit local ou r�seau.
-            <br />
-            <br /><img src = 'http://nex.neuroshok.com/image/nex_presentation.jpg' />
-            )__";
-            nex.output().add(result);
+            nex.output().add(std::move(result));
         }
 
         static void dbtest(nxs::nex& nex)
@@ -92,14 +79,14 @@ namespace nxs
 
             } catch (const std::exception& e) { res << e.what(); }
 
-            nex.output().add(res.str());
+            nex.output().add(std::move(res.str()));
         }
 
         static void rabbit(nxs::nex& nex)
         {
             std::string out =
         R"(:rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit:)";
-            nex.output().add(out);
+            nex.output().add(std::move(out));
         }
 
     }; // commands

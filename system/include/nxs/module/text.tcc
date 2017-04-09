@@ -21,7 +21,7 @@ namespace nxs
             while (!file.eof())
             {
                 file.read(buffer, 512);
-                m_text += std::string(buffer, file.gcount());
+                m_text += std::string(buffer, static_cast<size_t>(file.gcount()));
             }
             file.close();
         }
@@ -35,7 +35,7 @@ namespace nxs
     int text_module<T>::process(nxs::nex& nex)
     {
         try {
-        nex.output().add(m_text);
+        nex.output().add(std::move(m_text));
         } catch (const std::exception& e) { nxs_error << "module error" << e.what(); }
         return 0;
     }

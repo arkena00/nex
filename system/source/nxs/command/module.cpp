@@ -15,7 +15,7 @@ namespace nxs
             {
                 result += "<br />" + std::to_string(m.id()) + " " + m.name() + " " + m.author();
             }
-            nex.output().add(result);
+            nex.output().add(std::move(result));
         }
 
         static void add(nxs::nex& nex)
@@ -25,7 +25,7 @@ namespace nxs
             int mid = module::add(nex.input().param("name").value(), ext);
             if (module::load(mid, ext)) result = "module loaded";
             else result = "unable to load module";
-            nex.output().add(result);
+            nex.output().add(std::move(result));
         }
     };
 

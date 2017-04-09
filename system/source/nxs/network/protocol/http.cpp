@@ -53,11 +53,11 @@ namespace nxs{namespace network
 
     // send to input
     template<>
-    void http<io::input>::send(const request& req)
+    void http<io::input>::send(request& req)
     {
         if (_mm)
         {
-            mm_send(req.data_const(0).get());
+            mm_send(req.data(0).get());
             return;
         }
 
@@ -69,7 +69,7 @@ namespace nxs{namespace network
             send_string("<i>no output</i>");
             return;
         }
-        const network::data& output_data = req.data_const(0);
+        const network::data& output_data = req.data(0);
 
         if (output_data.target() == network::data::hdd)
         {
@@ -85,12 +85,13 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header);
+        connexion().send_move(header);
+        connexion().send(req.data_shared(0));
 
         // send data
         if (output_data.target() == network::data::memory)
         {
-            connexion().send(output_data.get<std::string>());
+            connexion().send(req.data_shared(0));
         }
         else
         {
@@ -123,14 +124,13 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header);
-
-        connexion().send(output_data);
+        connexion().send_move(header);
+        connexion().send_move(output_data);
     }
 
     // send string to input
     template<>
-    void http<io::input>::send_string(const std::string& data)
+    void http<io::input>::send_string(std::string&& data)
     {
         std::string header = "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/html\r\n"
@@ -138,8 +138,8 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send(header);
-        connexion().send(data);
+        connexion().send_move(header);
+        connexion().send_move(data);
     }
 
 
@@ -156,7 +156,7 @@ namespace nxs{namespace network
     }
 
     // send to output
-    template<> void http<io::output>::send(const request&)
+    template<> void http<io::output>::send(request&)
     {
 
     }

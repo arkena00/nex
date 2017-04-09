@@ -3,13 +3,14 @@
 
 #include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
+#include <functional>
 #include <memory>
 
 namespace nxs{namespace network
 {
     class protocol;
     class data;
-    using data_ptr = std::shared_ptr<data>;
+    using shared_data = std::shared_ptr<data>;
 
     class NXS_SHARED connexion
     {
@@ -27,9 +28,12 @@ namespace nxs{namespace network
         virtual network::protocol& protocol() = 0;
         virtual buffer_type& buffer() = 0;
         virtual bool is_alive() const = 0;
-        virtual void send(network::data_ptr) = 0;
+        virtual void send(network::shared_data) = 0;
 
-        template<class T> void send(const T&);
+        template<class T> void send_move(T&&);
+        template<class T> void send_move(T&);
+        template<class T> void send(const T&) = delete;
+        template<class T> void send(T&) = delete;
     };
 }} // nxs::network
 
@@ -38,9 +42,14 @@ namespace nxs{namespace network
 namespace nxs{namespace network
 {
     template<class T>
-    void connexion::send(const T& t)
+    void connexion::send_move(T&& t)
     {
-        send(memory_data::make(t));
+        send(make_memory_data(std::move(t)));
+    }
+    template<class T>
+    void connexion::send_move(T& t)
+    {
+        send_move(std::move(t));
     }
 }} // nxs::network
 

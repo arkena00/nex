@@ -9,6 +9,8 @@
 
 namespace nxs{namespace network
 {
+    class connexion;
+
     template<io::type IO_Type>
     class NXS_SHARED basic_protocol : public protocol
     {
@@ -30,7 +32,7 @@ namespace nxs{namespace network
         virtual ~basic_protocol() = default;
 
         virtual void read() = 0;
-        virtual void send(const request&) = 0;
+        virtual void send(request&) = 0;
 
         virtual void process();
         virtual void error(const std::string& message);

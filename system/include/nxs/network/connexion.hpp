@@ -3,6 +3,7 @@
 
 #include <nxs/share.hpp>
 #include <nxs/setup/connexion.hpp>
+#include <nxs/network/error_code.hpp>
 #include <functional>
 #include <memory>
 
@@ -21,8 +22,7 @@ namespace nxs{namespace network
 
         virtual void on_read(std::function<void()>) = 0;
         virtual void on_send(std::function<void(const network::data&)>, size_t progress_size = setup<connexion>::output_progress_size) = 0;
-        virtual void on_error(std::function<void(const std::string&)>) = 0;
-        virtual void on_close(std::function<void()>) = 0;
+        virtual void on_close(std::function<void(const network::error_code&)>) = 0;
 
         virtual size_t id() const = 0;
         virtual network::protocol& protocol() = 0;

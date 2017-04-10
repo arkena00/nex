@@ -11,15 +11,13 @@
 #include <memory>
 #include <string>
 #include <deque>
+#include <nxs/network/error_code.hpp>
 
 namespace nxs{namespace network
 {
     template<io::type IO_Type>
     class basic_connexion : virtual public connexion
     {
-    public:
-        using buffer_type = setup<connexion>::buffer_type;
-
     private:
         size_t _id;
 
@@ -30,8 +28,7 @@ namespace nxs{namespace network
 
         std::function<void()> _on_read;
         std::function<void(const network::data&)> _on_send;
-        std::function<void(const std::string&)> _on_error;
-        std::function<void()> _on_close;
+        std::function<void(const network::error_code&)> _on_close;
 
         template<class Protocol>
         void protocol_set();
@@ -43,8 +40,7 @@ namespace nxs{namespace network
 
         void read();
         void send();
-        void close();
-        void error(const boost::system::error_code&);
+        void close(const network::error_code&);
 
     public:
         basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> = nullptr);
@@ -54,8 +50,7 @@ namespace nxs{namespace network
 
         void on_read(std::function<void()>) override;
         void on_send(std::function<void(const network::data&)>, size_t progress_size) override;
-        void on_error(std::function<void(const std::string&)>) override;
-        void on_close(std::function<void()>) override;
+        void on_close(std::function<void(const network::error_code&)>) override;
 
         size_t id() const override;
         constexpr io::type iotype() const;

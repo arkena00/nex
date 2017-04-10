@@ -19,7 +19,7 @@ namespace nxs{namespace network
             // accept connexion, load and store
             if (!err)
             {
-                cnx->on_close([this, id = cnx->id()]()
+                cnx->on_close([this, id = cnx->id()](const network::error_code& err)
                               {
                                   nxs_log << "connexion closed " << id << log::network;
                                   this->connexion_delete(id);

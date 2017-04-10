@@ -1,6 +1,4 @@
-#include <nxs/network/connexion/output.hpp>
 #include <nxs/network/protocol.hpp>
-#include <nxs/network/connexion/basic.hpp>
 
 namespace nxs{namespace network
 {
@@ -22,7 +20,7 @@ namespace nxs{namespace network
     template<class Protocol>
     void basic_output_connexion<Protocol>::connect(const std::string& ip, uint16_t port, int time_out)
     {
-        auto socket_connect = [this](const boost::system::error_code& err)
+        auto socket_connect = [this](const network::error_code& err)
         {
             if (!err)
             {
@@ -31,7 +29,7 @@ namespace nxs{namespace network
 
                 this->read();
             }
-            else this->error(err);
+            else this->close(err);
         };
 
         tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip), port);
@@ -54,7 +52,7 @@ namespace nxs{namespace network
 
         while (1)
         {
-            boost::system::error_code error;
+            network::error_code error;
 
             size_t data_size = _socket.read_some(boost::asio::buffer(basic_connexion<io::output>::buffer().address(),
                                                                   basic_connexion<io::output>::buffer().capacity()),

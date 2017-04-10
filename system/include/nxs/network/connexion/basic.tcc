@@ -16,7 +16,7 @@ r.async_resolve(q, resolve_handler);
 // ...
 
 void resolve_handler(
-    const boost::system::error_code& ec,
+    const network::error_code& ec,
     tcp::resolver::iterator i)
 {
   if (!ec)
@@ -50,7 +50,7 @@ namespace nxs{namespace network
     template<io::type IO_Type>
     void basic_connexion<IO_Type>::read()
     {
-        auto socket_read = [this](const boost::system::error_code& err, std::size_t transfer_size)
+        auto socket_read = [this](const network::error_code& err, std::size_t transfer_size)
         {
             std::cout << "\nREAD : " << _socket.is_open();
             if (!err)
@@ -67,10 +67,10 @@ namespace nxs{namespace network
                 } catch (const std::exception& e)
                 {
                     nxs_log << e.what() << log::network;
-                    close();
+                    close(err);
                 }
             }
-            else error(err);
+            else close(err);
         };
 
         _socket.async_read_some(boost::asio::buffer(_buffer.address(), _buffer.capacity()), socket_read);
@@ -85,13 +85,13 @@ namespace nxs{namespace network
         // send front data
         auto& data = *_output_data.front().get();
 
-        auto progress = [this, &data](const boost::system::error_code& err, std::size_t transfer_size) -> std::size_t
+        auto progress = [this, &data](const network::error_code& err, std::size_t transfer_size) -> std::size_t
         {
             data.transfer_set(transfer_size);
             if (_on_send) _on_send(data);
             return err ? 0 : _output_progress_size;
         };
-        auto data_complete = [this, &data](const boost::system::error_code& err, std::size_t transfer_size)
+        auto data_complete = [this, &data](const network::error_code& err, std::size_t transfer_size)
         {
             if (!err)
             {
@@ -99,7 +99,7 @@ namespace nxs{namespace network
                 // send next data
                 send();
             }
-            else error(err);
+            else close(err);
         };
 
         boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()), progress, data_complete );
@@ -116,7 +116,7 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::error(const boost::system::error_code& err)
+    void basic_connexion<IO_Type>::close(const network::error_code& err)
     {
         if (_alive && _socket.is_open())
         {
@@ -124,19 +124,7 @@ namespace nxs{namespace network
             _socket.close();
             _alive = false;
         }
-        if (_on_error) _on_error(err.message());
-    }
-
-    template<io::type IO_Type>
-    void basic_connexion<IO_Type>::close()
-    {
-        if (_socket.is_open())
-        {
-            _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-            _socket.close();
-        }
-        _alive = false;
-        if (_on_close) _on_close();
+        if (_on_close) _on_close(err);
     }
 
     template<io::type IO_Type>
@@ -180,13 +168,7 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::on_error(std::function<void(const std::string&)> fn)
-    {
-        _on_error = fn;
-    }
-
-    template<io::type IO_Type>
-    void basic_connexion<IO_Type>::on_close(std::function<void()> fn)
+    void basic_connexion<IO_Type>::on_close(std::function<void(const network::error_code&)> fn)
     {
         _on_close = fn;
     }
@@ -210,7 +192,7 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    typename basic_connexion<IO_Type>::buffer_type &basic_connexion<IO_Type>::buffer()
+    typename basic_connexion<IO_Type>::buffer_type& basic_connexion<IO_Type>::buffer()
     {
         return _buffer;
     }

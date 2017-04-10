@@ -1,5 +1,5 @@
-#ifndef NETWORK_DATA_NXS
-#define NETWORK_DATA_NXS
+#ifndef NETWORK_DATA_H_NXS
+#define NETWORK_DATA_H_NXS
 
 #include <nxs/share.hpp>
 #include <nxs/utility/trait.hpp>
@@ -40,72 +40,8 @@ namespace nxs{namespace network
 
     using shared_data = std::shared_ptr<data>;
 
-    template<class T>
-    class memory_data : public data
-    {
-    private:
-        T _data;
-
-    public:
-        memory_data() {}
-        memory_data(const T& t) : _data(t) {}
-        memory_data(T& t) : _data(t) {}
-        memory_data(T&& t) : _data(std::move(t)) {}
-
-        void add(const char* data_ptr, size_t data_size) override
-        {
-            _data.insert(_data.end(), data_ptr, data_ptr);
-        }
-
-        const char* ptr() override
-        {
-            return _data.data();
-        }
-
-        size_t size() const override
-        {
-            return _data.size();
-        }
-
-        void reserve(size_t n) override
-        {
-            _data.reserve(n);
-        }
-
-        target_code target() const override
-        {
-            return data::memory;
-        }
-    };
-
-    template<class T>
-    network::shared_data make_memory_data(T&& v)
-    {
-        return std::make_shared<memory_data<T>>(std::move(v));
-    }
-
-
-    class NXS_SHARED hdd_data : public data
-    {
-    private:
-        std::string _path;
-        size_t _size;
-        bool _tmp;
-        std::array<char, 1024> _buffer;
-
-    public:
-        hdd_data(const std::string& path);
-        ~hdd_data();
-
-        void tmp(bool n);
-        void add(const char* data_ptr, size_t data_size) override;
-        const char* ptr() override;
-        target_code target() const override;
-        size_t size() const override;
-        void reserve(size_t n) override;
-    };
 }} // nxs::network
 
 #include "data.tcc"
 
-#endif // NETWORK_DATA_NXS
+#endif // NETWORK_DATA_H_NXS

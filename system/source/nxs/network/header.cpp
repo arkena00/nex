@@ -79,7 +79,7 @@ namespace nxs
                     // hdd data
                     if (target == headers::data_target::hdd)
                     {
-                        network::hdd_data d(nxs::config::network_download_path + "__tmp" + std::to_string(nex.connexion().id()) + std::to_string(i));
+                        network::file_data d(nxs::config::network_download_path + "__tmp" + std::to_string(nex.connexion().id()) + std::to_string(i));
                         d.tmp(true);
                         d.reserve(data_size);
                         nex.input().add(std::move(d));

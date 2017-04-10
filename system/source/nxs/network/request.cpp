@@ -94,9 +94,9 @@ namespace nxs
     nxs::param& request::param(const std::string& name) { return _param_list[name]; }
     std::string& request::param_value(const std::string& name, int index)  { return _param_list[name][index]; }
 
-    void request::add(network::hdd_data&& d)
+    void request::add(network::file_data&& d)
     {
-        _data.push_back(std::make_shared<network::hdd_data>(std::move(d)));
+        _data.push_back(std::make_shared<network::file_data>(std::move(d)));
     }
 
     // add linear data used by request
@@ -115,7 +115,7 @@ namespace nxs
     {
         header_add<headers::data_size>(_data.back().get()->size());
         header_add<headers::user_name>("ads");
-        _data.push_back(std::make_shared<network::hdd_data>(path));
+        _data.push_back(std::make_shared<network::file_data>(path));
     }
 
     network::data& request::data(size_t index)

@@ -6,7 +6,8 @@
 #include <nxs/network/io.hpp>
 #include <nxs/network/request_base.hpp>
 #include <nxs/network/param.hpp>
-#include <nxs/network/data.hpp>
+#include <nxs/network/data/file.hpp>
+#include <nxs/network/data/memory.hpp>
 #include <string>
 #include <vector>
 #include <memory>
@@ -47,7 +48,7 @@ namespace nxs
 
         //template<class T>
         //void add(T data);
-        void add(network::hdd_data&& data);
+        void add(network::file_data&& data);
         template<class T>
         void add(network::memory_data<T>&& data);
         //void add(network::data&& data);

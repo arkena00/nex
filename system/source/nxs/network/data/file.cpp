@@ -1,0 +1,55 @@
+#include <nxs/network/data/file.hpp>
+#include <fstream>
+
+namespace nxs{namespace network
+{
+    file_data::~file_data()
+    {
+        if (_tmp) std::remove(_path.c_str());
+    }
+
+    void file_data::tmp(bool n)
+    {
+        _tmp = n;
+    }
+
+    void file_data::add(const char* data_ptr, size_t data_size)
+    {
+        std::ofstream output;
+        output.open(_path, std::ios::out | std::ios::binary | std::ios::app);
+        if (output.is_open())
+        {
+            output.write(data_ptr, data_size);
+            output.close();
+            transfer_add(data_size);
+        }
+        else nxs_error << "can't write data";
+    }
+
+    const char* file_data::ptr()
+    {
+        std::ifstream input;
+        input.open(_path, std::ios::in | std::ios::binary);
+        input.seekg(_transfer_size);
+
+        if (!input.is_open()) nxs_error << "data_hdd_read";
+        input.read(_buffer.data(), 1024);
+
+        return _buffer.data();
+    }
+
+    data::target_code file_data::target() const
+    {
+        return data::hdd;
+    }
+
+    size_t file_data::size() const
+    {
+        return _size;
+    }
+
+    void file_data::reserve(size_t n)
+    {
+        _size = n;
+    }
+}} // nxs::network

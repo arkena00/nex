@@ -3,6 +3,15 @@
 
 namespace nxs{namespace network
 {
+    file_data::file_data(const std::string& path) :
+    _path(path),
+    _tmp(false)
+    {
+        std::ifstream in(path, std::ios::in | std::ios::binary);
+        in.seekg(0, std::ios::end);
+        _size = in.tellg();
+    }
+
     file_data::~file_data()
     {
         if (_tmp) std::remove(_path.c_str());

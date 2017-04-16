@@ -32,6 +32,9 @@ namespace nxs{namespace network
 
         template<class T> void send_move(T&&);
         template<class T> void send_move(T&);
+
+        template<class T> void send(T&&);
+
         template<class T> void send(const T&) = delete;
         template<class T> void send(T&) = delete;
     };
@@ -46,8 +49,15 @@ namespace nxs{namespace network
     {
         send(make_memory_data(std::move(t)));
     }
+
     template<class T>
     void connexion::send_move(T& t)
+    {
+        send_move(std::move(t));
+    }
+
+    template<class T>
+    void connexion::send(T&& t)
     {
         send_move(std::move(t));
     }

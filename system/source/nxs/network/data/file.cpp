@@ -39,7 +39,7 @@ namespace nxs{namespace network
     {
         std::ifstream input;
         input.open(_path, std::ios::in | std::ios::binary);
-        input.seekg(_transfer_size);
+        input.seekg(m_transfer_size);
 
         if (!input.is_open()) nxs_error << "data_hdd_read";
         input.read(_buffer.data(), 1024);

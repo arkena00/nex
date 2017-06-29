@@ -5,13 +5,13 @@
 #include <nxs/resource.hpp>
 
 #include <sstream>
-#include <iostream>
 
 #include <nxs/network/protocol.hpp>
 #include <nxs/network/server.hpp>
 #include <nxs/network/client.hpp>
-#include <nxs/network/connexion/output.hpp>
 #include <nxs/config.hpp>
+
+#include <stdz/variant.hpp>
 
 namespace nxs
 {
@@ -54,8 +54,6 @@ namespace nxs
         static void test(nxs::nex& nex)
         {
             std::string result = "";
-
-
 
             nex.output().add(std::move(result));
         }

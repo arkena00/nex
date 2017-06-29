@@ -12,7 +12,6 @@ namespace nxs{namespace network
     public:
         virtual void connect(const std::string& ip, uint16_t port, int time_out = 0) = 0;
         virtual void on_connect(std::function<void()>) = 0;
-
     };
 }} // nxs::network
 

@@ -7,13 +7,19 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include <chrono>
+#include <stdz/variant.hpp>
 
 namespace nxs{namespace network
 {
     class NXS_SHARED data
     {
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_transfer_time_begin;
+
     protected:
-        size_t _transfer_size;
+        bool m_transfer_init;
+        size_t m_transfer_size;
 
         data();
 
@@ -30,9 +36,12 @@ namespace nxs{namespace network
 
         size_t transfer_size() const;
 
+        void transfer_init();
         void transfer_add(size_t n);
         void transfer_set(size_t n);
         float transfer_progress() const;
+        float transfer_speed() const;
+        size_t transfer_elapsed_time() const;
         bool transfer_complete() const;
 
         template<class T = std::string> T get() const;

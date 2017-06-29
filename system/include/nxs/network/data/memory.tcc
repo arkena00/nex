@@ -5,7 +5,6 @@ namespace nxs{namespace network
     template<class T>
     memory_data<T>::memory_data() {}
 
-
     template<class T>
     memory_data<T>::memory_data(const T& t) : _data(t) {}
 

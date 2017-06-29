@@ -27,6 +27,9 @@ namespace nxs{namespace network
         virtual size_t id() const = 0;
         virtual network::protocol& protocol() = 0;
         virtual buffer_type& buffer() = 0;
+        virtual std::string ip() const = 0;
+        virtual uint16_t port() const = 0;
+
         virtual bool is_alive() const = 0;
         virtual void send(network::shared_data) = 0;
 

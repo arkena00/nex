@@ -52,7 +52,6 @@ namespace nxs{namespace network
     {
         auto socket_read = [this](const network::error_code& err, std::size_t transfer_size)
         {
-            std::cout << "\nREAD : " << _socket.is_open();
             if (!err)
             {
                 buffer().reserve(transfer_size);

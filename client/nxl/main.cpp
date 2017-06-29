@@ -17,63 +17,50 @@ int main()
         std::thread client_thread(&nxs::network::client::run, &client);
 
         output_connexion& nex_cnx = client.connexion_add<network::nex>();
+
+        // data to send
+        std::string z = "a";
+
+
+        auto s = network::make_memory_data(std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;"));
+        auto data = network::make_memory_data(std::string(1000000, 'z'));
+
         nex_cnx.on_connect([&]()
                            {
-                               std::cout << "\nconnected";
+                               std::cout << "\nconnected to " << nex_cnx.ip() << ":" << nex_cnx.port() << std::endl;
+
+                               std::string cmd;
+                                   std::cout << ">";
+                                   std::cin >> cmd;
+                                   //nxs::request req(cmd);
+                                   //nex_cnx.protocol().send(req);
+                                   nex_cnx.send(s);
+                                   nex_cnx.send(data);
                            });
 
         nex_cnx.on_read([&]()
                         {
-                            std::cout << "\n\n___";
+                            std::cout << "\n\n___" << nex_cnx.protocol().input().data().transfer_size();
                             std::cout.write(nex_cnx.buffer().data(), nex_cnx.buffer().size());
                             std::cout << "\n\nread";
                         });
 
 
-        using clock = std::chrono::high_resolution_clock;
-        auto t0 = clock::now();
-        auto t1 = clock::now();
-
-         //nex_cnx.connect("127.0.0.1", 50, 0);
-        nex_cnx.connect("37.59.107.118", 50, 0);
-
         nex_cnx.on_send([&](const network::data& data)
         {
-            if (data.transfer_size() == 0)
-            {
-                std::cout << "\nstart___\n";
-                t0 = clock::now();
-            }
-
-            t1 = clock::now();
-            auto d = std::chrono::duration_cast<std::chrono::seconds>(t1 -t0);
             std::cout << "\r                                          ";
-            std::cout << "\r_" << (int)(data.transfer_progress() * 100) << " %";
-            std::cout << " - speed : " << (float)data.transfer_size() / d.count() / 1000 << "Ko / s";
+            std::cout << "\rProgress : " << (int)(data.transfer_progress() * 100) << " %";
+            std::cout << " | time elapsed : " << data.transfer_elapsed_time() << " | speed : " << data.transfer_speed() << " Ko / s";
 
             if (data.transfer_complete())
             {
-                t1 = clock::now();
-                auto d = std::chrono::duration_cast<std::chrono::seconds>(t1 - t0);
-                std::cout << "\ntransfer complete : " << data.size() << "bytes in " << d.count() << "s " << (float)data.size() / d.count() / 1000 << "Ko / s\n";
+                std::cout << "\ntransfer complete : " << data.size() << "bytes in " << data.transfer_elapsed_time() << "s " << data.transfer_speed() << " Ko / s\n" << std::endl;
             }
         });
 
-        std::string s("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;");
-        auto s2 = std::string(1000000, 'z');
-        auto d = memory_data::make(s);
-        auto d2 = memory_data::make(s2);
 
-        std::string cmd;
-        while (1)
-        {
-            std::cout << "\n>";
-            std::cin >> cmd;
-            nxs::request req(cmd);
-            //nex_cnx.protocol().send(req);
-            nex_cnx.send("NEX:1.0//nxs::version;;");
-            //nex_cnx.send(d2);
-        }
+        //nex_cnx.connect("127.0.0.1", 50, 0);
+        nex_cnx.connect("37.59.107.118", 50, 0);
 
         client_thread.join();
 

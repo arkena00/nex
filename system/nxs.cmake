@@ -47,6 +47,7 @@ set(NXS_BINARY_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/${CMAKE_BUILD_TYPE})
 set(INCLUDE_LIST
         ${NEX_PATH}/system/include
         ${EXTLIB_PATH}/boost/include
+        ${EXTLIB_PATH}/stdz/include
         ${NK_PATH}/nds/include
         ${NK_PATH}/ndb/include)
 include_directories(${INCLUDE_LIST})

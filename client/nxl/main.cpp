@@ -21,6 +21,9 @@ int main()
         // data to send
         std::string z = "a";
 
+        //nex_cnx.send(z);
+        //nex_cnx.send(std::string("aze"));
+
 
         auto s = network::make_memory_data(std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;"));
         auto data = network::make_memory_data(std::string(1000000, 'z'));
@@ -59,6 +62,7 @@ int main()
         });
 
 
+        std::cout << "connecting...";
         //nex_cnx.connect("127.0.0.1", 50, 0);
         nex_cnx.connect("37.59.107.118", 50, 0);
 

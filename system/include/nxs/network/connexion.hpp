@@ -34,8 +34,10 @@ namespace nxs{namespace network
         virtual void send(std::unique_ptr<data>) = 0;
 
         template<class T> void send_ref(const T&);
+        template<class T> void send_ref(T&);
         template<class T> void send(T&&);
 
+        template<class T> void send_ref(T&&) = delete;
         template<class T> void send(const T&) = delete;
         template<class T> void send(T&) = delete;
     };
@@ -47,6 +49,12 @@ namespace nxs{namespace network
 {
     template<class T>
     void connexion::send_ref(const T& t)
+    {
+        send(make_memory_data(t));
+    }
+
+    template<class T>
+    void connexion::send_ref(T& t)
     {
         send(make_memory_data(t));
     }

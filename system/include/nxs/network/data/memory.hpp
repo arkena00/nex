@@ -30,6 +30,7 @@ namespace nxs{namespace network
 
     template<class T> std::unique_ptr<data> make_memory_data(T&& v);
     template<class T> std::unique_ptr<data> make_memory_data(const T& v);
+    template<class T> std::unique_ptr<data> make_memory_data(T& v);
 
 }} // nxs::network
 

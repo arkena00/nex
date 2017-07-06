@@ -78,4 +78,10 @@ namespace nxs{namespace network
     {
         return std::make_unique<memory_data<T>>(v);
     }
+
+    template<class T>
+    std::unique_ptr<data> make_memory_data(T& v)
+    {
+        return std::make_unique<memory_data<T>>(v);
+    }
 }} // nxs::network

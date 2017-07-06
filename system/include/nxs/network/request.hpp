@@ -21,6 +21,9 @@ namespace nxs
         template<io::type IO_Type> friend class nxs::network::basic_protocol;
         friend class nds::encoder<>;
 
+    public:
+        using linear_type = std::string;
+
     private:
         std::string _version;
         nxs::param_list _param_list;
@@ -28,11 +31,9 @@ namespace nxs
 
         bool _valid;
 
-        std::vector<std::shared_ptr<network::data>> _data;
+        std::vector<std::unique_ptr<network::data>> _data;
 
     public:
-        using linear_type = std::string;
-
         request();
         request(const std::string& str_request);
 
@@ -48,16 +49,17 @@ namespace nxs
 
         //template<class T>
         //void add(T data);
+
         void add(network::file_data&& data);
         template<class T>
         void add(network::memory_data<T>&& data);
-        //void add(network::data&& data);
         void add(request::linear_type&& data);
         void add(const request::linear_type& data);
 
         void file_add(const std::string& path);
+
         network::data& data(size_t index = 0);
-        std::shared_ptr<network::data> data_shared(size_t index = 0);
+        //std::shared_ptr<network::data> data_shared(size_t index = 0);
         size_t data_count() const;
     };
 } // nxs

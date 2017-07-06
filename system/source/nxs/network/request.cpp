@@ -94,28 +94,29 @@ namespace nxs
     nxs::param& request::param(const std::string& name) { return _param_list[name]; }
     std::string& request::param_value(const std::string& name, int index)  { return _param_list[name][index]; }
 
+
     void request::add(network::file_data&& d)
     {
-        _data.push_back(std::make_shared<network::file_data>(std::move(d)));
+        _data.push_back(std::make_unique<network::file_data>(std::move(d)));
     }
 
     // add linear data used by request
     void request::add(request::linear_type&& data)
     {
         header_add<headers::data_size>(data.size());
-        _data.push_back(std::make_shared<network::memory_data<request::linear_type>>(std::move(data)));
+        _data.push_back(std::make_unique<network::memory_data<request::linear_type>>(std::move(data)));
     }
     void request::add(const request::linear_type& data)
     {
         header_add<headers::data_size>(data.size());
-        _data.push_back(std::make_shared<network::memory_data<request::linear_type>>(data));
+        _data.push_back(std::make_unique<network::memory_data<request::linear_type>>(data));
     }
 
     void request::file_add(const std::string& path)
     {
         header_add<headers::data_size>(_data.back().get()->size());
         header_add<headers::user_name>("ads");
-        _data.push_back(std::make_shared<network::file_data>(path));
+        _data.push_back(std::make_unique<network::file_data>(path));
     }
 
     network::data& request::data(size_t index)
@@ -124,11 +125,6 @@ namespace nxs
         return *_data[index];
     }
 
-    std::shared_ptr<network::data> request::data_shared(size_t index)
-    {
-        if (index >= _data.size()) nxs_error << "request data out of range";
-        return _data.at(index);
-    }
 
     size_t request::data_count() const { return _data.size(); }
 } // nxs

@@ -46,9 +46,6 @@ namespace nxs{namespace network
 
         template<class T = std::string> T get() const;
     };
-
-    using shared_data = std::shared_ptr<data>;
-
 }} // nxs::network
 
 #include "data.tcc"

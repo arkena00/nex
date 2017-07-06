@@ -2,6 +2,7 @@
 #define NETWORK_DATA_MEMORY_H_NXS
 
 #include <nxs/network/data.hpp>
+#include <boost/hana/functional/overload_linearly.hpp>
 
 namespace nxs{namespace network
 {
@@ -9,12 +10,15 @@ namespace nxs{namespace network
     class memory_data : public data
     {
     private:
-        T _data;
+        stdz::variant<T, T*, const T*> _value;
+
+        T& value();
+        const T& value_const() const;
 
     public:
         memory_data();
-        memory_data(const T& t);
         memory_data(T& t);
+        memory_data(const T& t);
         memory_data(T&& t);
 
         void add(const char* data_ptr, size_t data_size) override;
@@ -24,7 +28,8 @@ namespace nxs{namespace network
         target_code target() const override;
     };
 
-    template<class T> network::shared_data make_memory_data(T&& v);
+    template<class T> std::unique_ptr<data> make_memory_data(T&& v);
+    template<class T> std::unique_ptr<data> make_memory_data(const T& v);
 
 }} // nxs::network
 

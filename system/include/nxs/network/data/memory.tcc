@@ -1,41 +1,62 @@
 #include <nxs/network/data.hpp>
+#include <iostream>
 
 namespace nxs{namespace network
 {
-    template<class T>
-    memory_data<T>::memory_data() {}
+    // _value must be STL container
 
     template<class T>
-    memory_data<T>::memory_data(const T& t) : _data(t) {}
+    memory_data<T>::memory_data() : _value(T{}) {}
+
+    // store pointer to data, lifetime of data is handled by user
+    template<class T>
+    memory_data<T>::memory_data(T& v) : _value(&v) {}
+    template<class T>
+    memory_data<T>::memory_data(const T& v) : _value(&v) {}
+
+    // memory_data will store the value
+    template<class T>
+    memory_data<T>::memory_data(T&& t) : _value(std::move(t)) {}
 
     template<class T>
-    memory_data<T>::memory_data(T& t) : _data(t) {}
+    T& memory_data<T>::value()
+    {
+        if (_value.index() == 0) return stdz::get<T>(_value);
+        else if (_value.index() == 1) return *stdz::get<T*>(_value);
+        else nxs_error << "bad memory_data variant access";
+    }
 
     template<class T>
-    memory_data<T>::memory_data(T&& t) : _data(std::move(t)) {}
+    const T& memory_data<T>::value_const() const
+    {
+        if (_value.index() == 0) return stdz::get<T>(_value);
+        else if (_value.index() == 1) return *stdz::get<T*>(_value);
+        else if (_value.index() == 2) return *stdz::get<const T*>(_value);
+        nxs_error << "bad memory_data variant access";
+    }
 
     template<class T>
     void memory_data<T>::add(const char* data_ptr, size_t data_size)
     {
-        _data.insert(_data.end(), data_ptr, data_ptr);
+        value().insert(value().end(), data_ptr, data_ptr);
     }
 
     template<class T>
     const char* memory_data<T>::ptr()
     {
-        return _data.data();
+        return value().data();
     }
 
     template<class T>
     size_t memory_data<T>::size() const
     {
-        return _data.size();
+        return value_const().size();
     }
 
     template<class T>
     void memory_data<T>::reserve(size_t n)
     {
-        _data.reserve(n);
+        value().reserve(n);
     }
 
     template<class T>
@@ -44,9 +65,17 @@ namespace nxs{namespace network
         return data::memory;
     }
 
+    // make memory_data from rvalue
     template<class T>
-    network::shared_data make_memory_data(T&& v)
+    std::unique_ptr<data> make_memory_data(T&& v)
     {
-        return std::make_shared<memory_data<T>>(std::move(v));
+        return std::make_unique<memory_data<T>>(std::move(v));
+    }
+
+    // make memory_data from reference
+    template<class T>
+    std::unique_ptr<data> make_memory_data(const T& v)
+    {
+        return std::make_unique<memory_data<T>>(v);
     }
 }} // nxs::network

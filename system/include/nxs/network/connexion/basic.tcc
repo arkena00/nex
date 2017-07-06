@@ -105,11 +105,11 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::send(network::shared_data d)
+    void basic_connexion<IO_Type>::send(std::unique_ptr<data> d)
     {
         bool start_send = false;
         if (_output_data.size() == 0) start_send = true;
-        _output_data.push_back(d);
+        _output_data.push_back(std::move(d));
         // start to send data if output buffer queue was empty
         if (start_send) send();
     }

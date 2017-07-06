@@ -52,7 +52,7 @@ namespace nxs{namespace network
         std::string str_request = nds::encoder<>::encode<std::string>(req);
 
         // send request
-        Protocol::connexion().send_move(str_request);
+        Protocol::connexion().send(std::move(str_request));
 
 
         // send all data

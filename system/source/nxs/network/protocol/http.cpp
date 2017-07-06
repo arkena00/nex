@@ -85,13 +85,13 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send_move(header);
-        connexion().send(req.data_shared(0));
+        connexion().send(std::move(header));
+        //connexion().send(req.data_shared(0));
 
         // send data
         if (output_data.target() == network::data::memory)
         {
-            connexion().send(req.data_shared(0));
+            //connexion().send(req.data_shared(0));
         }
         else
         {
@@ -124,8 +124,8 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send_move(header);
-        connexion().send_move(output_data);
+        connexion().send(std::move(header));
+        connexion().send(std::move(output_data));
     }
 
     // send string to input
@@ -138,8 +138,8 @@ namespace nxs{namespace network
         "\r\n\r\n";
 
         // send header
-        connexion().send_move(header);
-        connexion().send_move(data);
+        connexion().send(std::move(header));
+        connexion().send(std::move(data));
     }
 
 

@@ -31,11 +31,9 @@ namespace nxs{namespace network
         virtual uint16_t port() const = 0;
 
         virtual bool is_alive() const = 0;
-        virtual void send(network::shared_data) = 0;
+        virtual void send(std::unique_ptr<data>) = 0;
 
-        template<class T> void send_move(T&&);
-        template<class T> void send_move(T&);
-
+        template<class T> void send_ref(const T&);
         template<class T> void send(T&&);
 
         template<class T> void send(const T&) = delete;
@@ -43,26 +41,20 @@ namespace nxs{namespace network
     };
 }} // nxs::network
 
-#include <nxs/network/data.hpp>
+#include <nxs/network/data/memory.hpp>
 
 namespace nxs{namespace network
 {
     template<class T>
-    void connexion::send_move(T&& t)
+    void connexion::send_ref(const T& t)
     {
-        send(make_memory_data(std::move(t)));
-    }
-
-    template<class T>
-    void connexion::send_move(T& t)
-    {
-        send_move(std::move(t));
+        send(make_memory_data(t));
     }
 
     template<class T>
     void connexion::send(T&& t)
     {
-        send_move(std::move(t));
+        send(make_memory_data(std::move(t)));
     }
 }} // nxs::network
 

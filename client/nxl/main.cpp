@@ -7,8 +7,15 @@ using namespace nxs;
 using namespace nxs::network;
 
 
+
+
+
 int main()
 {
+    auto s = std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;");
+    auto data = std::string(1000000, 'z');
+
+
     try
     {
         nxs::load();
@@ -25,9 +32,6 @@ int main()
         //nex_cnx.send(std::string("aze"));
 
 
-        auto s = network::make_memory_data(std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;"));
-        auto data = network::make_memory_data(std::string(1000000, 'z'));
-
         nex_cnx.on_connect([&]()
                            {
                                std::cout << "\nconnected to " << nex_cnx.ip() << ":" << nex_cnx.port() << std::endl;
@@ -37,8 +41,8 @@ int main()
                                    std::cin >> cmd;
                                    //nxs::request req(cmd);
                                    //nex_cnx.protocol().send(req);
-                                   nex_cnx.send(s);
-                                   nex_cnx.send(data);
+                                   nex_cnx.send_ref(s);
+                                   nex_cnx.send_ref(data);
                            });
 
         nex_cnx.on_read([&]()

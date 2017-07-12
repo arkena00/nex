@@ -105,7 +105,7 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::send(std::unique_ptr<data> d)
+    void basic_connexion<IO_Type>::send(std::shared_ptr<data> d)
     {
         bool start_send = false;
         if (_output_data.size() == 0) start_send = true;
@@ -124,6 +124,7 @@ namespace nxs{namespace network
             _alive = false;
         }
         if (_on_close) _on_close(err);
+        nxs_log << "connexion error" << err.message() << log::network;
     }
 
     template<io::type IO_Type>

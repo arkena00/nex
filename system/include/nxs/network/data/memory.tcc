@@ -67,21 +67,21 @@ namespace nxs{namespace network
 
     // make memory_data from rvalue
     template<class T>
-    std::unique_ptr<data> make_memory_data(T&& v)
+    std::shared_ptr<data> make_memory_data(T&& v)
     {
-        return std::make_unique<memory_data<T>>(std::move(v));
+        return std::make_shared<memory_data<T>>(std::move(v));
     }
 
     // make memory_data from reference
     template<class T>
-    std::unique_ptr<data> make_memory_data(const T& v)
+    std::shared_ptr<data> make_memory_data(const T& v)
     {
-        return std::make_unique<memory_data<T>>(v);
+        return std::make_shared<memory_data<T>>(v);
     }
 
     template<class T>
-    std::unique_ptr<data> make_memory_data(T& v)
+    std::shared_ptr<data> make_memory_data(T& v)
     {
-        return std::make_unique<memory_data<T>>(v);
+        return std::make_shared<memory_data<T>>(v);
     }
 }} // nxs::network

@@ -37,7 +37,7 @@ namespace nxs{namespace network
         size_t id = req.header_value<headers::req_id>();
         // link req_id to callback
         _callback[id] = fn;
-        send(req);
+        // send(req);
     }
 
     template<io::type IO_Type>

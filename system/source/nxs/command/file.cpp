@@ -3,7 +3,7 @@
 #include <nxs/command.hpp>
 #include <nxs/network/request.hpp>
 #include <nxs/utility/file.hpp>
-#include <iostream>
+#include <string>
 
 namespace nxs
 {

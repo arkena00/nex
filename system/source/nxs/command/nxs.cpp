@@ -53,7 +53,7 @@ namespace nxs
 
         static void test(nxs::nex& nex)
         {
-            std::string result = "";
+            std::string result = "test";
 
             nex.output().add(std::move(result));
         }

@@ -14,7 +14,7 @@ namespace nxs{namespace network
         {}
 
         void read() override;
-        void send(request&) override;
+        void send() override;
     };
 }} // nxs::network
 

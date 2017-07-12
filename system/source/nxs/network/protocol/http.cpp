@@ -20,7 +20,7 @@ namespace nxs{namespace network
         {
             output().set("nxs::response;");
             output().file_add("nex.ico");
-            send(output());
+            send();
             return;
         }
 
@@ -53,23 +53,23 @@ namespace nxs{namespace network
 
     // send to input
     template<>
-    void http<io::input>::send(request& req)
+    void http<io::input>::send()
     {
         if (_mm)
         {
-            mm_send(req.data(0).get());
+            mm_send(output().data(0).get());
             return;
         }
 
         std::string type = "text/html";
         std::string header_file = "";
 
-        if (!req.data_count())
+        if (!output().data_count())
         {
             send_string("<i>no output</i>");
             return;
         }
-        const network::data& output_data = req.data(0);
+        const network::data& output_data = output().data(0);
 
         if (output_data.target() == network::data::hdd)
         {
@@ -86,12 +86,11 @@ namespace nxs{namespace network
 
         // send header
         connexion().send(std::move(header));
-        //connexion().send(req.data_shared(0));
 
         // send data
         if (output_data.target() == network::data::memory)
         {
-            //connexion().send(req.data_shared(0));
+            connexion().send(output().data_ptr(0));
         }
         else
         {
@@ -156,7 +155,7 @@ namespace nxs{namespace network
     }
 
     // send to output
-    template<> void http<io::output>::send(request&)
+    template<> void http<io::output>::send()
     {
 
     }

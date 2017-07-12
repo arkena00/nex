@@ -28,9 +28,7 @@ namespace nxs{namespace network
         target_code target() const override;
     };
 
-    template<class T> std::unique_ptr<data> make_memory_data(T&& v);
-    template<class T> std::unique_ptr<data> make_memory_data(const T& v);
-    template<class T> std::unique_ptr<data> make_memory_data(T& v);
+    template<class T> std::shared_ptr<data> make_memory_data(T&& v);
 
 }} // nxs::network
 

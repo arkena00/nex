@@ -32,7 +32,7 @@ namespace nxs{namespace network
         virtual ~basic_protocol() = default;
 
         virtual void read() = 0;
-        virtual void send(request&) = 0;
+        virtual void send() = 0;
 
         virtual void process();
         virtual void error(const std::string& message);

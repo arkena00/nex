@@ -31,7 +31,7 @@ namespace nxs
 
         bool _valid;
 
-        std::vector<std::unique_ptr<network::data>> _data;
+        std::vector<std::shared_ptr<network::data>> _data;
 
     public:
         request();
@@ -53,13 +53,12 @@ namespace nxs
         void add(network::file_data&& data);
         template<class T>
         void add(network::memory_data<T>&& data);
-        void add(request::linear_type&& data);
-        void add(const request::linear_type& data);
+        void add(request::linear_type data);
 
         void file_add(const std::string& path);
 
         network::data& data(size_t index = 0);
-        //std::shared_ptr<network::data> data_shared(size_t index = 0);
+        std::shared_ptr<network::data> data_ptr(size_t index = 0);
         size_t data_count() const;
     };
 } // nxs

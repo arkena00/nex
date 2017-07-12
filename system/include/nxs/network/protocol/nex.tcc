@@ -45,20 +45,20 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void nex<IO_Type>::send(request& req)
+    void nex<IO_Type>::send()
     {
         using Protocol = basic_protocol<IO_Type>;
 
-        std::string str_request = nds::encoder<>::encode<std::string>(req);
+        std::string str_request = nds::encoder<>::encode<std::string>(output());
 
         // send request
         Protocol::connexion().send(std::move(str_request));
 
 
         // send all data
-        for (size_t i = 0; i < req.data_count(); i++)
+        for (size_t i = 0; i < output().data_count(); i++)
         {
-            const network::data& output_data = req.data(i);
+            const network::data& output_data = output().data(i);
             // req.data_get(i);
             // send data
             if (output_data.target() == network::data::memory)

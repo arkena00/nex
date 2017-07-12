@@ -10,7 +10,7 @@ namespace nxs{namespace network
         // send output
         if (process_complete() || transfer_complete())
         {
-            send(_output);
+            send();
         }
     }
 
@@ -22,7 +22,7 @@ namespace nxs{namespace network
         _input.clear();
         _output.set("nxs::error;");
         _output.add(message);
-        send(_output);
+        send();
     }
 
     // process read data from output connexion when all complete, call the callback if req_id exist

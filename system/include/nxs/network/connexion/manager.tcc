@@ -30,7 +30,7 @@ namespace nxs{namespace network
     template<class Connexion>
     boost::asio::io_service& connexion_manager<Connexion>::ios()
     {
-        return  m_ios;
+        return m_ios;
     }
 
     template<class Connexion>
@@ -50,7 +50,13 @@ namespace nxs{namespace network
     template<class Connexion>
     void connexion_manager<Connexion>::connexion_delete(size_t id)
     {
-        if (connexion_manager<Connexion>::connexion_exist(id)) _connexion_list.erase(id);
+        if (connexion_manager<Connexion>::connexion_exist(id))
+        {
+            ios().post([this, id]()
+                       {
+                           _connexion_list.erase(id);
+                       });
+        }
     }
 
     template<class Connexion>

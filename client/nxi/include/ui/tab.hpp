@@ -39,9 +39,9 @@ namespace ui
         void load(const nxs::network::url&);
         void address_load();
 
-        void on_connect();
+        void on_connexion_connect();
         void on_transfer_progress(unsigned int);
-        void on_transfer_error();
+        void on_connexion_close();
 
         nxs::network::output_connexion& connexion();
 
@@ -52,10 +52,11 @@ namespace ui
 
     signals:
         void engine_load(const QString&);
-        void event_connect();
+        void event_connexion_connect();
+        void event_connexion_close();
+
         void event_transfer_complete();
         void event_transfer_progress(int);
-        void event_transfer_error();
     };
 
 } // ui

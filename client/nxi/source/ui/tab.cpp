@@ -25,22 +25,26 @@ namespace ui
         _main(main_window),
         _index(tab_index)
     {
+        qRegisterMetaType<nxs::network::error_code>("error_code");
         // create new connexion
         using output_connexion = nxs::network::output_connexion;
         output_connexion& cnx = _main->client().connexion_add();
         _connexion_id = cnx.id();
         // bind connexion events
-        cnx.on_connect([this]() { emit event_connect();});
-        cnx.on_error([this](const char*) { emit event_transfer_error();});
+
+        cnx.on_connect([this]() { emit event_connexion_connect(); });
+        cnx.on_close([this](const nxs::network::error_code& status) { emit event_connexion_close();  });
+
+        /*
         cnx.on_read([this](output_connexion& out)
                     {
                         emit engine_load(out.protocol().input().data(0).get().c_str());
                     }
-        );
+        );*/
 
-        QObject::connect(this, &tab::event_connect, this, &tab::on_connect, Qt::QueuedConnection);
+        QObject::connect(this, &tab::event_connexion_connect, this, &tab::on_connexion_connect, Qt::QueuedConnection);
         QObject::connect(this, &tab::event_transfer_progress, this, &tab::on_transfer_progress, Qt::QueuedConnection);
-        QObject::connect(this, &tab::event_transfer_error, this, &tab::on_transfer_error, Qt::QueuedConnection);
+        QObject::connect(this, &tab::event_connexion_close, this, &tab::on_connexion_close, Qt::QueuedConnection);
 
 
         // main layout
@@ -106,7 +110,7 @@ namespace ui
 
     tab::~tab()
     {
-        _main->client().connexion_close(_connexion_id);
+        _main->client().connexion_delete(_connexion_id);
     }
 
     void tab::load(const nxs::network::url& url)
@@ -124,13 +128,13 @@ namespace ui
             // connexion alive, send command
             if (connexion().is_alive())
             {
-                //title_set("loading...");
+                title_set("loading...");
                 nxs::request req(_url.command());
-                connexion().protocol().send(req);
+                //connexion().protocol().send(std::move(req));
             }
             else
             {
-                //title_set("connecting...");
+                title_set("connecting...");
                 connexion().connect(_url.host(), _url.port());
             }
 
@@ -142,8 +146,9 @@ namespace ui
         }
     }
 
-    void tab::on_connect()
+    void tab::on_connexion_connect()
     {
+        engine_load("on_connexion_connect");
         icon_set(QIcon(":/image/connexion_status_1"));
         title_set("connected");
         auto item = _tree->item_add(_url.host().c_str(), QIcon(":/image/nex"));
@@ -155,12 +160,11 @@ namespace ui
 
     }
 
-    void tab::on_transfer_error()
+
+    void tab::on_connexion_close()
     {
         icon_set(QIcon(":/image/connexion_status_0"));
-        engine_load("connexion error");
     }
-
 
     nxs::network::output_connexion &tab::connexion()
     {

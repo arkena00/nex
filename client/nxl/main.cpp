@@ -15,6 +15,9 @@ int main()
     auto s = std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;");
     auto data = std::string(1000000, 'z');
 
+    nxs::request req("nxs::file_add;name=test;");
+    req.add("COUCOU");
+
 
     try
     {
@@ -39,10 +42,9 @@ int main()
                                std::string cmd;
                                    std::cout << ">";
                                    std::cin >> cmd;
-                                   //nxs::request req(cmd);
-                                   //nex_cnx.protocol().send(req);
-                                   nex_cnx.send_ref(s);
-                                   nex_cnx.send_ref(data);
+                                   nex_cnx.protocol().send(std::move(req), [](nxs::nex& nex) {});
+                                   //nex_cnx.send_ref(s);
+                                   //nex_cnx.send_ref(data);
                            });
 
         nex_cnx.on_read([&]()

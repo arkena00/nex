@@ -46,7 +46,7 @@ namespace nxs{namespace network
         basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> = nullptr);
         ~basic_connexion();
 
-        void send(std::shared_ptr   <data>) override;
+        void send(std::shared_ptr<data>, std::function<void()> = nullptr) override;
 
         void on_read(std::function<void()>) override;
         void on_send(std::function<void(const network::data&)>, size_t progress_size) override;

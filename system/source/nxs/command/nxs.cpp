@@ -13,6 +13,8 @@
 
 #include <stdz/variant.hpp>
 
+using std::move;
+
 namespace nxs
 {
     template<>
@@ -46,7 +48,7 @@ namespace nxs
                 }*/
             }
 
-            nex.output().add(std::move(res.str()));
+            nex.output().add(move(res.str()));
         }
 
 
@@ -55,7 +57,7 @@ namespace nxs
         {
             std::string result = "test";
 
-            nex.output().add(std::move(result));
+            nex.output().add(move(result));
         }
 
         static void dbtest(nxs::nex& nex)
@@ -77,14 +79,14 @@ namespace nxs
 
             } catch (const std::exception& e) { res << e.what(); }
 
-            nex.output().add(std::move(res.str()));
+            nex.output().add(move(res.str()));
         }
 
         static void rabbit(nxs::nex& nex)
         {
             std::string out =
         R"(:rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit::rabbit:)";
-            nex.output().add(std::move(out));
+            nex.output().add(move(out));
         }
 
     }; // commands

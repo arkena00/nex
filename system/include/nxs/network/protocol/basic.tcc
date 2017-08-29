@@ -30,21 +30,21 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    void basic_protocol<IO_Type>::send(request& req, std::function<void(nxs::nex&)> fn)
+    void basic_protocol<IO_Type>::send(request&& req, std::function<void(nxs::nex&)> fn)
     {
+        _output = req;
         // add req_id to request
-        req.header_add<headers::req_id>();
-        size_t id = req.header_value<headers::req_id>();
+        _output.header_add<headers::req_id>();
+        size_t id = _output.header_value<headers::req_id>();
         // link req_id to callback
         _callback[id] = fn;
-        // send(req);
+        send();
     }
 
     template<io::type IO_Type>
     void basic_protocol<IO_Type>::send(const std::string& str_request, std::function<void(nxs::nex&)> fn)
     {
-        nxs::request req(str_request);
-        send(req, fn);
+        send(nxs::request(str_request), fn);
     }
 
     template<io::type IO_Type> bool basic_protocol<IO_Type>::transfer_complete() const { return _transfer_complete; }

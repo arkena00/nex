@@ -42,7 +42,7 @@ namespace nxs{namespace network
     {
         if (_socket.is_open())
         {
-            _socket.cancel();
+            _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
             _socket.close();
         }
     }
@@ -101,11 +101,11 @@ namespace nxs{namespace network
             else close(err);
         };
 
-        boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()), progress, data_complete );
+        boost::asio::async_write(_socket, boost::asio::buffer(data.ptr(), data.size()), progress, data_complete);
     }
 
     template<io::type IO_Type>
-    void basic_connexion<IO_Type>::send(std::shared_ptr<data> d)
+    void basic_connexion<IO_Type>::send(std::shared_ptr<data> d, std::function<void()> fn)
     {
         bool start_send = false;
         if (_output_data.size() == 0) start_send = true;
@@ -117,14 +117,13 @@ namespace nxs{namespace network
     template<io::type IO_Type>
     void basic_connexion<IO_Type>::close(const network::error_code& err)
     {
-        if (_alive && _socket.is_open())
+        if (_socket.is_open())
         {
             _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
             _socket.close();
             _alive = false;
         }
         if (_on_close) _on_close(err);
-        nxs_log << "connexion error" << err.message() << log::network;
     }
 
     template<io::type IO_Type>
@@ -222,11 +221,4 @@ namespace nxs{namespace network
         if (_protocol.get() == nullptr) return false;
         return true;
     }
-
-/*
-    template<io::type IO_Type>
-    boost::asio::ip::tcp::socket &basic_connexion<IO_Type>::socket()
-    {
-        return _socket;
-    }*/
 }} // nxs::network

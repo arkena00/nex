@@ -54,30 +54,10 @@ namespace nxs{namespace network
         // send request
         Protocol::connexion().send(std::move(str_request));
 
-
         // send all data
         for (size_t i = 0; i < output().data_count(); i++)
         {
-            const network::data& output_data = output().data(i);
-            // req.data_get(i);
-            // send data
-            if (output_data.target() == network::data::memory)
-            {
-                //Protocol::connexion().send(output_data);
-            }
-            else
-            {
-                /*
-                std::ifstream file(output_data.get<std::string>(), std::ios::binary | std::ios::in);
-                if (!file.is_open()) nxs_error << "data_hdd_read";
-                std::array<char, 1024> buffer;
-                while (!file.eof())
-                {
-                    file.read(buffer.data(), 1024);
-                    Protocol::connexion().send(buffer.data(), file.gcount());
-                }
-                file.close();*/
-            }
+            Protocol::connexion().send(output().data_ptr(i));
         }
     }
 }} // nxs::network

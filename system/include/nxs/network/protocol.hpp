@@ -23,8 +23,8 @@ namespace nxs{namespace network
 
         virtual void read() = 0;
         virtual void send() = 0;
-        virtual void send(request&, std::function<void(nxs::nex&)>) = 0;
-        virtual void send(const std::string&, std::function<void(nxs::nex&)>) = 0;
+        virtual void send(request&&, std::function<void(nxs::nex&)> = {}) = 0;
+        virtual void send(const std::string&, std::function<void(nxs::nex&)> = {}) = 0;
 
         virtual bool transfer_complete() const = 0;
         virtual void transfer_complete(bool n) = 0;

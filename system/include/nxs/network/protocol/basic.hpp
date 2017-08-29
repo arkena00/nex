@@ -37,8 +37,8 @@ namespace nxs{namespace network
         virtual void process();
         virtual void error(const std::string& message);
 
-        void send(request& req, std::function<void(nxs::nex&)>);
-        void send(const std::string&, std::function<void(nxs::nex&)>);
+        void send(request&& req, std::function<void(nxs::nex&)> = {});
+        void send(const std::string&, std::function<void(nxs::nex&)> = {});
 
         bool transfer_complete() const;
         void transfer_complete(bool n);

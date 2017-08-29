@@ -31,7 +31,7 @@ namespace nxs{namespace network
         virtual uint16_t port() const = 0;
 
         virtual bool is_alive() const = 0;
-        virtual void send(std::shared_ptr<data>) = 0;
+        virtual void send(std::shared_ptr<data>, std::function<void()> = nullptr) = 0;
 
         template<class T> void send_ref(const T&);
         template<class T> void send_ref(T&);

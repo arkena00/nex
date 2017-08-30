@@ -5,11 +5,23 @@
 
 int main(int argc, char* argv[])
 {
-    QApplication app(argc, argv);
+    int status = 0;
 
-    nxs::load();
-    nxi::core nxc;
-    ui::core uic(app, nxc);
+    try
+    {
+        QApplication app(argc, argv);
 
-    return app.exec();
+        nxs::load();
+        nxi::core nxc;
+        ui::core  uic(app, nxc);
+
+        status = app.exec();
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what();
+    }
+
+
+    return status;
 }

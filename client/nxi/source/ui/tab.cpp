@@ -1,4 +1,5 @@
 #include <ui/tab.hpp>
+#include <ui/tabbar.hpp>
 #include <ui/main.hpp>
 #include <ui/tree.hpp>
 #include <ui/tree/item.hpp>
@@ -9,7 +10,6 @@
 #include <nxs/network/connexion/output.hpp>
 #include <nxs/network/buffer.hpp>
 
-#include <QTabBar>
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <QLineEdit>
@@ -21,19 +21,21 @@
 
 namespace ui
 {
-    tab::tab(ui::main* main_window, size_t tab_index) :
+    tab::tab(ui::main* main_window, size_t index) :
         _main(main_window),
-        _index(tab_index)
+        _id((size_t)reinterpret_cast<void*>(this))
     {
+        // link tab widget to tab
+        tabbar().setTabData(index, _id);
+
         qRegisterMetaType<nxs::network::error_code>("error_code");
         // create new connexion
         using output_connexion = nxs::network::output_connexion;
         output_connexion& cnx = _main->client().connexion_add();
         _connexion_id = cnx.id();
         // bind connexion events
-
         cnx.on_connect([this]() { emit event_connexion_connect(); });
-        cnx.on_close([this](const nxs::network::error_code& status) { emit event_connexion_close();  });
+        cnx.on_close([this](const nxs::network::error_code& status) { emit event_connexion_close(); });
 
         /*
         cnx.on_read([this](output_connexion& out)
@@ -104,8 +106,6 @@ namespace ui
 
         // default value
         _address_bar->setText(_url.str().c_str());
-
-        title_set(std::to_string(_connexion_id));
     }
 
     tab::~tab()
@@ -150,7 +150,7 @@ namespace ui
     {
         engine_load("on_connexion_connect");
         icon_set(QIcon(":/image/connexion_status_1"));
-        title_set("connected");
+        title_set(std::to_string(_id));
         auto item = _tree->item_add(_url.host().c_str(), QIcon(":/image/nex"));
         item->node(true);
     }
@@ -166,6 +166,16 @@ namespace ui
         icon_set(QIcon(":/image/connexion_status_0"));
     }
 
+    size_t tab::id() const
+    {
+        return _id;
+    }
+
+    ui::tabbar& tab::tabbar() const
+    {
+        return _main->tabbar();
+    }
+
     nxs::network::output_connexion &tab::connexion()
     {
         return _main->client().connexion(_connexion_id);
@@ -173,17 +183,11 @@ namespace ui
 
     void tab::icon_set(const QIcon &icon)
     {
-        tabbar().setTabIcon(_index, icon);
+        tabbar().setTabIcon(tabbar().index(this), icon);
     }
 
     void tab::title_set(const std::string &title)
     {
-        tabbar().setTabText(_index, title.c_str());
+        tabbar().setTabText(tabbar().index(this), title.c_str());
     }
-
-    QTabBar &tab::tabbar() const
-    {
-        return _main->tabbar();
-    }
-
 } // ui

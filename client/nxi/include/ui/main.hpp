@@ -9,10 +9,10 @@
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
 
-class QTabBar;
-
 namespace ui
 {
+    class tabbar;
+
     class main : public QWidget
     {
         Q_OBJECT
@@ -20,7 +20,7 @@ namespace ui
         nxi::core& _nxc;
 
         QPushButton* _menu_button;
-        QTabBar* _tabbar;
+        ui::tabbar* _tabbar;
         QStackedWidget* _tabstack;
         QSystemTrayIcon* _systray;
 
@@ -32,7 +32,7 @@ namespace ui
 
         nxs::network::client& client();
 
-        QTabBar& tabbar();
+        ui::tabbar& tabbar();
 
     public slots:
         void tab_add_click();

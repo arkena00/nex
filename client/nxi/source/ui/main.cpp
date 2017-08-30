@@ -1,5 +1,6 @@
 #include "ui/main.hpp"
 #include "ui/tab.hpp"
+#include "ui/tabbar.hpp"
 
 #include <nxs/network/connexion/output.hpp>
 
@@ -7,7 +8,6 @@
 #include <QIcon>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
-#include <QTabBar>
 
 namespace ui
 {
@@ -49,7 +49,7 @@ namespace ui
         top_layout->addWidget(_menu_button);
 
         // tabbar
-        _tabbar = new QTabBar(this);
+        _tabbar = new ui::tabbar(this);
         _tabbar->setObjectName("tab");
         _tabbar->setTabsClosable(1);
         _tabbar->setMovable(1);
@@ -88,7 +88,6 @@ namespace ui
 
     void main::tab_close(int index)
     {
-
         if (_tabbar->count() == 1) return;
         _tabbar->removeTab(index);
         delete _tabstack->widget(index);
@@ -100,17 +99,22 @@ namespace ui
         // new tab index
         size_t index = _tabbar->count();
 
+        // create tab
         _tabbar->addTab(name);
-        _tabbar->setCurrentIndex(index);
 
         // create tab widget
         ui::tab* tab = new ui::tab(this, index);
         _tabstack->addWidget(tab);
+
+        // change index
+        _tabbar->setCurrentIndex(index);
         _tabstack->setCurrentIndex(index);
+
+        _tabbar->setTabText(index, name);
     }
 
     nxs::network::client& main::client() { return _nxc.client(); }
 
-    QTabBar& main::tabbar() { return *_tabbar; }
+    ui::tabbar& main::tabbar() { return *_tabbar; }
 
 } // ui

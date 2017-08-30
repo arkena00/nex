@@ -7,13 +7,13 @@
 #include <QWidget>
 #include <QString>
 
-class QTabBar;
 class QLineEdit;
 class QStackedWidget;
 
 namespace ui
 {
     class main;
+    class tabbar;
     class tree;
 
     class tab : public QWidget
@@ -22,9 +22,8 @@ namespace ui
     private:
         ui::main* _main;
         size_t _connexion_id;
-        size_t _index;
+        size_t _id;
 
-        int _id;
         QString _name;
         nxs::network::url _url;
 
@@ -33,7 +32,7 @@ namespace ui
         QStackedWidget* _engine_stack;
 
     public:
-        tab(ui::main* main_window, size_t tab_index);
+        tab(ui::main* main_window, size_t index);
         ~tab();
 
         void load(const nxs::network::url&);
@@ -43,11 +42,12 @@ namespace ui
         void on_transfer_progress(unsigned int);
         void on_connexion_close();
 
+        size_t id() const;
+        ui::tabbar& tabbar() const;
         nxs::network::output_connexion& connexion();
 
         void title_set(const std::string&);
         void icon_set(const QIcon&);
-        QTabBar& tabbar() const;
 
 
     signals:

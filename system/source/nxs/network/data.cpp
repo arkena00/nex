@@ -58,7 +58,7 @@ namespace nxs{namespace network
     {
         auto now = std::chrono::high_resolution_clock::now();
         auto d = std::chrono::duration_cast<std::chrono::seconds>(now - m_transfer_time_begin);
-        return d.count();
+        return static_cast<size_t>(d.count());
     }
 
     bool data::transfer_complete() const

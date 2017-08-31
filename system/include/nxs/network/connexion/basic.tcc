@@ -82,7 +82,7 @@ namespace nxs{namespace network
         if (_output_data.size() == 0) return;
 
         // send front data
-        auto& data = *_output_data.front().get();
+        auto& data = *std::get<0>(_output_data.front()).get();
 
         auto progress = [this, &data](const network::error_code& err, std::size_t transfer_size) -> std::size_t
         {
@@ -94,6 +94,10 @@ namespace nxs{namespace network
         {
             if (!err)
             {
+                // transfer complete, call the callback
+                auto& callback = std::get<1>(_output_data.front());
+                if (callback) callback();
+
                 _output_data.pop_front();
                 // send next data
                 send();
@@ -109,7 +113,7 @@ namespace nxs{namespace network
     {
         bool start_send = false;
         if (_output_data.size() == 0) start_send = true;
-        _output_data.push_back(std::move(d));
+        _output_data.push_back(std::make_tuple(std::move(d), fn));
         // start to send data if output buffer queue was empty
         if (start_send) send();
     }

@@ -24,7 +24,7 @@ namespace nxs{namespace network
         std::unique_ptr<network::protocol> _protocol;
         buffer_type _buffer;
         size_t _output_progress_size;
-        std::deque<std::shared_ptr<data>> _output_data;
+        std::deque<std::tuple<std::shared_ptr<data>, std::function<void()>>> _output_data;
 
         std::function<void()> _on_read;
         std::function<void(const network::data&)> _on_send;

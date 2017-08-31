@@ -11,7 +11,6 @@ namespace nxs{namespace network
 {
     class protocol;
     class data;
-    using shared_data = std::shared_ptr<data>;
 
     class NXS_SHARED connexion
     {
@@ -33,13 +32,13 @@ namespace nxs{namespace network
         virtual bool is_alive() const = 0;
         virtual void send(std::shared_ptr<data>, std::function<void()> = nullptr) = 0;
 
-        template<class T> void send_ref(const T&);
-        template<class T> void send_ref(T&);
-        template<class T> void send(T&&);
+        template<class T> void send_ref(const T&, std::function<void()> = nullptr);
+        template<class T> void send_ref(T&, std::function<void()> = nullptr);
+        template<class T> void send(T&&, std::function<void()> = nullptr);
 
-        template<class T> void send_ref(T&&) = delete;
-        template<class T> void send(const T&) = delete;
-        template<class T> void send(T&) = delete;
+        template<class T> void send_ref(T&&, std::function<void()> = nullptr) = delete;
+        template<class T> void send(const T&, std::function<void()> = nullptr) = delete;
+        template<class T> void send(T&, std::function<void()> = nullptr) = delete;
     };
 }} // nxs::network
 
@@ -48,21 +47,21 @@ namespace nxs{namespace network
 namespace nxs{namespace network
 {
     template<class T>
-    void connexion::send_ref(const T& t)
+    void connexion::send_ref(const T& t, std::function<void()> fn)
     {
-        send(make_memory_data(t));
+        send(make_memory_data(t), fn);
     }
 
     template<class T>
-    void connexion::send_ref(T& t)
+    void connexion::send_ref(T& t, std::function<void()> fn)
     {
-        send(make_memory_data(t));
+        send(make_memory_data(t), fn);
     }
 
     template<class T>
-    void connexion::send(T&& t)
+    void connexion::send(T&& t, std::function<void()> fn)
     {
-        send(make_memory_data(std::move(t)));
+        send(make_memory_data(std::move(t)), fn);
     }
 }} // nxs::network
 

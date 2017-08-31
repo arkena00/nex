@@ -48,6 +48,9 @@ namespace nxs{namespace network
         auto now = std::chrono::high_resolution_clock::now();
         auto d = std::chrono::duration_cast<std::chrono::seconds>(now - m_transfer_time_begin);
 
+        // transfer was ultra fast !
+        if (d.count() == 0) return 0;
+
         return static_cast<float>(transfer_size()) / d.count() / 1000;
     }
 

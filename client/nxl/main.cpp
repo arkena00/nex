@@ -7,17 +7,13 @@ using namespace nxs;
 using namespace nxs::network;
 
 
-
-
-
 int main()
 {
     auto s = std::string("NEX:1.0/data_target=8;data_size=1000000;/nxs::file_add;name=test;;");
     auto data = std::string(1000000, 'z');
 
-    nxs::request req("nxs::file_add;name=test;");
-    req.add("COUCOU");
-
+    nxs::request req("nxs::version;");
+    //req.add("COUCOU");
 
     try
     {
@@ -42,9 +38,14 @@ int main()
                                std::string cmd;
                                    std::cout << ">";
                                    std::cin >> cmd;
-                                   nex_cnx.protocol().send(std::move(req), [](nxs::nex& nex) {});
-                                   //nex_cnx.send_ref(s);
-                                   //nex_cnx.send_ref(data);
+                                   nex_cnx.protocol().send(std::move(req), [](nxs::nex& nex)
+                                   {
+                                       std::cout.write(nex.input().data(0).ptr(), nex.input().data(0).size());
+                                       std::cout << "\nVERSION : " << nex.input().data(0).unserialize<int>();
+                                   });
+
+                                   //nex_cnx.send_ref(s, []() { std::cout << "\nreq sent\n"; } );
+                                   //nex_cnx.send_ref(data, []() { std::cout << "\ndata sent\n"; });
                            });
 
         nex_cnx.on_read([&]()
@@ -57,6 +58,7 @@ int main()
 
         nex_cnx.on_send([&](const network::data& data)
         {
+
             std::cout << "\r                                          ";
             std::cout << "\rProgress : " << (int)(data.transfer_progress() * 100) << " %";
             std::cout << " | time elapsed : " << data.transfer_elapsed_time() << " | speed : " << data.transfer_speed() << " Ko / s";
@@ -69,8 +71,8 @@ int main()
 
 
         std::cout << "connecting...";
-        //nex_cnx.connect("127.0.0.1", 50, 0);
-        nex_cnx.connect("37.59.107.118", 50, 0);
+        nex_cnx.connect("127.0.0.1", 50, 0);
+        //nex_cnx.connect("37.59.107.118", 50, 0);
 
         client_thread.join();
 

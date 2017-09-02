@@ -100,6 +100,11 @@ namespace nxs
         _data.emplace_back(std::make_shared<network::file_data>(std::move(d)));
     }
 
+    void request::add(network::memory_data<request::linear_type>&& d)
+    {
+        _data.push_back(std::make_shared<network::memory_data<request::linear_type>>(std::move(d)));
+    }
+
     // add linear data used by request
     void request::add(request::linear_type data)
     {

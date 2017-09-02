@@ -130,7 +130,10 @@ namespace ui
             {
                 title_set("loading...");
                 nxs::request req(_url.command());
-                //connexion().protocol().send(std::move(req));
+                //connexion().protocol().send(std::move(req), []()
+                // {
+                //      engine_load("result");
+                // } );
             }
             else
             {

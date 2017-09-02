@@ -87,7 +87,7 @@ namespace nxs
                     // memory data
                     else
                     {
-                        network::memory_data<std::vector<char>> d;
+                        network::memory_data<nxs::request::linear_type> d;
                         d.reserve(data_size);
                         nex.input().add(std::move(d));
                     }
@@ -117,10 +117,10 @@ namespace nxs
                     _data_index = 0;
                     _data_offset = 0;
                     nex.transfer_complete(true);
+                    process(nex);
                     return;
                 }
                 _data_offset += write_size;
-                process(nex);
             }
             else if (write_size > 0) current.add(nex.connexion().buffer().data() + _data_offset, write_size);
 

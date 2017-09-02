@@ -22,6 +22,11 @@ namespace nxs{namespace network
         _tmp = n;
     }
 
+    const char* file_data::name() const
+    {
+        return _path.c_str();
+    }
+
     void file_data::add(const char* data_ptr, size_t data_size)
     {
         std::ofstream output;

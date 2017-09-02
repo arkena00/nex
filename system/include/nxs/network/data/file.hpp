@@ -18,6 +18,7 @@ namespace nxs{namespace network
         ~file_data();
 
         void tmp(bool n);
+        const char* name() const override;
         void add(const char* data_ptr, size_t data_size) override;
         const char* ptr() override;
         target_code target() const override;

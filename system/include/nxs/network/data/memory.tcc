@@ -1,6 +1,3 @@
-#include <nxs/network/data.hpp>
-#include <iostream>
-
 namespace nxs{namespace network
 {
     // _value must be STL container
@@ -36,9 +33,16 @@ namespace nxs{namespace network
     }
 
     template<class T>
+    const char* memory_data<T>::name() const
+    {
+        return "memory";
+    }
+
+    template<class T>
     void memory_data<T>::add(const char* data_ptr, size_t data_size)
     {
-        value().insert(value().end(), data_ptr, data_ptr);
+        value().insert(value().begin() + transfer_size(), data_ptr, data_ptr + data_size);
+        transfer_add(data_size);
     }
 
     template<class T>
@@ -56,7 +60,7 @@ namespace nxs{namespace network
     template<class T>
     void memory_data<T>::reserve(size_t n)
     {
-        value().reserve(n);
+        value().resize(n);
     }
 
     template<class T>

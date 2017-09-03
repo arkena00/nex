@@ -42,8 +42,7 @@ namespace ui
 
             _tab->connexion().protocol().send("nxs::resource_get;", [parent_item, this](nxs::nex& nex)
             {
-                std::vector<nxs::resource> res_list = nxs::unserialize<std::vector<nxs::resource>>(
-                nex.input().data(0).get());
+                std::vector<nxs::resource> res_list = nex.input().data(0).get<std::vector<nxs::resource>>();
 
                 for (auto& res : res_list)
                 {

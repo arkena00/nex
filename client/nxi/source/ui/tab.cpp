@@ -103,6 +103,7 @@ namespace ui
         engine->load("started");
         _engine_stack->addWidget(engine->widget());
         QObject::connect(this, &tab::engine_load, engine, &render::engine::load);
+        engine->setUrl(QUrl("http://www.google.fr"));
 
         // default value
         _address_bar->setText(_url.str().c_str());
@@ -128,12 +129,10 @@ namespace ui
             // connexion alive, send command
             if (connexion().is_alive())
             {
-                title_set("loading...");
-                nxs::request req(_url.command());
-                //connexion().protocol().send(std::move(req), []()
-                // {
-                //      engine_load("result");
-                // } );
+                connexion().protocol().send(_url.command(), [this](nxs::nex& nex)
+                {
+                      engine_load(nex.input().data().get().c_str());
+                });
             }
             else
             {

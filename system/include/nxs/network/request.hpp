@@ -14,7 +14,7 @@
 
 namespace nxs
 {
-    namespace network { template<io::type> class basic_protocol; }
+    namespace network { template<io::type> class basic_protocol; template<class> class memory_data; class file_data; }
 
     class NXS_SHARED request : public request_base
     {
@@ -47,13 +47,12 @@ namespace nxs
         nxs::param& param(const std::string& name);
         std::string& param_value(const std::string& name, int index = 0);
 
-        //template<class T>
-        //void add(T data);
-
         void add(network::file_data&& data);
+        void add(network::memory_data<request::linear_type>&& data);
+        void data_add(request::linear_type data);
+
         template<class T>
-        void add(network::memory_data<T>&& data);
-        void add(request::linear_type data);
+        void add(T data);
 
         void file_add(const std::string& path);
 

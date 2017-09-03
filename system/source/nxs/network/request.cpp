@@ -106,7 +106,7 @@ namespace nxs
     }
 
     // add linear data used by request
-    void request::add(request::linear_type data)
+    void request::data_add(request::linear_type data)
     {
         header_add<headers::data_size>(data.size());
         _data.emplace_back(std::make_shared<network::memory_data<request::linear_type>>(std::move(data)));

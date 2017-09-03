@@ -18,7 +18,7 @@ namespace nxs
             {
                 name = nex.input().param_value("name", i);
                 if (name == "") name = "file_" + std::to_string(i);
-                nxs::file::rename(nex.input().data(i).get(), name);
+                nxs::file::rename(nex.input().data(i).name(), name);
             }
             nex.output().add("NXS_TRANSFER_COMPLETE");
         }

@@ -16,7 +16,7 @@ namespace nxs{namespace network
         }
         catch (const std::exception&)
         {
-            return "data unserialize error";
+            nxs_error << "data unserialize error" << log::system;
         }
     }
 }} // nxs::network

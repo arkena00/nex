@@ -28,6 +28,7 @@ namespace nxs{namespace network
 
         virtual ~data() = default;
 
+        virtual const char* name() const = 0;
         virtual void add(const char* data_ptr, size_t data_size) = 0;
         virtual const char* ptr() = 0;
         virtual target_code target() const = 0;
@@ -44,7 +45,9 @@ namespace nxs{namespace network
         size_t transfer_elapsed_time() const;
         bool transfer_complete() const;
 
-        template<class T = std::string> T get() const;
+        template<class T = std::string>
+        T get() const;
+
     };
 }} // nxs::network
 

@@ -17,8 +17,7 @@ namespace nxs
     void log::push(const log::type& type)
     {
         std::string str_level = level_str_[_level];
-        std::string source = "nxs";
-        std::string message = "[" + source  + ":" + type_str_[type] + "] " + str_level + " - " + _output + "\n";
+        std::string message = "[" + _source  + ":" + type_str_[type] + "] " + str_level + " - " + _output + "\n";
         if (_level != log::note) message += "at " + _line + "\nin " + _func + "\n";
 
 
@@ -76,13 +75,14 @@ namespace nxs
         return *this;
     }
 
-    log& log::add(const std::string& line, const std::string& func)
+    log& log::add(const std::string& line, const std::string& func, const std::string& source)
     {
         if (instance_ == nullptr) instance_ = new log;
         if (instance_->_pushed == false && instance_->_mod != list) std::cout << "\nLOG IS NOT PUSHED, ADD LOG TYPE TO PUSH LOG LINE : " << line;
         instance_->_pushed = false;
         instance_->_line = line;
         instance_->_func = func;
+        instance_->_source = source;
         return *instance_;
     }
 } // nxs

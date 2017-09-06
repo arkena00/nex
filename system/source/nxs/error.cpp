@@ -13,7 +13,7 @@ namespace nxs
 
     error::~error() throw()
     {
-        log::add(_line, _func) << _message << log::error << _type;
+        log::add(_line, _func, _source) << _message << log::error << _type;
     };
 
     const char* error::what() const throw()

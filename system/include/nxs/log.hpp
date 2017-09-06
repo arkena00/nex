@@ -31,6 +31,7 @@ namespace nxs
 
         std::string _output;
         level _level;
+        std::string _source;
         std::string _line;
         std::string _func;
         std::function<void(const std::string&)> _redirect;
@@ -51,7 +52,7 @@ namespace nxs
         NXS_SHARED log& operator<<(log::level log_level);
         NXS_SHARED log& operator<<(log::type log_type);
 
-        static NXS_SHARED log& add(const std::string& line, const std::string& func);
+        static NXS_SHARED log& add(const std::string& line, const std::string& func, const std::string& source = "nxs");
     };
 } // nxs
 

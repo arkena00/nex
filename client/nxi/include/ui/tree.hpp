@@ -15,7 +15,7 @@ namespace ui
     {
         Q_OBJECT
     private:
-        tab* _tab;
+        ui::tab* tab_;
 
     public:
         tree(tab*);

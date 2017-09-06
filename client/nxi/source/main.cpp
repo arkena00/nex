@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
         nxs::load();
         nxi::core nxc;
-        ui::core  uic(app, nxc);
+        ui::core uic(app, nxc);
 
         status = app.exec();
     }

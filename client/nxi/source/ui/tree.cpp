@@ -12,8 +12,14 @@
 
 namespace ui
 {
-    tree::tree(ui::tab* tab) : _tab(tab)
+    tree::tree(ui::tab* tab) :
+        QTreeWidget(tab),
+        tab_(tab)
     {
+        setHeaderHidden(1);
+        setStyleSheet("border: none;");
+        item_add("NEX", QIcon(":/image/nex"));
+
         connect(this, &QTreeWidget::itemExpanded, this, &tree::item_expand);
     }
 
@@ -35,6 +41,7 @@ namespace ui
 
     void tree::item_expand(QTreeWidgetItem* in_item)
     {
+        /*
         try
         {
             tree_item *parent_item = static_cast<tree_item *>(in_item);
@@ -53,6 +60,7 @@ namespace ui
             });
 
         } catch (const std::exception&) { std::cout << "ERROR"; }
+         */
     }
 
 } // ui

@@ -4,6 +4,9 @@
 #include <nxs/network/client.hpp>
 #include <nxi/core.hpp>
 
+#include <vector>
+#include <memory>
+
 #include <QWidget>
 #include <QPushButton>
 #include <QStackedWidget>
@@ -11,7 +14,9 @@
 
 namespace ui
 {
+    class window;
     class tabbar;
+    class tabwidget;
 
     class main : public QWidget
     {
@@ -19,25 +24,17 @@ namespace ui
     private:
         nxi::core& _nxc;
 
-        QPushButton* _menu_button;
-        ui::tabbar* _tabbar;
-        QStackedWidget* _tabstack;
-        QSystemTrayIcon* _systray;
+        QPushButton* menu_button_;
+
+        ui::tabwidget* tabwidget_;
 
     public:
-        main(nxi::core &nxc);
+        main(ui::window* window);
         ~main();
-
-        void tab_add(QString name = "nxi");
 
         nxs::network::client& client();
 
-        ui::tabbar& tabbar();
-
-    public slots:
-        void tab_add_click();
-        void tab_close(int index);
-
+        ui::tabwidget& tabwidget();
     };
 
 } // ui

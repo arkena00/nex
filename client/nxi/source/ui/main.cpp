@@ -1,6 +1,9 @@
-#include "ui/main.hpp"
-#include "ui/tab.hpp"
-#include "ui/tabbar.hpp"
+#include <ui/window.hpp>
+#include <ui/main.hpp>
+#include <ui/tabwidget.hpp>
+#include <ui/tabbar.hpp>
+#include <ui/render/web.hpp>
+#include <ui/tree.hpp>
 
 #include <nxs/network/connexion/output.hpp>
 
@@ -8,55 +11,65 @@
 #include <QIcon>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
+#include <QSplitter>
+#include <nxi/error.hpp>
 
 namespace ui
 {
-    main::main(nxi::core& nxc) : _nxc(nxc)
+    main::main(ui::window* window) :
+        QWidget(window),
+        _nxc(window->nxc())
     {
-        QIcon icon(":image/nex");
-        setWindowIcon(icon);
-
-        // main window
-        QDesktopWidget screen;
-        QRect screen_size = screen.availableGeometry(screen.primaryScreen());
-        size_t width = screen_size.width() * 0.8;
-        size_t height = screen_size.height() * 0.7;
-        size_t x = (screen_size.width() - width) / 2;
-        size_t y = (screen_size.height() - height) / 2;
-        // center window
-        resize(width, height);
-        move(x, y);
-        setWindowTitle("nxi");
-
+        // layouts
         QVBoxLayout* main_layout = new QVBoxLayout(this);
         QHBoxLayout* top_layout = new QHBoxLayout;
+        QHBoxLayout* top2_layout = new QHBoxLayout;
+        QHBoxLayout* middle_layout = new QHBoxLayout;
+        QHBoxLayout* bot_layout = new QHBoxLayout;
+        QVBoxLayout* left_layout = new QVBoxLayout;
+        QVBoxLayout* right_layout = new QVBoxLayout;
 
         main_layout->addLayout(top_layout);
+        main_layout->addLayout(top2_layout);
+        main_layout->addLayout(middle_layout);
+        main_layout->addLayout(bot_layout);
         main_layout->setContentsMargins(5, 5, 0, 0);
 
-        // tabstack
-        _tabstack = new QStackedWidget(this);
-        main_layout->addWidget(_tabstack);
+        // splitter
+        QSplitter* splitter = new QSplitter(this);
+        QWidget* left_side = new QWidget(this);
+        QWidget* right_side = new QWidget(this);
+
+        // splitter
+        left_side->setLayout(left_layout);
+        left_side->setMinimumWidth(150);
+        left_layout->setMargin(0);
+        right_layout->setMargin(0);
+        right_side->setLayout(right_layout);
+        splitter->addWidget(left_side);
+        splitter->setStretchFactor(0, 0);
+        splitter->addWidget(right_side);
+        splitter->setStretchFactor(1, 1);
+        middle_layout->addWidget(splitter);
 
         //// top
         // menu button
-        _menu_button = new QPushButton(this);
-        _menu_button->setObjectName("menu_button");
-        _menu_button->setFixedSize(24, 24);
-        _menu_button->setIcon(QIcon(":/image/menu"));
-        _menu_button->setIconSize(QSize(16, 16));
-        _menu_button->setCheckable(1);
-        top_layout->addWidget(_menu_button);
+        menu_button_ = new QPushButton(this);
+        menu_button_->setObjectName("menu_button");
+        menu_button_->setFixedSize(24, 24);
+        menu_button_->setIcon(QIcon(":/image/menu"));
+        menu_button_->setIconSize(QSize(16, 16));
+        menu_button_->setCheckable(1);
+        top_layout->addWidget(menu_button_);
 
-        // tabbar
-        _tabbar = new ui::tabbar(this);
-        _tabbar->setObjectName("tab");
-        _tabbar->setTabsClosable(1);
-        _tabbar->setMovable(1);
-        _tabbar->setDrawBase(0);
-        top_layout->addWidget(_tabbar);
-        QObject::connect(_tabbar, &QTabBar::tabBarClicked, [&](int index) { _tabstack->setCurrentIndex(index); });
-        QObject::connect(_tabbar, &QTabBar::tabCloseRequested, this, &main::tab_close);
+        // tabwidget
+        tabwidget_ = new tabwidget(this);
+        tabwidget_->stack_add("address");
+        tabwidget_->stack_add("tree");
+        left_layout->addWidget(tabwidget_->stack("tree"));
+
+        // top
+        top_layout->addWidget(tabwidget_->tabbar());
 
         // new tab
         QPushButton* tab_new = new QPushButton(this);
@@ -66,55 +79,33 @@ namespace ui
         tab_new->setIconSize(QSize(16, 16));
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
-        QObject::connect(tab_new, &QPushButton::clicked, this,  &main::tab_add_click);
+        QObject::connect(tab_new, &QPushButton::clicked, [&]() { tabwidget_->add(); } );
 
-        // systray
-        _systray = new QSystemTrayIcon(this);
-        //_systray->setIcon(QIcon(":/image/nex"));
-        //_systray->show();
+        tabwidget_->stack("address")->setFixedHeight(24);
+        top2_layout->addWidget(tabwidget_->stack("address"));
+
+        tabwidget_->add();
+
+        /*
+        // engine stack
+        engine_stack_ = new QStackedWidget(this);
+        right_layout->addWidget(engine_stack_);
+
+        auto engine = new render::web(this);
+        engine_stack_->addWidget(engine->widget());
 
         // add tab
-        tab_add();
+        tabwidget_->add();*/
     }
 
     main::~main()
     {
     }
 
-    void main::tab_add_click()
-    {
-        tab_add();
-    }
-
-    void main::tab_close(int index)
-    {
-        if (_tabbar->count() == 1) return;
-        _tabbar->removeTab(index);
-        delete _tabstack->widget(index);
-    }
-
-
     void main::tab_add(QString name)
     {
-        // new tab index
-        size_t index = _tabbar->count();
 
-        // create tab
-        _tabbar->addTab(name);
-
-        // create tab widget
-        ui::tab* tab = new ui::tab(this, index);
-        _tabstack->addWidget(tab);
-
-        // change index
-        _tabbar->setCurrentIndex(index);
-        _tabstack->setCurrentIndex(index);
-
-        _tabbar->setTabText(index, name);
     }
 
     nxs::network::client& main::client() { return _nxc.client(); }
-
-    ui::tabbar& main::tabbar() { return *_tabbar; }
-
 } // ui

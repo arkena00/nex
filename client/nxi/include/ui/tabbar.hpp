@@ -13,13 +13,13 @@ namespace ui
 
     private:
 
-
     public:
         tabbar(QWidget* widget = nullptr);
 
-        size_t index(tab* t);
+        size_t index(ui::tab* t);
 
-        void title_set(tab* t, const QString& text);
+        void title_set(ui::tab* t, const QString& text);
+        void icon_set(ui::tab* t, const QIcon& icon);
     };
 
 } // ui

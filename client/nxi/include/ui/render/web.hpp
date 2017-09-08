@@ -12,7 +12,9 @@ namespace ui{namespace render
         web(QWidget* parent);
 
         void load(const QString&) override;
-        QWidget* widget() override;
+        void load(render::page*) override;
+
+        QWidget& widget() override;
     };
 }} // ui::render
 

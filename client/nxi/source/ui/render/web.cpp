@@ -1,4 +1,6 @@
 #include <ui/render/web.hpp>
+#include <ui/render/web_page.hpp>
+
 namespace ui{namespace render
 {
     web::web(QWidget* parent) : QWebEngineView(parent)
@@ -11,8 +13,14 @@ namespace ui{namespace render
         setHtml(data);
     }
 
-    QWidget* web::widget()
+
+    void web::load(render::page* page)
     {
-        return this;
+        setPage(static_cast<web_page*>(page));
+    }
+
+    QWidget& web::widget()
+    {
+        return static_cast<QWebEngineView&>(*this);
     }
 }} // ui::render

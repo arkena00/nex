@@ -1,6 +1,3 @@
-/*
-
-
 #include <ui/render/nazara.hpp>
 #include <NDK/Systems/RenderSystem.hpp>
 #include <NDK/Components/CameraComponent.hpp>
@@ -12,18 +9,16 @@
 #include <NDK/Widgets/TextAreaWidget.hpp>
 #include <NDK/Widgets/LabelWidget.hpp>
 #include <NDK/Canvas.hpp>
-#include <Nazara/Utility/Event.hpp>
-#include <Nazara/Utility/Keyboard.hpp>
+#include <Nazara/Platform/Event.hpp>
+#include <Nazara/Platform/Keyboard.hpp>
 
 #include <QDebug>
 #include <QKeyEvent>
 
 namespace ui{namespace render
 {
-    std::mutex nazara::world_lock_;
 
-    nazara::nazara(QWidget* parent) : engine(parent),
-         _canvas(_world.CreateHandle(), GetEventHandler(), GetCursorController().CreateHandle())
+    nazara::nazara(QWidget* parent)
     {
         // Setup some states to allow direct rendering into the widget
         setAttribute(Qt::WA_PaintOnScreen);
@@ -45,11 +40,10 @@ namespace ui{namespace render
             SetCursor(Nz::Cursor::Get(Nz::SystemCursor_Default));
         }
 
-        _timer = new QTimer(this);
-        _timer->setInterval(10);
-        QObject::connect(_timer, &QTimer::timeout, this, &nazara::update);
 
+        //QObject::connect(_timer, &QTimer::timeout, this, &nazara::update);
 
+/*
         // world
         _world.GetSystem<Ndk::RenderSystem>().SetGlobalUp(Nz::Vector3f::Down());
         Nz::ColorBackground* bg = new Nz::ColorBackground(Nz::Color(255, 255, 255));
@@ -73,7 +67,7 @@ namespace ui{namespace render
 
         // model
         Nz::ModelRef model = Nz::Model::New();
-        model->LoadFromFile("C:\\Projet\\nk\\nex\\client\\win32\\release\\model\\earth.obj");
+        model->LoadFromFile("C:\\Projet\\nk\\nex\\client\\nxi\\bin\\resources\\test.obj");
         _model_entity = _world.CreateEntity();
         _model_entity->AddComponent<Ndk::GraphicsComponent>().Attach(model);
         Ndk::NodeComponent& model_node = _model_entity->AddComponent<Ndk::NodeComponent>();
@@ -99,49 +93,23 @@ namespace ui{namespace render
         test->SetSize({300.f, 300.f});
         test->UpdateText(Nz::SimpleTextDrawer::Draw("data", 24, Nz::TextStyle_Regular, Nz::Color(0, 0, 0)));
         test->UpdateText(Nz::SimpleTextDrawer::Draw("aze", 24, Nz::TextStyle_Regular, Nz::Color(0, 0, 0)));
-
+*/
     }
 
     nazara::~nazara()
     {
-        _timer->stop();
+        //_timer->stop();
     }
 
-    void nazara::load(const std::string& data)
+    void nazara::load(const QString& data)
     {
-        std::lock_guard<std::mutex> lock(world_lock_);
-        _data = data;
-        _data_loaded = false;
-    }
-
-
-    unsigned int nazara::GetHeight() const { return height(); }
-    unsigned int nazara::GetWidth() const { return width(); }
-
-    QSize nazara::sizeHint() const { return QSize(); }
-    void nazara::resizeEvent(QResizeEvent*) { OnWindowResized(); }
-
-    void nazara::showEvent(QShowEvent*)
-    {
-        _timer->start();
-    }
-
-    QPaintEngine* nazara::paintEngine() const { return nullptr; }
-
-    void nazara::paintEvent(QPaintEvent*){}
-
-    void nazara::keyPressEvent(QKeyEvent* ev)
-    {
-        if (ev->text().size() == 0) return;
-        Nz::WindowEvent e;
-        e.type = Nz:: WindowEventType_TextEntered;
-        e.text.character= ev->text().toStdU32String().at(0);
-        GetEventHandler().Dispatch(e);
 
     }
+
 
     void nazara::update()
     {
+        /*
         _delta += 2;
         Ndk::NodeComponent& model_node = _world.GetEntity(_model_entity->GetId())->GetComponent<Ndk::NodeComponent>();
         model_node.SetRotation(Nz::EulerAnglesf(0.f, _delta, 0.f));
@@ -149,14 +117,17 @@ namespace ui{namespace render
         std::lock_guard<std::mutex> lock(world_lock_);
         if (!_data_loaded)
         {
-            _label->SetText(_data);
+            _label->SetText(_data.toStdString());
             _data_loaded = true;
         }
 
         _world.Update(1);
         Display();
+         */
+    }
+
+    QWidget& nazara::widget()
+    {
+        return *this;
     }
 }} // ui::render
-
-
-*/

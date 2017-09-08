@@ -4,10 +4,9 @@ project(nxi)
 
 include(../../system/nxs.cmake)
 
+include_directories(${EXTLIB_PATH}/nazara/include ${EXTLIB_PATH}/nazara/ndk/include ./include)
 
-
-
-include_directories("include")
+link_directories(${EXTLIB_PATH}/nazara/lib)
 
 add_subdirectory(../../system ${NXS_BINARY_PATH})
 
@@ -23,7 +22,9 @@ file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 
 add_executable(nxi ${SOURCE_LIST} $<TARGET_OBJECTS:nxs_object>)
 
-target_link_libraries(nxi ${NXS_LIB_LIST} Qt5::Core Qt5::Widgets Qt5::Gui Qt5::WebEngine Qt5::WebEngineWidgets)
+target_link_libraries(nxi ${NXS_LIB_LIST}
+        Qt5::Core Qt5::Widgets Qt5::Gui Qt5::WebEngine Qt5::WebEngineWidgets
+        NazaraCore NazaraGraphics NazaraRenderer NazaraUtility NazaraPlatform NazaraSDK )
 
 set_target_properties(nxi
         PROPERTIES

@@ -3,6 +3,9 @@
 
 #include <nxs/network/client.hpp>
 
+#include <Nazara/Core/Initializer.hpp>
+#include <NDK/Sdk.hpp>
+
 namespace nxi
 {
     class core
@@ -10,6 +13,8 @@ namespace nxi
     private:
         nxs::network::client m_client;
         std::thread m_client_thread;
+
+        Nz::Initializer<Ndk::Sdk> nazara_;
 
     public:
         core();

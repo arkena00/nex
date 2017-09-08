@@ -15,40 +15,19 @@
 
 namespace ui{namespace render
 {
-    class nazara : public render::engine, public Nz::RenderWindow
+    class nazara : public QWidget, Nz::RenderWindow
     {
+        Q_OBJECT
     private:
-        static std::mutex world_lock_;
-
-        QTimer* _timer;
-        std::string _data;
-        bool _data_loaded;
-
         Ndk::World _world;
-        Ndk::Canvas _canvas;
-        Ndk::EntityHandle _model_entity;
-
-        Ndk::TextAreaWidget* _label;
-
-        int _delta;
-        QString _text;
-
-        void paintEvent(QPaintEvent*) override;
-        QPaintEngine* paintEngine() const override;
-        void resizeEvent(QResizeEvent*) override;
-        void showEvent(QShowEvent*) override;
-        void keyPressEvent(QKeyEvent* ev) override;
 
     public:
         nazara(QWidget* parent = nullptr);
         ~nazara();
 
-        void load(const std::string&);
+        void load(const QString&);
 
-        unsigned int GetHeight() const override;
-        unsigned int GetWidth() const override;
-
-        virtual QSize sizeHint() const override;
+        QWidget& widget();
 
     public slots:
         void update();

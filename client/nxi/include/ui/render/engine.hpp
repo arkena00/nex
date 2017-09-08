@@ -1,21 +1,26 @@
 #ifndef UI_RENDER_ENGINE_H_NXI
 #define UI_RENDER_ENGINE_H_NXI
 
-#include <QObject>
+#include <QWidget>
 
 class QString;
 
 namespace ui{namespace render
 {
-    class engine : public QObject
+    class page;
+
+    class engine : public QWidget
     {
-        Q_OBJECT
+    Q_OBJECT
     public:
+        enum { engine_web, engine_gl };
+
         engine() = default;
 
-        virtual QWidget* widget() = 0;
+        virtual void load(render::page*) = 0;
 
-    public slots:
+        virtual QWidget& widget() = 0;
+
         virtual void load(const QString&) = 0;
     };
 }} // ui::render

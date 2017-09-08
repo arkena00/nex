@@ -18,6 +18,8 @@ namespace ui
     class tabbar;
     class tabwidget;
 
+    namespace render { class engine; class web; class nazara; }
+
     class main : public QWidget
     {
         Q_OBJECT
@@ -25,16 +27,19 @@ namespace ui
         nxi::core& _nxc;
 
         QPushButton* menu_button_;
+        QPushButton* notification_button_;
 
         ui::tabwidget* tabwidget_;
+
+        render::web* engine_web_;
 
     public:
         main(ui::window* window);
         ~main();
 
         nxs::network::client& client();
-
         ui::tabwidget& tabwidget();
+        render::engine& engine();
     };
 
 } // ui

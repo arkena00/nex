@@ -2,17 +2,17 @@
 #include <ui/main.hpp>
 #include <ui/tabwidget.hpp>
 #include <ui/tabbar.hpp>
+#include <ui/tab.hpp>
+#include <ui/render/engine.hpp>
 #include <ui/render/web.hpp>
-#include <ui/tree.hpp>
+#include <ui/render/nazara.hpp>
 
 #include <nxs/network/connexion/output.hpp>
 
-#include <QDebug>
 #include <QIcon>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <QSplitter>
-#include <nxi/error.hpp>
 
 namespace ui
 {
@@ -52,24 +52,19 @@ namespace ui
         splitter->setStretchFactor(1, 1);
         middle_layout->addWidget(splitter);
 
-        //// top
-        // menu button
+         // menu button
         menu_button_ = new QPushButton(this);
         menu_button_->setObjectName("menu_button");
         menu_button_->setFixedSize(24, 24);
         menu_button_->setIcon(QIcon(":/image/menu"));
         menu_button_->setIconSize(QSize(16, 16));
         menu_button_->setCheckable(1);
-        top_layout->addWidget(menu_button_);
 
         // tabwidget
-        tabwidget_ = new tabwidget(this);
+        tabwidget_ = new ui::tabwidget(this);
         tabwidget_->stack_add("address");
         tabwidget_->stack_add("tree");
-        left_layout->addWidget(tabwidget_->stack("tree"));
 
-        // top
-        top_layout->addWidget(tabwidget_->tabbar());
 
         // new tab
         QPushButton* tab_new = new QPushButton(this);
@@ -77,35 +72,57 @@ namespace ui
         tab_new->setFixedSize(24, 24);
         tab_new->setIcon(QIcon(":/image/tab_new"));
         tab_new->setIconSize(QSize(16, 16));
-        top_layout->addWidget(tab_new);
-        top_layout->addStretch(1);
         QObject::connect(tab_new, &QPushButton::clicked, [&]() { tabwidget_->add(); } );
 
+        // notification
+        notification_button_ = new QPushButton(this);
+        notification_button_->setObjectName("notification_button");
+        notification_button_->setFixedSize(24, 24);
+        notification_button_->setIcon(QIcon(":/image/notification_status_0"));
+        notification_button_->setIconSize(QSize(16, 16));
+
+        // address
         tabwidget_->stack("address")->setFixedHeight(24);
+
+        // engine
+        engine_web_ = new ui::render::web(this);
+
+        //auto nazara = new ui::render::nazara;
+        //nazara->show();
+
+        // fill layouts
+        top_layout->addWidget(menu_button_);
+        top_layout->addWidget(&tabwidget_->tabbar());
+        top_layout->addWidget(tab_new);
+        top_layout->addStretch(1);
+
+        top2_layout->addWidget(notification_button_);
         top2_layout->addWidget(tabwidget_->stack("address"));
 
-        tabwidget_->add();
+        left_layout->addWidget(tabwidget_->stack("tree"));
+        right_layout->addWidget(&engine_web_->widget());
 
-        /*
-        // engine stack
-        engine_stack_ = new QStackedWidget(this);
-        right_layout->addWidget(engine_stack_);
 
-        auto engine = new render::web(this);
-        engine_stack_->addWidget(engine->widget());
+        QObject::connect(&tabwidget_->tabbar(), &QTabBar::currentChanged, [&](int index)
+        {
+            engine().load(&tabwidget_->tab(index).page());
+        });
 
         // add tab
-        tabwidget_->add();*/
+        tabwidget_->add();
     }
 
     main::~main()
     {
     }
 
-    void main::tab_add(QString name)
+    render::engine& main::engine()
     {
-
+        return *engine_web_;
     }
 
-    nxs::network::client& main::client() { return _nxc.client(); }
+    nxs::network::client& main::client()
+    {
+        return _nxc.client();
+    }
 } // ui

@@ -9,10 +9,11 @@ int main(int argc, char* argv[])
 
     try
     {
-        QApplication app(argc, argv);
-
         nxs::load();
         nxi::core nxc;
+
+        QApplication app(argc, argv);
+
         ui::core uic(app, nxc);
 
         status = app.exec();

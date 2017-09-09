@@ -3,6 +3,9 @@ window
 	background-color: #EEEEEE;
 }
 
+QLineEdit#address { border:none; border-bottom: 1px solid #EEEEEE; background-color: #EEEEEE; }
+QLineEdit#address::hover, QLineEdit#address::focus { border-bottom: 1px solid #AAAAEE; }
+
 QTabBar#tab::tab
 {
     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,

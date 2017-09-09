@@ -12,6 +12,8 @@
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
 
+namespace widget { class bar; }
+
 namespace ui
 {
     class window;
@@ -30,6 +32,7 @@ namespace ui
         QPushButton* notification_button_;
 
         ui::tabwidget* tabwidget_;
+        widget::bar* tool_bar_;
 
         render::web* engine_web_;
 

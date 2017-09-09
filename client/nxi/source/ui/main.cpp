@@ -70,9 +70,9 @@ namespace ui
         QObject::connect(tab_new, &QPushButton::clicked, [&]() { tabwidget_->add(); } );
 
         // tool bar
-        auto tool_bar = new widget::bar(this);
-        tool_bar->setFixedHeight(24);
-        tool_bar->setContentsMargins(0, 0, 0, 0);
+        tool_bar_ = new widget::bar(this);
+        tool_bar_->setFixedHeight(24);
+        tool_bar_->setContentsMargins(0, 0, 0, 0);
 
         tabwidget_ = new ui::tabwidget(this);
         tabwidget_->stack_add("status");
@@ -80,18 +80,18 @@ namespace ui
         tabwidget_->stack_add("tree");
 
         // status stack
-        tool_bar->add(tabwidget_->stack("status"));
+        tool_bar_->add(tabwidget_->stack("status"));
         tabwidget_->stack("status")->setFixedSize(24, 24);
 
         // notification
-        notification_button_ = new QPushButton(tool_bar);
+        notification_button_ = new QPushButton(tool_bar_);
         notification_button_->setObjectName("notification_button");
         notification_button_->setIcon(QIcon(":/image/notification_status_0"));
         notification_button_->setIconSize(QSize(16, 16));
-        tool_bar->add(notification_button_);
+        tool_bar_->add(notification_button_);
 
         // address stack
-        tool_bar->add(tabwidget_->stack("address"));
+        tool_bar_->add(tabwidget_->stack("address"));
 
         // engine
         engine_web_ = new ui::render::web(this);
@@ -105,12 +105,12 @@ namespace ui
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
 
-        tool_layout->addWidget(tool_bar);
+        tool_layout->addWidget(tool_bar_);
 
         left_layout->addWidget(tabwidget_->stack("tree"));
         right_layout->addWidget(&engine_web_->widget());
 
-
+        // tab change
         QObject::connect(&tabwidget_->tabbar(), &QTabBar::currentChanged, [&](int index)
         {
             engine().load(&tabwidget_->tab(index).page());

@@ -15,6 +15,7 @@ int main()
     nxs::request req("nxs::version;");
     //req.add("COUCOU");
 
+
     try
     {
         nxs::load();
@@ -34,14 +35,12 @@ int main()
         nex_cnx.on_connect([&]()
                            {
                                std::cout << "\nconnected to " << nex_cnx.ip() << ":" << nex_cnx.port() << std::endl;
-
                                std::string cmd;
                                    std::cout << ">";
                                    std::cin >> cmd;
                                    nex_cnx.protocol().send(std::move(req), [](nxs::nex& nex)
                                    {
-                                       std::cout.write(nex.input().data(0).ptr(), nex.input().data(0).size());
-                                       std::cout << "\nVERSION : " << nex.input().data(0).unserialize<int>();
+                                       std::cout << "\nVERSION : " << nex.input().data(0).get();
                                    });
 
                                    //nex_cnx.send_ref(s, []() { std::cout << "\nreq sent\n"; } );

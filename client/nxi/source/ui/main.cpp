@@ -13,6 +13,7 @@
 #include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <QSplitter>
+#include <widget/bar.hpp>
 
 namespace ui
 {
@@ -23,14 +24,14 @@ namespace ui
         // layouts
         QVBoxLayout* main_layout = new QVBoxLayout(this);
         QHBoxLayout* top_layout = new QHBoxLayout;
-        QHBoxLayout* top2_layout = new QHBoxLayout;
+        QHBoxLayout* tool_layout = new QHBoxLayout;
         QHBoxLayout* middle_layout = new QHBoxLayout;
         QHBoxLayout* bot_layout = new QHBoxLayout;
         QVBoxLayout* left_layout = new QVBoxLayout;
         QVBoxLayout* right_layout = new QVBoxLayout;
 
         main_layout->addLayout(top_layout);
-        main_layout->addLayout(top2_layout);
+        main_layout->addLayout(tool_layout);
         main_layout->addLayout(middle_layout);
         main_layout->addLayout(bot_layout);
         main_layout->setContentsMargins(5, 5, 0, 0);
@@ -60,12 +61,6 @@ namespace ui
         menu_button_->setIconSize(QSize(16, 16));
         menu_button_->setCheckable(1);
 
-        // tabwidget
-        tabwidget_ = new ui::tabwidget(this);
-        tabwidget_->stack_add("status");
-        tabwidget_->stack_add("address");
-        tabwidget_->stack_add("tree");
-
         // new tab
         QPushButton* tab_new = new QPushButton(this);
         tab_new->setObjectName("tab_new");
@@ -74,18 +69,29 @@ namespace ui
         tab_new->setIconSize(QSize(16, 16));
         QObject::connect(tab_new, &QPushButton::clicked, [&]() { tabwidget_->add(); } );
 
-        // notification
-        notification_button_ = new QPushButton(this);
-        notification_button_->setObjectName("notification_button");
-        notification_button_->setFixedSize(24, 24);
-        notification_button_->setIcon(QIcon(":/image/notification_status_0"));
-        notification_button_->setIconSize(QSize(16, 16));
+        // tool bar
+        auto tool_bar = new widget::bar(this);
+        tool_bar->setFixedHeight(24);
+        tool_bar->setContentsMargins(0, 0, 0, 0);
+
+        tabwidget_ = new ui::tabwidget(this);
+        tabwidget_->stack_add("status");
+        tabwidget_->stack_add("address");
+        tabwidget_->stack_add("tree");
 
         // status stack
+        tool_bar->add(tabwidget_->stack("status"));
         tabwidget_->stack("status")->setFixedSize(24, 24);
 
+        // notification
+        notification_button_ = new QPushButton(tool_bar);
+        notification_button_->setObjectName("notification_button");
+        notification_button_->setIcon(QIcon(":/image/notification_status_0"));
+        notification_button_->setIconSize(QSize(16, 16));
+        tool_bar->add(notification_button_);
+
         // address stack
-        tabwidget_->stack("address")->setFixedHeight(24);
+        tool_bar->add(tabwidget_->stack("address"));
 
         // engine
         engine_web_ = new ui::render::web(this);
@@ -99,9 +105,7 @@ namespace ui
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
 
-        top2_layout->addWidget(tabwidget_->stack("status"));
-        top2_layout->addWidget(notification_button_);
-        top2_layout->addWidget(tabwidget_->stack("address"));
+        tool_layout->addWidget(tool_bar);
 
         left_layout->addWidget(tabwidget_->stack("tree"));
         right_layout->addWidget(&engine_web_->widget());

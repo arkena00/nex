@@ -104,9 +104,7 @@ namespace ui
         top_layout->addWidget(&tabwidget_->tabbar());
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
-
         tool_layout->addWidget(tool_bar_);
-
         left_layout->addWidget(tabwidget_->stack("tree"));
         right_layout->addWidget(&engine_web_->widget());
 

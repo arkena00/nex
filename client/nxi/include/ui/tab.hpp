@@ -7,6 +7,7 @@
 #include <QWidget>
 
 class QLineEdit;
+class QLabel;
 class QWebEnginePage;
 
 namespace ui
@@ -29,6 +30,7 @@ namespace ui
         ui::tree* tree_;
         render::page* page_;
 
+        QLabel* connexion_status_;
         QLineEdit* address_bar_;
 
     public:

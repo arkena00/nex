@@ -62,9 +62,9 @@ namespace ui
 
         // tabwidget
         tabwidget_ = new ui::tabwidget(this);
+        tabwidget_->stack_add("status");
         tabwidget_->stack_add("address");
         tabwidget_->stack_add("tree");
-
 
         // new tab
         QPushButton* tab_new = new QPushButton(this);
@@ -81,7 +81,10 @@ namespace ui
         notification_button_->setIcon(QIcon(":/image/notification_status_0"));
         notification_button_->setIconSize(QSize(16, 16));
 
-        // address
+        // status stack
+        tabwidget_->stack("status")->setFixedSize(24, 24);
+
+        // address stack
         tabwidget_->stack("address")->setFixedHeight(24);
 
         // engine
@@ -96,6 +99,7 @@ namespace ui
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
 
+        top2_layout->addWidget(tabwidget_->stack("status"));
         top2_layout->addWidget(notification_button_);
         top2_layout->addWidget(tabwidget_->stack("address"));
 

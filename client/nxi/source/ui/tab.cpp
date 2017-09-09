@@ -9,6 +9,8 @@
 #include <ui/render/web_page.hpp>
 
 #include <QLineEdit>
+#include <QLabel>
+
 #include <QDebug>
 
 //! use events and queued connections for async network events
@@ -37,8 +39,16 @@ namespace ui
         // address
         address_bar_ = new QLineEdit(this);
         address_bar_->setObjectName("address");
+        address_bar_->setFixedHeight(24);
+
         tabwidget->stack("address")->addWidget(address_bar_);
         QObject::connect(address_bar_, &QLineEdit::returnPressed, this, &tab::address_load);
+
+        // status
+        connexion_status_ = new QLabel(this);
+        connexion_status_->setFixedSize(24, 24);
+        connexion_status_->setPixmap(QIcon(":/image/connexion_status_idle").pixmap(20, 20));
+        tabwidget->stack("status")->addWidget(connexion_status_);
 
         // tree
         tree_ = new ui::tree(this);
@@ -69,7 +79,7 @@ namespace ui
             // connexion alive, send command
             if (connexion().is_alive())
             {
-                connexion().protocol().send(nxs::request(url_.command()), [this](nxs::nex& nex)
+                connexion().protocol().send(url_.command(), [this](nxs::nex& nex)
                  {
                      page_load(nex.input().data().get().c_str());
                  });
@@ -94,8 +104,9 @@ namespace ui
     void tab::on_connexion_connect()
     {
         page_load("on_connexion_connect");
-        icon_set(QIcon(":/image/connexion_status_1"));
         title_set(url_.host().c_str());
+        connexion_status_->setPixmap(QIcon(":/image/connexion_status_1").pixmap(20, 20));
+        // tree
         auto item = tree_->item_add(url_.host().c_str(), QIcon(":/image/nex"));
         item->node(true);
     }
@@ -108,7 +119,7 @@ namespace ui
 
     void tab::on_connexion_close()
     {
-        icon_set(QIcon(":/image/connexion_status_0"));
+        connexion_status_->setPixmap(QIcon(":/image/connexion_status_0").pixmap(20, 20));
     }
 
 ////////////////////////////////////////////////////////////////////////////////

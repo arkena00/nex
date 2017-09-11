@@ -21,6 +21,12 @@ namespace nxs
             nex.output().add(resource::get());
         }
 
+        static void del(nxs::nex& nex)
+        {
+            size_t id = nex.input().param("id").value<size_t>();
+            resource::del(id);
+        }
+
         static void type_add(nxs::nex& nex)
         {
             int id = nex.input().param("id").value<int>();
@@ -38,6 +44,9 @@ namespace nxs
 
         command& resource_get = command::add("nxs", "resource_get", &commands<command::resource>::get);
         resource_get.param_add("source_id", param::require, "0");
+
+        command& resource_del = command::add("nxs", "resource_del", &commands<command::resource>::del);
+        resource_del.param_add("id", param::require);
 
         command& resource_type_add = command::add("nxs", "resource_type_add", &commands<command::resource>::type_add);
         resource_type_add.param_add("id", param::require);

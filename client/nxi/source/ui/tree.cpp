@@ -28,6 +28,7 @@ namespace ui
         setDragDropMode(QAbstractItemView::DragDrop);
         setDefaultDropAction(Qt::MoveAction);
 
+        qRegisterMetaType<QVector<int>>();
         QObject::connect(this, &QTreeWidget::itemExpanded, this, &tree::on_item_expand);
         QObject::connect(this, &QTreeWidget::customContextMenuRequested, this, &tree::on_item_option);
         QObject::connect(tab_, &tab::event_connexion_connect, this, &tree::on_connexion_connect, Qt::QueuedConnection);

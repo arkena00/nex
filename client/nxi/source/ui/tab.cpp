@@ -106,9 +106,6 @@ namespace ui
         page_load("on_connexion_connect");
         title_set(url_.host().c_str());
         connexion_status_->setPixmap(QIcon(":/image/connexion_status_1").pixmap(20, 20));
-        // tree
-        auto item = tree_->item_add(url_.host().c_str(), QIcon(":/image/nex"));
-        item->node(true);
     }
 
     void tab::on_transfer_progress(unsigned int n)
@@ -138,6 +135,11 @@ namespace ui
     size_t tab::id() const
     {
         return id_;
+    }
+
+    const nxs::network::url& tab::url() const
+    {
+        return url_;
     }
 
     nxs::network::output_connexion& tab::connexion()

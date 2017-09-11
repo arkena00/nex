@@ -40,6 +40,7 @@ namespace ui
         void address_load();
 
         size_t id() const;
+        const nxs::network::url& url() const;
         nxs::network::output_connexion& connexion();
         render::page& page();
 

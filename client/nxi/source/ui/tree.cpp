@@ -1,9 +1,6 @@
-#include "ui/tree.hpp"
-#include "ui/tree/item.hpp"
-#include "ui/tab.hpp"
-
-#include <nxs/network/client.hpp>
-#include <nxs/resource.hpp>
+#include <ui/tree.hpp>
+#include <ui/tree/nex_item.hpp>
+#include <ui/tab.hpp>
 
 #include <QTabBar>
 #include <QHBoxLayout>
@@ -18,9 +15,22 @@ namespace ui
     {
         setHeaderHidden(1);
         setStyleSheet("border: none;");
-        item_add("NEX", QIcon(":/image/nex"));
 
-        connect(this, &QTreeWidget::itemExpanded, this, &tree::item_expand);
+        setContextMenuPolicy(Qt::CustomContextMenu);
+
+        setIndentation(15);
+        setEditTriggers(QAbstractItemView::EditKeyPressed);
+
+        // drag & drop
+        setDragEnabled(1);
+        setAcceptDrops(1);
+        setDropIndicatorShown(1);
+        setDragDropMode(QAbstractItemView::DragDrop);
+        setDefaultDropAction(Qt::MoveAction);
+
+        QObject::connect(this, &QTreeWidget::itemExpanded, this, &tree::on_item_expand);
+        QObject::connect(this, &QTreeWidget::customContextMenuRequested, this, &tree::on_item_option);
+        QObject::connect(tab_, &tab::event_connexion_connect, this, &tree::on_connexion_connect, Qt::QueuedConnection);
     }
 
     tree::~tree() {}
@@ -30,37 +40,36 @@ namespace ui
         this->addTopLevelItem(item);
     }
 
-    tree_item* tree::item_add(const QString& name, const QIcon& icon)
+
+    void tree::on_item_expand(QTreeWidgetItem* in_item)
     {
-        tree_item* item = new tree_item;
-        item->setText(0, name);
-        item->setIcon(0, icon);
-        this->addTopLevelItem(item);
-        return item;
+        auto item = static_cast<tree_item*>(in_item);
+        item->list();
     }
 
-    void tree::item_expand(QTreeWidgetItem* in_item)
+    void tree::on_item_option(const QPoint& pos)
     {
-        /*
-        try
-        {
-            tree_item *parent_item = static_cast<tree_item *>(in_item);
-            parent_item->takeChildren();
+        QTreeWidgetItem* in_item = itemAt(pos);
+        if (in_item == nullptr) return;
 
-            _tab->connexion().protocol().send("nxs::resource_get;", [parent_item, this](nxs::nex& nex)
-            {
-                std::vector<nxs::resource> res_list = nex.input().data(0).get<std::vector<nxs::resource>>();
+        // item disabled
+        if (!(in_item->flags() & Qt::ItemIsEnabled)) return;
 
-                for (auto& res : res_list)
-                {
-                    tree_item *item = new tree_item(parent_item);
-                    item->setText(0, res.name().c_str());
-                    parent_item->addChild(item);
-                }
-            });
-
-        } catch (const std::exception&) { std::cout << "ERROR"; }
-         */
+        static_cast<tree_item*>(in_item)->option();
     }
 
+    void tree::on_connexion_connect()
+    {
+        // tree
+        tree_nex_item* server = new tree_nex_item(this);
+        server->setText(0, tab().url().host().c_str());
+        server->node(true);
+        server->setIcon(0, QIcon(":/image/nex"));
+        item_add(server);
+    }
+
+    ui::tab& tree::tab()
+    {
+        return *tab_;
+    }
 } // ui

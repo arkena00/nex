@@ -2,7 +2,9 @@
 
 namespace ui
 {
-    tree_item::tree_item(tree_item* parent) : QTreeWidgetItem(parent)
+    tree_item::tree_item(ui::tree* tree, tree_item* parent) :
+        QTreeWidgetItem(parent),
+        tree_(tree)
     {
         this->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled | Qt::ItemIsDragEnabled);
     }
@@ -13,4 +15,8 @@ namespace ui
         addChild(node);
     }
 
+    ui::tree& tree_item::tree()
+    {
+        return *tree_;
+    }
 } // ui

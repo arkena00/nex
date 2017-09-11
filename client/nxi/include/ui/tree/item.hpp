@@ -5,17 +5,22 @@
 
 namespace ui
 {
+    class tree;
+
     class tree_item : public QTreeWidgetItem
     {
     private:
-        int _type;
+        ui::tree* tree_;
 
     public:
-        explicit tree_item(tree_item* parent = 0);
+        explicit tree_item(ui::tree*, tree_item* parent = 0);
         ~tree_item() = default;
 
-        void node(bool);
+        virtual void list() = 0;
+        virtual void option() = 0;
 
+        void node(bool);
+        ui::tree& tree();
     };
 } // ui
 

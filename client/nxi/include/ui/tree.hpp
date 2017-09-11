@@ -21,12 +21,13 @@ namespace ui
         tree(tab*);
         ~tree();
 
+        void on_item_expand(QTreeWidgetItem*);
+        void on_item_option(const QPoint&);
+        void on_connexion_connect();
+
         void item_add(tree_item*);
-        tree_item* item_add(const QString& name, const QIcon& icon);
 
-    public slots:
-        void item_expand(QTreeWidgetItem*);
-
+        ui::tab& tab();
     };
 
 } // ui

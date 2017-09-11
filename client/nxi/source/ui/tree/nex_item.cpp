@@ -1,12 +1,11 @@
 #include <ui/tree/nex_item.hpp>
 #include <ui/tree.hpp>
 #include <ui/tab.hpp>
+#include <widget/menu.hpp>
 
 #include <nxs/network/client.hpp>
 #include <nxs/resource.hpp>
 
-#include <QMenu>
-#include <QAction>
 #include <QDebug>
 
 namespace ui
@@ -39,16 +38,23 @@ namespace ui
 
     void tree_nex_item::option()
     {
-        QMenu menu;
-        QAction action(&menu);
-        action.setText("test");
-        menu.addAction(&action);
+        widget::menu add_menu;
+        add_menu.add("void", "nxs::resource_add;name=new_resource;");
 
-        QObject::connect(&menu, &QMenu::triggered, [](QAction* a)
+        widget::menu menu;
+        menu.add("Add resource", add_menu);
+        menu.add("Delete");
+
+        QObject::connect(&menu, &QMenu::triggered, [this](QAction* action)
         {
-
-            qDebug() << "click";
+            qDebug() << action->data();
+            QString command = action->data().value<QString>();
+            tree().tab().connexion().protocol().send(command.toStdString(), [this](nxs::nex& nex)
+            {
+                list();
+            });
         });
-        menu.exec(QCursor::pos());
+
+        menu.exec();
     }
 } // ui

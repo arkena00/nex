@@ -2,6 +2,7 @@
 #define UI_TREE_ITEM_H_NXI
 
 #include <QTreeWidgetItem>
+#include <nxs/network/protocol.hpp>
 
 namespace ui
 {
@@ -21,6 +22,7 @@ namespace ui
 
         void node(bool);
         ui::tree& tree();
+        nxs::network::protocol& session();
     };
 } // ui
 

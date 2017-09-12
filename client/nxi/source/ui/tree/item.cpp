@@ -1,4 +1,6 @@
-#include "ui/tree/item.hpp"
+#include <ui/tree/item.hpp>
+#include <ui/tree.hpp>
+#include <ui/tab.hpp>
 
 namespace ui
 {
@@ -18,5 +20,10 @@ namespace ui
     ui::tree& tree_item::tree()
     {
         return *tree_;
+    }
+
+    nxs::network::protocol& tree_item::session()
+    {
+        return tree().tab().connexion().protocol();
     }
 } // ui

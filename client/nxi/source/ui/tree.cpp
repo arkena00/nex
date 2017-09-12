@@ -32,6 +32,8 @@ namespace ui
         QObject::connect(this, &QTreeWidget::itemExpanded, this, &tree::on_item_expand);
         QObject::connect(this, &QTreeWidget::customContextMenuRequested, this, &tree::on_item_option);
         QObject::connect(tab_, &tab::event_connexion_connect, this, &tree::on_connexion_connect, Qt::QueuedConnection);
+
+        QObject::connect(this, &tree::event_item_del, this, &tree::on_item_del, Qt::QueuedConnection);
     }
 
     tree::~tree() {}
@@ -41,6 +43,10 @@ namespace ui
         this->addTopLevelItem(item);
     }
 
+    void tree::item_del(tree_item* item)
+    {
+        emit event_item_del(item);
+    }
 
     void tree::on_item_expand(QTreeWidgetItem* in_item)
     {
@@ -62,11 +68,17 @@ namespace ui
     void tree::on_connexion_connect()
     {
         // tree
-        tree_nex_item* server = new tree_nex_item(this);
+        tree_nex_item* server = new tree_nex_item(this, 0);
         server->setText(0, tab().url().host().c_str());
         server->node(true);
         server->setIcon(0, QIcon(":/image/nex"));
         item_add(server);
+    }
+
+    // thread safe delete
+    void tree::on_item_del(tree_item* item)
+    {
+        delete item;
     }
 
     ui::tab& tree::tab()

@@ -64,9 +64,6 @@ namespace ui
             });
         });
 
-        void tree::item_del(tree_item* item) { emit event_item_del(item); }
-        void tree::on_item_del(tree_item* item) { delete item; }
-
         menu.exec();
     }
 } // ui

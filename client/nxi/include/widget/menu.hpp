@@ -2,8 +2,7 @@
 #define WIDGET_MENU_H_NXI
 
 #include <QMenu>
-
-class QAction;
+#include <widget/menu_action.hpp>
 
 namespace widget
 {
@@ -18,9 +17,11 @@ namespace widget
         ~menu();
 
         void add(menu&);
-        QAction* add(const QString& text, menu&);
-        QAction* add(const QString& text);
-        QAction* add(const QString& text, const QString& command);
+        menu_action* add(const QString& text, menu&);
+        menu_action* add(const QString& text);
+        menu_action* add(const QString& text, const QString& command);
+
+        void on_click(std::function<void(QAction*)>);
 
         void exec();
     };

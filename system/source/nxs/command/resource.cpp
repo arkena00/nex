@@ -18,7 +18,7 @@ namespace nxs
         static void get(nxs::nex& nex)
         {
             size_t source_id = nex.input().param("source_id").value<size_t>();
-            nex.output().add(resource::get());
+            nex.output().add(resource::get( /*db::nex.resource.connexion.source_id = source_id*/ ));
         }
 
         static void del(nxs::nex& nex)

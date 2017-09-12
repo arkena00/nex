@@ -17,13 +17,7 @@ namespace nxs
 
         static void get(nxs::nex& nex)
         {
-            const auto& r = db::nex.type;
-            std::stringstream ss;
-            for (nxs::type& item : type::get())
-            {
-                ss << "<br />" << item.id() << " - " << item.name();
-            }
-            nex.output().add(ss.str());
+            nex.output().add(type::get());
         }
     };
 

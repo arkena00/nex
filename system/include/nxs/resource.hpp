@@ -30,11 +30,10 @@ namespace nxs
         resource(int id);
         resource(const db::line&);
 
-        int id() const;
         const std::string& name() const;
-
-        // std::vector<resource> list() const;
         const Type_List& type_get() const;
+
+        static std::vector<resource> get(int source_id = 0);
         static db::result type_add(int id, int type_id);
     };
 } // nxs

@@ -38,10 +38,24 @@ namespace nxs
         //resource.data("movie", "name")
     }
 
-    int resource::id() const { return Entity::id(); }
-    const std::string& resource::name() const { return _name; }
+    const std::string& resource::name() const
+    {
+        return _name;
+    }
 
-    const resource::Type_List& resource::type_get() const { return _type; }
+    const resource::Type_List& resource::type_get() const
+    {
+        return _type;
+    }
+
+
+    std::vector<resource> resource::get(int source_id)
+    {
+        std::vector<resource> vec;
+        db::result res = db::query() << (db::nex.resource.all()) << (db::nex.resource.id = source_id);
+        for(auto& item : res) vec.push_back(resource(item));
+        return vec;
+    }
 
     db::result resource::type_add(int id, int type_id)
     {

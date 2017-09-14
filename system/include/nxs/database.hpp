@@ -131,6 +131,16 @@ namespace db
 
             resource(ndb::model<>& m);
         };
+
+        struct resource_connexion : public ndb::table<>
+        {
+            field<int> source_id;
+            field<int> target_id;
+            field<std::string, 16> target_address;
+            field<int> connexion_id;
+
+            resource_connexion(ndb::model<>& m, ndb::table_option<> option = {});
+        };
     } // tables
 
     namespace models
@@ -138,6 +148,7 @@ namespace db
         struct nex : ndb::model<>
         {
             tables::resource resource;
+            tables::resource_connexion resource_connexion;
             tables::type type;
             tables::property property;
             tables::module module;

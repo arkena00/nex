@@ -9,6 +9,7 @@ namespace db
     {
         nex::nex() :
             resource(*this),
+            resource_connexion(*this),
             type(*this),
             property(*this),
             module(*this),
@@ -90,6 +91,13 @@ namespace db
             date_creation(*this),
             type(*this),
             property(*this)
+        {}
+
+        resource_connexion::resource_connexion(ndb::model<>& m, ndb::table_option<> option) : table(m, "resource_connexion"),
+            source_id(*this),
+            target_id(*this),
+            target_address(*this, "localhost"),
+            connexion_id(*this)
         {}
     } // tables
 

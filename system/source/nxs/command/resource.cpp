@@ -11,14 +11,15 @@ namespace nxs
     {
         static void add(nxs::nex& nex)
         {
-            int id = resource::add(nex.input().param("name").value());
-            nex.output().add("resource added : " + std::to_string(id));
+            int source_id = nex.input().param("source_id").value<int>();
+            int id = resource::add(nex.input().param("name").value(), source_id);
+            nex.output().add(id);
         }
 
         static void get(nxs::nex& nex)
         {
-            size_t source_id = nex.input().param("source_id").value<size_t>();
-            nex.output().add(resource::get( /*db::nex.resource.connexion.source_id = source_id*/ ));
+            int source_id = nex.input().param("source_id").value<int>();
+            nex.output().add(resource::get(source_id));
         }
 
         static void del(nxs::nex& nex)
@@ -41,6 +42,7 @@ namespace nxs
     {
         command& resource_add = command::add("nxs", "resource_add", &commands<command::resource>::add);
         resource_add.param_add("name", param::require, "", "[a-zA-Z0-9_]{3,}");
+        resource_add.param_add("source_id", param::require, "0");
 
         command& resource_get = command::add("nxs", "resource_get", &commands<command::resource>::get);
         resource_get.param_add("source_id", param::require, "0");

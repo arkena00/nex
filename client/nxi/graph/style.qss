@@ -103,3 +103,5 @@ QLabel#interface_bar
 QProgressBar#request_progress {
 
 }
+
+QTreeWidget::item{ height: 20px; }

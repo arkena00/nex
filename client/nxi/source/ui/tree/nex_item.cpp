@@ -25,7 +25,7 @@ namespace ui
         tree_item* parent_item = static_cast<tree_item*>(this);
         parent_item->takeChildren();
 
-        session().send("nxs::resource_get;", [parent_item, this](nxs::nex& nex)
+        session().send("nxs::resource_get;source_id=" + std::to_string(id_) + ";", [parent_item, this](nxs::nex& nex)
         {
             auto res_list = nex.input().data(0).get<std::vector<nxs::resource>>();
 
@@ -33,8 +33,9 @@ namespace ui
             {
                 tree_nex_item* item = new tree_nex_item(parent_item, res.id());
                 item->setText(0, res.name().c_str());
+                if (res.is_node()) item->node(true);
                 item->setIcon(0, QIcon(":/image/resource"));
-                parent_item->addChild(item);
+                tree().item_add(item, parent_item);
             }
         });
     }
@@ -44,12 +45,12 @@ namespace ui
         widget::menu add_menu;
         add_menu.add("void")->on_trigger([this]()
         {
-           session().send("nxs::resource_add;name=new_resource;", [this](nxs::nex& nex)
+           session().send("nxs::resource_add;name=new_resource;source_id=" + std::to_string(id_) + ";", [this](nxs::nex& nex)
            {
                auto new_item = new tree_nex_item(this, nex.input().data().get<int>());
                new_item->setText(0, "new_resource");
                new_item->setIcon(0, QIcon(":/image/resource"));
-               addChild(new_item);
+               tree().item_add(new_item, this);
            });
         });
 
@@ -65,5 +66,10 @@ namespace ui
         });
 
         menu.exec();
+    }
+
+    int tree_nex_item::id() const
+    {
+        return id_;
     }
 } // ui

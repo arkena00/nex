@@ -8,12 +8,14 @@ namespace ui
     class tree_nex_item : public tree_item
     {
     private:
-        size_t id_;
+        int id_;
 
     public:
         explicit tree_nex_item(ui::tree*, size_t id, tree_item* parent = nullptr);
         explicit tree_nex_item(tree_item* parent, size_t id);
         ~tree_nex_item() = default;
+
+        int id() const;
 
         void list() override;
         void option() override;

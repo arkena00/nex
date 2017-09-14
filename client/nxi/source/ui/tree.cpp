@@ -33,14 +33,15 @@ namespace ui
         QObject::connect(this, &QTreeWidget::customContextMenuRequested, this, &tree::on_item_option);
         QObject::connect(tab_, &tab::event_connexion_connect, this, &tree::on_connexion_connect, Qt::QueuedConnection);
 
+        QObject::connect(this, &tree::event_item_add, this, &tree::on_item_add, Qt::QueuedConnection);
         QObject::connect(this, &tree::event_item_del, this, &tree::on_item_del, Qt::QueuedConnection);
     }
 
     tree::~tree() {}
 
-    void tree::item_add(tree_item* item)
+    void tree::item_add(tree_item* item, tree_item* parent)
     {
-        this->addTopLevelItem(item);
+        emit event_item_add(item, parent);
     }
 
     void tree::item_del(tree_item* item)
@@ -48,6 +49,9 @@ namespace ui
         emit event_item_del(item);
     }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////             EVENT              ////////////////////////
+////////////////////////////////////////////////////////////////////////////////
     void tree::on_item_expand(QTreeWidgetItem* in_item)
     {
         auto item = static_cast<tree_item*>(in_item);
@@ -75,11 +79,23 @@ namespace ui
         item_add(server);
     }
 
+    // thread safe add
+    void tree::on_item_add(tree_item* item, tree_item* parent)
+    {
+        // item is top level
+        if (parent == nullptr) addTopLevelItem(item);
+        else parent->addChild(item);
+    }
+
     // thread safe delete
     void tree::on_item_del(tree_item* item)
     {
         delete item;
     }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////               GET              ////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
     ui::tab& tree::tab()
     {

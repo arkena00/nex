@@ -28,7 +28,11 @@ namespace nxs
     }
 
     template<class H>
-    H& request_base::header() { return *static_cast<H*>(_header_list[H::id()].get()); }
+    H& request_base::header()
+    {
+        header_exist_check<H>();
+        return *static_cast<H*>(_header_list[H::id()].get());
+    }
 
     template<class H>
     auto request_base::header_value(size_t index) const

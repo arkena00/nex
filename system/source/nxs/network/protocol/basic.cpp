@@ -23,7 +23,7 @@ namespace nxs{namespace network
         _output.set("nxs::error;");
         _output.add(message);
         // transfer req_id from input to output
-        _input.header<headers::req_id>().preprocess(*this);
+        if (_input.header_exist<headers::req_id>()) _input.header<headers::req_id>().preprocess(*this);
         send();
     }
 

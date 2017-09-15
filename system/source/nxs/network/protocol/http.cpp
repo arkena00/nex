@@ -48,7 +48,7 @@ namespace nxs{namespace network
 
         process();
 
-        } catch (const std::exception& e) { return error(e.what()); }
+        } catch (const std::exception& e) { error(e.what()); }
     }
 
     // send to input

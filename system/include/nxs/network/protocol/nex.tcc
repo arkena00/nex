@@ -41,7 +41,10 @@ namespace nxs{namespace network
             header::process_all(*this);
             Protocol::process();
 
-        } catch (const std::exception& e) { Protocol::error(e.what()); }
+        } catch (const std::exception& e)
+        {
+            Protocol::error(e.what());
+        }
     }
 
     template<io::type IO_Type>

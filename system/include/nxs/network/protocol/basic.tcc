@@ -16,6 +16,8 @@ namespace nxs{namespace network
         _input.clear();
         _output.set("nxs::error;");
         _output.add(message);
+        // send error
+        send();
         nxs_log << "protocol error" << message << log::network;
     }
 

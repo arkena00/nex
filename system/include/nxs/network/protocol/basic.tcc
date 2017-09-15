@@ -9,6 +9,7 @@ namespace nxs{namespace network
         _process_complete(true)
     {}
 
+    // generic error, used by output type, input type is specialized
     template<io::type IO_Type>
     void basic_protocol<IO_Type>::error(const std::string& message)
     {
@@ -16,8 +17,6 @@ namespace nxs{namespace network
         _input.clear();
         _output.set("nxs::error;");
         _output.add(message);
-        // send error
-        send();
         nxs_log << "protocol error" << message << log::network;
     }
 

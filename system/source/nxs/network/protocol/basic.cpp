@@ -15,13 +15,15 @@ namespace nxs{namespace network
     }
 
     // send error to input connexion
+
     template<>
     void basic_protocol<io::input>::error(const std::string& message)
     {
         process_complete(true);
-        _input.clear();
         _output.set("nxs::error;");
         _output.add(message);
+        // transfer req_id from input to output
+        _input.header<headers::req_id>().preprocess(*this);
         send();
     }
 

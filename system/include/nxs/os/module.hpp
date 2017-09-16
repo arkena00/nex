@@ -17,7 +17,7 @@
     #include <windows.h>
 
     #define NXS_OS_MODULE_FUNCTION GetProcAddress
-    #define NXS_OS_MODULE_LOAD(path) LoadLibraryW(reinterpret_cast<LPCWSTR>(path))
+    #define NXS_OS_MODULE_LOAD(path) LoadLibraryEx(reinterpret_cast<LPCSTR>(path), 0, 0)
     #define NXS_OS_MODULE_UNLOAD FreeLibrary
     namespace nxs { typedef HINSTANCE NXS_OS_MODULE_HANDLE; }
     #define NXS_OS_SHARELIBEXT "dll"

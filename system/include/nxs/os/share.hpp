@@ -14,8 +14,8 @@
 
 // win constant
 #ifdef NXS_WIN
-    #define NXS_IMPORT //__declspec(dllimport)
-    #define NXS_EXPORT //__declspec(dllexport)
+    #define NXS_IMPORT __declspec(dllimport)
+    #define NXS_EXPORT __declspec(dllexport)
 #endif
 
 // export function

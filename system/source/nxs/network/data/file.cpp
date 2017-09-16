@@ -9,7 +9,7 @@ namespace nxs{namespace network
     {
         std::ifstream in(path, std::ios::in | std::ios::binary);
         in.seekg(0, std::ios::end);
-        _size = in.tellg();
+        _size = static_cast<size_t>(in.tellg());
     }
 
     file_data::~file_data()

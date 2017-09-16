@@ -39,7 +39,6 @@ set(NXS_BINARY_PATH ${CMAKE_CURRENT_LIST_DIR}/${NK_CMAKE_BINARY_PATH})
 set(NK_PATH "${CMAKE_CURRENT_LIST_DIR}/../../")
 set(NEX_PATH ${NK_PATH}/nex)
 set(EXTLIB_PATH ${NEX_PATH}/extlib)
-set(NXS_BINARY_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/${CMAKE_BUILD_TYPE})
 
 ########################################################
 #####################  INCLUDE  ########################

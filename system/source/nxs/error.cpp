@@ -9,11 +9,12 @@ namespace nxs
         _func(func),
         _source(source),
         _type(log::system)
-    {}
+    {
+        log::add(_line, _func, _source) << _message << log::error << _type;
+    }
 
     error::~error() throw()
     {
-        log::add(_line, _func, _source) << _message << log::error << _type;
     };
 
     const char* error::what() const throw()

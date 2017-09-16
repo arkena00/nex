@@ -29,7 +29,7 @@ namespace nxs
 
     std::unique_ptr<header> header::make(const std::string& name)
     {
-        if (!code_.count(name)) nxs_error << "header not found :" << name;
+        if (!code_.count(name)) nxs_error << "header not found :" << name << log::system;
         return make(code_[name]);
     }
     std::unique_ptr<header> header::make(header::code id) { return std::unique_ptr<header>(reflector_list_[id]()); }
@@ -95,7 +95,7 @@ namespace nxs
                 // init first data
                 _data_offset = nex.input().size();
             }
-            } catch (const std::exception& e) { nxs_error << "header data_size init fail :" << e.what(); }
+            } catch (const std::exception& e) { nxs_error << "header data_size init fail :" << e.what() << log::system; }
         }
 
         void data_size::process(network::protocol& nex)

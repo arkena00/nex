@@ -36,7 +36,7 @@ namespace nxs
     {
         try {
         nex.output().add(std::move(m_text));
-        } catch (const std::exception& e) { nxs_error << "module error" << e.what(); }
+        } catch (const std::exception& e) { nxs_error << "module error" << e.what() << log::system; }
         return 0;
     }
 

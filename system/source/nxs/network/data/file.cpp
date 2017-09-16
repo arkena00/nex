@@ -37,7 +37,7 @@ namespace nxs{namespace network
             output.close();
             transfer_add(data_size);
         }
-        else nxs_error << "can't write data";
+        else nxs_error << "can't write data" << log::system;
     }
 
     const char* file_data::ptr()
@@ -46,7 +46,7 @@ namespace nxs{namespace network
         input.open(_path, std::ios::in | std::ios::binary);
         input.seekg(m_transfer_size);
 
-        if (!input.is_open()) nxs_error << "data_hdd_read";
+        if (!input.is_open()) nxs_error << "data_hdd_read" << log::system;
         input.read(_buffer.data(), 1024);
 
         return _buffer.data();

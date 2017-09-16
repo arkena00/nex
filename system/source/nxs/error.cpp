@@ -9,9 +9,7 @@ namespace nxs
         _func(func),
         _source(source),
         _type(log::system)
-    {
-        log::add(_line, _func, _source) << _message << log::error << _type;
-    }
+    {}
 
     error::~error() throw()
     {
@@ -39,6 +37,7 @@ namespace nxs
     error& error::operator<<(log::type log_type)
     {
         _type = log_type;
+        log::add(_line, _func, _source) << _message << log::error << _type;
         return *this;
     }
 

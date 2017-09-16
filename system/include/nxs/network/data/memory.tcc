@@ -20,7 +20,7 @@ namespace nxs{namespace network
     {
         if (_value.index() == 0) return stdz::get<T>(_value);
         else if (_value.index() == 1) return *stdz::get<T*>(_value);
-        else nxs_error << "bad memory_data variant access";
+        else nxs_error << "bad memory_data variant access" << log::system;
     }
 
     template<class T>
@@ -29,7 +29,7 @@ namespace nxs{namespace network
         if (_value.index() == 0) return stdz::get<T>(_value);
         else if (_value.index() == 1) return *stdz::get<T*>(_value);
         else if (_value.index() == 2) return *stdz::get<const T*>(_value);
-        nxs_error << "bad memory_data variant access";
+        nxs_error << "bad memory_data variant access" << log::system;
     }
 
     template<class T>

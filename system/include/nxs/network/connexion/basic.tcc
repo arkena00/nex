@@ -154,7 +154,7 @@ namespace nxs{namespace network
             protocol_set<http<io::input>>();
         }
             // no protocol found, disconnect
-        else nxs_error << "protocol_unknown\n" << std::string(_buffer.data(), _buffer.size());
+        else nxs_error << "protocol_unknown\n" << std::string(_buffer.data(), _buffer.size()) << log::system;
     }
 
     template<io::type IO_Type>

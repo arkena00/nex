@@ -160,7 +160,7 @@ namespace db
         };
     } // models
 
-    NXS_SHARED extern models::nex nex;
+    extern models::nex nex;
 } // db
 
 namespace nxs{namespace database

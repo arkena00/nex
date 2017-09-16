@@ -6,7 +6,7 @@
 
 namespace nxs
 {
-    class NXS_SHARED user
+    class user
     {
     private:
         int _id;

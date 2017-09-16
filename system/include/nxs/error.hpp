@@ -12,9 +12,9 @@
 
 namespace nxs
 {
-    extern NXS_SHARED std::map<int, std::string> error_message_;
+    extern std::map<int, std::string> error_message_;
 
-    class NXS_SHARED error : public std::exception
+    class error : public std::exception
     {
     private:
         std::string _line;

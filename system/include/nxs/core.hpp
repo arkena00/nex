@@ -9,8 +9,8 @@
 
 namespace nxs
 {
-	std::string NXS_SHARED version();
-	NXS_SHARED void load();
+	std::string version();
+	void load();
 
     void execute(nxs::nex& nex);
 } // nxs

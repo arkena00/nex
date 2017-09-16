@@ -12,7 +12,7 @@ namespace nxs{namespace network
     class protocol;
     class data;
 
-    class NXS_SHARED connexion
+    class connexion
     {
     public:
         using buffer_type = setup<connexion>::buffer_type;

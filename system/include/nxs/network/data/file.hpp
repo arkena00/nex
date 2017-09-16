@@ -5,7 +5,7 @@
 
 namespace nxs{namespace network
 {
-    class NXS_SHARED file_data : public data
+    class file_data : public data
     {
     private:
         std::string _path;

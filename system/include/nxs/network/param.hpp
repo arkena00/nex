@@ -9,7 +9,7 @@
 
 namespace nxs
 {
-    class NXS_SHARED param
+    class param
     {
     public:
         enum modc { optional, require, overwrite };
@@ -54,7 +54,7 @@ namespace nxs
 
 
     // param_list
-    class NXS_SHARED param_list
+    class param_list
     {
         using Param_List = std::map<std::string, nxs::param>;
 

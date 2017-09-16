@@ -6,7 +6,7 @@
 
 namespace nxs{namespace network
 {
-    class NXS_SHARED url
+    class url
     {
     private:
         std::string _url;

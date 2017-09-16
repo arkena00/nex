@@ -101,7 +101,7 @@ namespace db
         {}
     } // tables
 
-    NXS_SHARED models::nex nex;
+    models::nex nex;
 } // db
 
 

@@ -8,7 +8,7 @@ namespace nxs{namespace network
 {
     class input_connexion;
 
-    class NXS_SHARED server : public connexion_manager<input_connexion>
+    class server : public connexion_manager<input_connexion>
     {
     private:
         uint16_t _port;

@@ -13,7 +13,7 @@ namespace nxs
     class request;
     template<unsigned char> struct commands {};
 
-    class NXS_SHARED command : public request_base
+    class command : public request_base
     {
         using command_list = std::map<std::string, command>;
 

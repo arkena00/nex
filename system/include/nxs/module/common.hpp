@@ -7,7 +7,7 @@
 namespace nxs
 {
     template<class T>
-    class NXS_SHARED common_module : public base_module<T>
+    class common_module : public base_module<T>
     {
     private:
         virtual bool load() override;

@@ -12,7 +12,7 @@ namespace nxs{namespace network
     class connexion;
 
     template<io::type IO_Type>
-    class NXS_SHARED basic_protocol : public protocol
+    class basic_protocol : public protocol
     {
      private:
         network::connexion& _connexion;

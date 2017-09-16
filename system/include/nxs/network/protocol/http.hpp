@@ -6,7 +6,7 @@
 namespace nxs{namespace network
 {
     template<io::type IO_Type>
-    class NXS_SHARED http : public basic_protocol<IO_Type>
+    class http : public basic_protocol<IO_Type>
     {
     public:
         bool _mm = false;

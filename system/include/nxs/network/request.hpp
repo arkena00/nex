@@ -16,7 +16,7 @@ namespace nxs
 {
     namespace network { template<io::type> class basic_protocol; template<class> class memory_data; class file_data; }
 
-    class NXS_SHARED request : public request_base
+    class request : public request_base
     {
         template<io::type IO_Type> friend class nxs::network::basic_protocol;
         friend class nds::encoder<>;
@@ -66,13 +66,13 @@ namespace nxs
 // request codecs
 namespace nds
 {
-    template<> NXS_SHARED std::string encoder<>::encode<std::string, nxs::header>(const std::vector<size_t>& value_list);
-    template<> NXS_SHARED std::string encoder<>::encode<std::string, nxs::header>(const std::string& v);
-    template<> NXS_SHARED std::string encoder<>::encode<std::string>(const nxs::request& req);
+    template<> std::string encoder<>::encode<std::string, nxs::header>(const std::vector<size_t>& value_list);
+    template<> std::string encoder<>::encode<std::string, nxs::header>(const std::string& v);
+    template<> std::string encoder<>::encode<std::string>(const nxs::request& req);
 
-    template<> NXS_SHARED size_t encoder<>::decode<size_t, nxs::header>(const std::string& v);
-    template<> NXS_SHARED std::string encoder<>::decode<std::string, nxs::header>(const std::string& v);
-    template<> NXS_SHARED void encoder<>::decode(const std::string& str_request, nxs::request& req);
+    template<> size_t encoder<>::decode<size_t, nxs::header>(const std::string& v);
+    template<> std::string encoder<>::decode<std::string, nxs::header>(const std::string& v);
+    template<> void encoder<>::decode(const std::string& str_request, nxs::request& req);
 } // nds
 
 #include "request.tcc"

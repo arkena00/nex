@@ -6,7 +6,7 @@
 namespace nxs
 {
     template<class T>
-    class NXS_SHARED text_module : public base_module<T>
+    class text_module : public base_module<T>
     {
     private:
         std::string m_text;

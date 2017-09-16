@@ -6,8 +6,8 @@ namespace fs = boost::filesystem;
 
 namespace nxs
 {
-    template<class T> NXS_SHARED std::map<int, std::unique_ptr<base_module<T>>> base_module<T>::load_list_id_;
-    template<class T> NXS_SHARED std::map<std::string, int> base_module<T>::module_id_;
+    template<class T> std::map<int, std::unique_ptr<base_module<T>>> base_module<T>::load_list_id_;
+    template<class T> std::map<std::string, int> base_module<T>::module_id_;
 
     // protected:
     template<class T>

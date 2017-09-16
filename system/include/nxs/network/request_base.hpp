@@ -11,7 +11,7 @@
 
 namespace nxs
 {
-    class NXS_SHARED request_base
+    class request_base
     {
     public:
         enum module_typec { unknown, module, interface };

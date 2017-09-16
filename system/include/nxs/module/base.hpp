@@ -11,7 +11,7 @@
 namespace nxs
 {
     template<class T>
-    class NXS_SHARED base_module : public db::entity<T>
+    class base_module : public db::entity<T>
     {
         using Entity = db::entity<T>;
         using Base_module = base_module<T>;

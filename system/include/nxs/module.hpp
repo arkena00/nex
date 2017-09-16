@@ -5,7 +5,7 @@
 
 namespace nxs
 {
-    class NXS_SHARED module : public common_module<module>
+    class module : public common_module<module>
     {
     public:
         static const std::string name_;

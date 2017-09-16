@@ -12,7 +12,7 @@
 
 namespace nxs{namespace network
 {
-    class NXS_SHARED data
+    class data
     {
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> m_transfer_time_begin;

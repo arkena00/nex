@@ -52,6 +52,7 @@ namespace nxs{namespace network
     };
 
     template<> void basic_protocol<io::input>::process();
+    template<> void basic_protocol<io::output>::process();
     template<> void basic_protocol<io::input>::error(const std::string& message);
 }} // nxs::network
 

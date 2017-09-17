@@ -1,5 +1,7 @@
 #ifndef NETWORK_CONNEXION_BASIC_OUTPUT_H_NXS
 #define NETWORK_CONNEXION_BASIC_OUTPUT_H_NXS
+#pragma warning(push)
+#pragma warning(disable : 4250)
 
 #include <nxs/network/socket.hpp>
 #include <nxs/network/connexion/basic.hpp>
@@ -30,4 +32,5 @@ namespace nxs{namespace network
 
 #include "basic_output.tcc"
 
+#pragma warning(pop)
 #endif // NETWORK_CONNEXION_BASIC_OUTPUT_H_NXS

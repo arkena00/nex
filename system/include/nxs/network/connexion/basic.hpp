@@ -19,7 +19,7 @@ namespace nxs{namespace network
     class basic_connexion : virtual public connexion
     {
     private:
-        size_t _id;
+        uintptr_t _id;
 
         std::unique_ptr<network::protocol> _protocol;
         buffer_type _buffer;

@@ -30,7 +30,7 @@ namespace nxs{namespace network
 {
     template<io::type IO_Type>
     basic_connexion<IO_Type>::basic_connexion(boost::asio::io_service& ios, std::unique_ptr<network::protocol> p) :
-        _id((size_t)reinterpret_cast<void*>(this)),
+        _id(reinterpret_cast<uintptr_t>(this)),
         _protocol(std::move(p)),
         _alive(false),
         _socket(ios),

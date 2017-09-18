@@ -3,7 +3,6 @@
 
 #include <nxs/share.hpp>
 #include <nxs/network/request_base.hpp>
-#include <nxs/network/param.hpp>
 #include <map>
 #include <functional>
 
@@ -21,7 +20,6 @@ namespace nxs
         static command_list list_;
 
         int _id;
-        nxs::param_list _param_list;
         std::function<void(nxs::nex&)> _address;
         std::string _help;
         bool _wait_transfer;

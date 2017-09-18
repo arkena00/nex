@@ -12,6 +12,7 @@ target_link_libraries(server ${NXS_LIB_LIST})
 
 set_target_properties(server
         PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/${NK_OS_NAME}"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+        ARCHIVE_OUTPUT_DIRECTORY "${NEX_PATH}/server/desktop/lib"
         OUTPUT_NAME  "nex"
         )

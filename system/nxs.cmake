@@ -52,5 +52,6 @@ set(INCLUDE_LIST
 include_directories(${INCLUDE_LIST})
 
 link_directories(${EXTLIB_PATH}/boost/lib/)
+link_directories(${NEX_PATH}/server/desktop/lib)
 
 add_definitions(${NXS_OS_DEFINE_LIST} -DNDB_ENGINE_SQL)

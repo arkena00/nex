@@ -133,4 +133,3 @@ namespace nxs
 
     size_t request::data_count() const { return _data.size(); }
 } // nxs
-

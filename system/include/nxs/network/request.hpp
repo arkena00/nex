@@ -5,7 +5,6 @@
 #include <nds/encoder.hpp>
 #include <nxs/network/io.hpp>
 #include <nxs/network/request_base.hpp>
-#include <nxs/network/param.hpp>
 #include <nxs/network/data/file.hpp>
 #include <nxs/network/data/memory.hpp>
 #include <string>
@@ -16,7 +15,7 @@ namespace nxs
 {
     namespace network { template<io::type> class basic_protocol; template<class> class memory_data; class file_data; }
 
-    class request : public request_base
+    class NXS_SHARED request : public request_base
     {
         template<io::type IO_Type> friend class nxs::network::basic_protocol;
         friend class nds::encoder<>;
@@ -26,7 +25,6 @@ namespace nxs
 
     private:
         std::string _version;
-        nxs::param_list _param_list;
         size_t _size;
 
         bool _valid;

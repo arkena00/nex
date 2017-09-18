@@ -9,7 +9,7 @@
 
 namespace nxs
 {
-    class param
+    class NXS_SHARED param
     {
     public:
         enum modc { optional, require, overwrite };

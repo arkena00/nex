@@ -16,6 +16,8 @@
 #ifdef NXS_WIN
     #define NXS_IMPORT __declspec(dllimport)
     #define NXS_EXPORT __declspec(dllexport)
+
+    #pragma warning(disable: 4251)
 #endif
 
 // export function

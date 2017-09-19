@@ -81,7 +81,8 @@ namespace ui
             {
                 connexion().protocol().send(url_.command(), [this](nxs::nex& nex)
                 {
-                    page_load(nex.input().data().get().c_str());
+                    QString result = nex.input().data().get().c_str();
+                    page_load(result);
                 });
             }
             else

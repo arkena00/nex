@@ -22,6 +22,7 @@ namespace nxs
         const auto& t = db::nex.type;
         const auto& rc = db::nex.resource_connexion;
 
+
         is_node_ = false;
         _name = data[r.name];
         _date_creation = data[r.date_creation];

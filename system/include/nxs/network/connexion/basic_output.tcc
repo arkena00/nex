@@ -33,6 +33,7 @@ namespace nxs{namespace network
         };
 
         tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip), port);
+        _socket.close();
         _socket.async_connect(endpoint, socket_connect);
     }
 

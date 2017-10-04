@@ -90,9 +90,6 @@ namespace ui
                 title_set("connecting...");
                 connexion().connect(url_.host(), url_.port());
             }
-
-            //page_->load(address_text);
-
         } catch (const std::exception& e)
         {
             //emit engine_load(e.what());
@@ -117,6 +114,7 @@ namespace ui
 
     void tab::on_connexion_close()
     {
+        title_set("closed");
         connexion_status_->setPixmap(QIcon(":/image/connexion_status_0").pixmap(20, 20));
     }
 

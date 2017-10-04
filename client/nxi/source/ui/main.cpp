@@ -95,9 +95,9 @@ namespace ui
 
         // engine
         engine_web_ = new ui::render::web(this);
+        engine_web_->widget()->hide();
+        engine_nazara_ = new ui::render::nazara(this);
 
-        //auto nazara = new ui::render::nazara;
-        //nazara->show();
 
         // fill layouts
         top_layout->addWidget(menu_button_);
@@ -106,7 +106,8 @@ namespace ui
         top_layout->addStretch(1);
         tool_layout->addWidget(tool_bar_);
         left_layout->addWidget(tabwidget_->stack("tree"));
-        right_layout->addWidget(&engine_web_->widget());
+        //right_layout->addWidget(engine_web_->widget());
+        right_layout->addWidget(engine_nazara_->widget());
 
         // tab change
         QObject::connect(&tabwidget_->tabbar(), &QTabBar::currentChanged, [&](int index)

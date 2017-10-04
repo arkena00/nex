@@ -35,6 +35,7 @@ namespace ui
         widget::bar* tool_bar_;
 
         render::web* engine_web_;
+        render::nazara* engine_nazara_;
 
     public:
         main(ui::window* window);

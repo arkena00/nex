@@ -19,8 +19,8 @@ namespace ui{namespace render
         setPage(static_cast<web_page*>(page));
     }
 
-    QWidget& web::widget()
+    QWidget* web::widget()
     {
-        return static_cast<QWebEngineView&>(*this);
+        return static_cast<QWebEngineView*>(this);
     }
 }} // ui::render

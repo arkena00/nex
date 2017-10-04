@@ -9,10 +9,11 @@ int main(int argc, char* argv[])
 
     try
     {
+        QApplication app(argc, argv);
+        app.setAttribute(Qt::AA_ShareOpenGLContexts);
+
         nxs::load();
         nxi::core nxc;
-
-        QApplication app(argc, argv);
 
         ui::core uic(app, nxc);
 

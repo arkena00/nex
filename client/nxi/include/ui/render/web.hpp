@@ -14,7 +14,8 @@ namespace ui{namespace render
         void load(const QString&) override;
         void load(render::page*) override;
 
-        QWidget& widget() override;
+        QWidget* widget() override;
+
     };
 }} // ui::render
 

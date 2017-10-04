@@ -15,11 +15,11 @@ namespace ui{namespace render
     public:
         enum { engine_web, engine_gl };
 
-        engine() = default;
+        engine(QWidget* parent = nullptr) : QWidget(parent) {}
 
         virtual void load(render::page*) = 0;
 
-        virtual QWidget& widget() = 0;
+        virtual QWidget* widget() = 0;
 
         virtual void load(const QString&) = 0;
     };

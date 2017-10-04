@@ -67,7 +67,7 @@ namespace ui{namespace render
         Ndk::EntityHandle nebulaLight = _world.CreateEntity();
         Ndk::NodeComponent& nebulaLightNode = nebulaLight->AddComponent<Ndk::NodeComponent>();
         Ndk::LightComponent& nebulaLightComp = nebulaLight->AddComponent<Ndk::LightComponent>(Nz::LightType_Directional);
-        nebulaLightNode.SetPosition(0.f, 0.f, 500.f);
+        nebulaLightComp.SetDiffuseFactor(1.8);
         nebulaLightComp.SetColor(Nz::Color(255, 255, 255));
 
         // model

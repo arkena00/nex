@@ -21,7 +21,10 @@ namespace ui{namespace render
     private:
         Ndk::World _world;
         Ndk::Canvas _canvas;
+        Ndk::EntityHandle _model_entity;
+        Ndk::EntityHandle _model_entity2;
         QTimer* _timer;
+        float _delta;
 
     public:
         nazara(QWidget* parent = nullptr);

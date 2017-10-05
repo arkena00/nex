@@ -19,6 +19,8 @@ namespace ui{namespace render
 {
 
     nazara::nazara(QWidget* parent) :
+        engine(parent),
+        Nz::RenderWindow(reinterpret_cast<Nz::WindowHandle>(winId()), Nz::ContextParameters(Nz::RenderTargetParameters(8))),
         _canvas(_world.CreateHandle(), GetEventHandler(), GetCursorController().CreateHandle())
     {
         // Setup some states to allow direct rendering into the widget
@@ -30,17 +32,9 @@ namespace ui{namespace render
         setFocusPolicy(Qt::StrongFocus);
         setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-        if (!IsValid())
-        {
-            #ifdef Q_WS_X11
-            XFlush(QX11Info::display());
-            #endif
 
-            Nz::RenderWindow::Create(reinterpret_cast<Nz::WindowHandle>(winId()));
-            SetEventListener(true);
-            SetCursor(Nz::Cursor::Get(Nz::SystemCursor_Default));
-        }
-
+        SetEventListener(true);
+        SetCursor(Nz::Cursor::Get(Nz::SystemCursor_Default));
 
         _timer = new QTimer(this);
         _timer->setInterval(10);
@@ -67,17 +61,21 @@ namespace ui{namespace render
         Ndk::EntityHandle nebulaLight = _world.CreateEntity();
         Ndk::NodeComponent& nebulaLightNode = nebulaLight->AddComponent<Ndk::NodeComponent>();
         Ndk::LightComponent& nebulaLightComp = nebulaLight->AddComponent<Ndk::LightComponent>(Nz::LightType_Directional);
-        nebulaLightComp.SetDiffuseFactor(1.8);
+        nebulaLightComp.SetDiffuseFactor(1.8f);
         nebulaLightComp.SetColor(Nz::Color(255, 255, 255));
 
         // model
         Nz::ModelRef model = Nz::Model::New();
         model->LoadFromFile(R"(C:\Projet\nk\nex\client\nxi\bin\resources\test\test.obj)");
-        auto _model_entity = _world.CreateEntity();
+        _model_entity = _world.CreateEntity();
         _model_entity->AddComponent<Ndk::GraphicsComponent>().Attach(model);
         Ndk::NodeComponent& model_node = _model_entity->AddComponent<Ndk::NodeComponent>();
         model_node.SetPosition(500, 200, -50);
         model_node.SetScale(2.f);
+
+        _model_entity2 = _world.CreateEntity();
+        _model_entity2->AddComponent<Ndk::GraphicsComponent>().Attach(model);
+        _model_entity2->AddComponent<Ndk::NodeComponent>().SetPosition(500, 400, -50);
 
         // camera
         Ndk::EntityHandle camera = _world.CreateEntity();
@@ -102,6 +100,15 @@ namespace ui{namespace render
 
     void nazara::update()
     {
+        _delta += 0.5;
+        auto& model_node = _model_entity->GetComponent<Ndk::NodeComponent>();
+        model_node.SetRotation(Nz::EulerAnglesf(0.f, _delta, 0.f));
+
+        float d2 = _delta;
+        _model_entity2->GetComponent<Ndk::NodeComponent>().SetRotation(Nz::EulerAnglesf(0.0f, d2, d2));
+        auto z = _delta;
+        //_model_entity2->GetComponent<Ndk::NodeComponent>().SetPosition(500, 400, z);
+
         _world.Update(1);
         Display();
 

@@ -1,0 +1,9 @@
+#ifndef CORE_VERSION_H_NXS
+#define CORE_VERSION_H_NXS
+
+namespace nxs_autoversion
+{
+    static const char* version = "@NXS_VERSION_MAJOR@.@NXS_VERSION_MINOR@";
+	static const char* fullversion = "@NXS_VERSION_MAJOR@.@NXS_VERSION_MINOR@ - build @NXS_VERSION_BUILD@";
+}
+#endif // CORE_VERSION_H_NXS

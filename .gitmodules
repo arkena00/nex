@@ -1,3 +1,12 @@
 [submodule "third_party/ndb"]
 	path = third_party/ndb
 	url = https://github.com/ads00/ndb.git
+[submodule "third_party/asio"]
+	path = third_party/asio
+	url = https://github.com/chriskohlhoff/asio.git
+[submodule "third_party/cereal"]
+	path = third_party/cereal
+	url = https://github.com/USCiLab/cereal.git
+[submodule "third_party/nds"]
+	path = third_party/nds
+	url = https://github.com/ads00/nds.git

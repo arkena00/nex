@@ -1,7 +1,7 @@
 #ifndef SERIALIZE_H_NXS
 #define SERIALIZE_H_NXS
 
-#include <nxs/encoder/cereal.hpp>
+#include <nxs/encoder/cereal_json.hpp>
 
 // macro
 #define nxs_serialize(S) \

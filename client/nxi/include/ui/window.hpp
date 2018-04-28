@@ -1,33 +1,56 @@
 #ifndef UI_WINDOW_H_NXI
 #define UI_WINDOW_H_NXI
 
-#include <nxs/network/client.hpp>
-#include <nxi/core.hpp>
+namespace nxi { class core; }
+namespace nxw { class vbox_layout; }
 
+#include <QLayout>
 #include <QWidget>
-#include <QPushButton>
-#include <QStackedWidget>
-#include <QSystemTrayIcon>
+#include <QMouseEvent>
+#include <QDebug>
+#include <utility>
+
+#include <nxw/vbox_layout.hpp>
 
 namespace ui
 {
     class main;
-    class tabbar;
 
     class window : public QWidget
     {
         Q_OBJECT
-    private:
-        nxi::core& nxc_;
-        ui::main* main_;
-
-        QSystemTrayIcon* systray_;
-
     public:
-        window(nxi::core& nxc);
+        window(nxi::core& nxi_core);
         ~window();
 
-        nxi::core& nxc();
+        void main_swap(QWidget* new_main, QLayout* origin_layout_);
+
+        template<class T>
+        T* load()
+        {
+            auto t = new T(this);
+            main_layout_->addWidget(t);
+            return t;
+        }
+
+        void mousePressEvent(QMouseEvent* event);
+        void mouseReleaseEvent(QMouseEvent* event);
+        void mouseMoveEvent(QMouseEvent* event);
+        void mouseDoubleClickEvent(QMouseEvent* event);
+
+        nxi::core& nxi_core();
+
+    private:
+        nxi::core& nxi_core_;
+
+        QWidget* main_;
+
+        bool moving_;
+        QPoint move_origin_;
+
+        QWidget* swapper_current_main_;
+        QLayout* swapper_origin_layout_;
+        nxw::vbox_layout* main_layout_;
     };
 
 } // ui

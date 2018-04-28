@@ -11,7 +11,7 @@ namespace ui{namespace render
     {
     Q_OBJECT
     public:
-        page() = default;
+        page(QWidget* parent = nullptr) : QWidget(parent) {}
 
         virtual void load(const QString& data) = 0;
 

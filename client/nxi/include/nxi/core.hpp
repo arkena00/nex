@@ -2,23 +2,30 @@
 #define CORE_H_NXI
 
 #include <nxs/network/client.hpp>
+#include <nxi/tabsystem.hpp>
 
+#include <QWidget>
+#include <QDebug>
 
 namespace nxi
 {
     class core
     {
-    private:
-        nxs::network::client m_client;
-        std::thread m_client_thread;
-
-
     public:
         core();
         ~core();
         core(const core&) = delete;
+        void operator=(const core&) = delete;
 
         nxs::network::client& client();
+        nxi::tabsystem& tabsystem();
+
+
+    private:
+        nxs::network::client client_;
+        std::thread client_thread_;
+
+        nxi::tabsystem tabsystem_;
     };
 } // nxi
 

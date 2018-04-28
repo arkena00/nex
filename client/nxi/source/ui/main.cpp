@@ -1,59 +1,47 @@
-#include <ui/window.hpp>
 #include <ui/main.hpp>
-#include <ui/tabwidget.hpp>
-#include <ui/tabbar.hpp>
-#include <ui/tab.hpp>
-#include <ui/render/engine.hpp>
 #include <ui/render/web.hpp>
-#include <ui/render/nazara.hpp>
+#include <ui/window.hpp>
+#include <nxw/tabbar.hpp>
+#include <nxw/hbox_layout.hpp>
 
-#include <nxs/network/connexion/output.hpp>
+#include <nxi/core.hpp>
 
 #include <QIcon>
-#include <QDesktopWidget>
-#include <QVBoxLayout>
+#include <QPushButton>
+#include <nxw/vbox_layout.hpp>
 #include <QSplitter>
-#include <widget/bar.hpp>
+
+#include <ui/render/web_page.hpp>
+#include <QtWidgets/QShortcut>
+#include <nxw/tabwidget.hpp>
+#include <include/ui/tree.hpp>
+#include <include/ui/tab.hpp>
+#include <QWebEnginePage>
 
 namespace ui
 {
     main::main(ui::window* window) :
         QWidget(window),
-        _nxc(window->nxc())
+        nxi_core_ { window->nxi_core() },
+        window_ { window }
     {
         // layouts
-        QVBoxLayout* main_layout = new QVBoxLayout(this);
-        QHBoxLayout* top_layout = new QHBoxLayout;
-        QHBoxLayout* tool_layout = new QHBoxLayout;
-        QHBoxLayout* middle_layout = new QHBoxLayout;
-        QHBoxLayout* bot_layout = new QHBoxLayout;
-        QVBoxLayout* left_layout = new QVBoxLayout;
-        QVBoxLayout* right_layout = new QVBoxLayout;
+        auto main_layout = new nxw::vbox_layout;
+        setLayout(main_layout);
+
+        auto top_layout = new nxw::hbox_layout;
+        auto tool_layout = new nxw::hbox_layout;
+        auto middle_layout = new nxw::hbox_layout;
+        auto bot_layout = new nxw::hbox_layout;
+        left_layout_ = new nxw::vbox_layout;
+        right_layout_ = new nxw::vbox_layout;
 
         main_layout->addLayout(top_layout);
         main_layout->addLayout(tool_layout);
         main_layout->addLayout(middle_layout);
         main_layout->addLayout(bot_layout);
-        main_layout->setContentsMargins(5, 5, 0, 0);
 
-        // splitter
-        QSplitter* splitter = new QSplitter(this);
-        QWidget* left_side = new QWidget(this);
-        QWidget* right_side = new QWidget(this);
-
-        // splitter
-        left_side->setLayout(left_layout);
-        left_side->setMinimumWidth(150);
-        left_layout->setMargin(0);
-        right_layout->setMargin(0);
-        right_side->setLayout(right_layout);
-        splitter->addWidget(left_side);
-        splitter->setStretchFactor(0, 0);
-        splitter->addWidget(right_side);
-        splitter->setStretchFactor(1, 1);
-        middle_layout->addWidget(splitter);
-
-         // menu button
+        // menu button
         menu_button_ = new QPushButton(this);
         menu_button_->setObjectName("menu_button");
         menu_button_->setFixedSize(24, 24);
@@ -61,75 +49,90 @@ namespace ui
         menu_button_->setIconSize(QSize(16, 16));
         menu_button_->setCheckable(1);
 
-        // new tab
-        QPushButton* tab_new = new QPushButton(this);
+        // engine
+        engine_web_ = new ui::render::web(this);
+        engine_web_->hide();
+
+        // tabwidget
+        tabbar_ = new nxw::tabbar(this);
+        tabwidget_ = new nxw::tabwidget(this);
+        tabwidget_->widget_ = engine()->widget();
+
+        QObject::connect(tabbar_, &nxw::tabbar::currentChanged, tabwidget_, &nxw::tabwidget::on_change);
+
+        // load tab page
+        QObject::connect(tabbar_, &nxw::tabbar::currentChanged, [this](int index)
+        {
+            auto p = static_cast<ui::tab*>(tabwidget_->stack()->widget(index))->page_;
+
+            qDebug() << "index " << index << "  load page  " << static_cast<render::web_page*>(p)->widget()->url();
+            engine()->load(p);
+        });
+
+
+        // tree
+        auto tree = new ui::tree(this);
+        left_layout_->addWidget(tree);
+        tree->setFixedWidth(200);
+        connect(tree, &QTreeWidget::itemClicked, [this, tree](QTreeWidgetItem *item, int column){ tabwidget_->on_change(tree->indexOfTopLevelItem(item)); });
+
+        // add tab
+        auto tab_new = new QPushButton(this);
         tab_new->setObjectName("tab_new");
         tab_new->setFixedSize(24, 24);
         tab_new->setIcon(QIcon(":/image/tab_new"));
         tab_new->setIconSize(QSize(16, 16));
-        QObject::connect(tab_new, &QPushButton::clicked, [&]() { tabwidget_->add(); } );
 
-        // tool bar
-        tool_bar_ = new widget::bar(this);
-        tool_bar_->setFixedHeight(24);
-        tool_bar_->setContentsMargins(0, 0, 0, 0);
+        connect(tab_new, &QPushButton::clicked, [this](){ nxi_core_.tabsystem().on_add(this); });
 
-        tabwidget_ = new ui::tabwidget(this);
-        tabwidget_->stack_add("status");
-        tabwidget_->stack_add("address");
-        tabwidget_->stack_add("tree");
+        connect(&nxi_core_.tabsystem(), &nxi::tabsystem::event_add, [this, tree](QWidget* source)
+        {
+            if (source == this)
+            {
+                auto t = tabwidget_->add<ui::tab>(this);
+                tabbar_->addTab("test");
 
-        // status stack
-        tool_bar_->add(tabwidget_->stack("status"));
-        tabwidget_->stack("status")->setFixedSize(24, 24);
-
-        // notification
-        notification_button_ = new QPushButton(tool_bar_);
-        notification_button_->setObjectName("notification_button");
-        notification_button_->setIcon(QIcon(":/image/notification_status_0"));
-        notification_button_->setIconSize(QSize(16, 16));
-        tool_bar_->add(notification_button_);
-
-        // address stack
-        tool_bar_->add(tabwidget_->stack("address"));
-
-        // engine
-        engine_web_ = new ui::render::web(this);
-        engine_web_->widget()->hide();
-        //engine_nazara_ = new ui::render::nazara(this);
-
+                auto item = new QTreeWidgetItem(tree);
+                item->setText(0, "test");
+                tree->addTopLevelItem(item);
+            }
+        });
 
         // fill layouts
         top_layout->addWidget(menu_button_);
-        top_layout->addWidget(&tabwidget_->tabbar());
+        top_layout->addWidget(tabbar_);
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
-        tool_layout->addWidget(tool_bar_);
-        left_layout->addWidget(tabwidget_->stack("tree"));
-        //right_layout->addWidget(engine_web_->widget());
-        //right_layout->addWidget(engine_nazara_->widget());
+        middle_layout->addLayout(left_layout_);
+        middle_layout->addLayout(right_layout_);
 
-        // tab change
-        QObject::connect(&tabwidget_->tabbar(), &QTabBar::currentChanged, [&](int index)
+
+        right_layout_->addWidget(tabwidget_->stack());
+
+
+
+
+
+
+        // test
+        auto sc = new QShortcut(QKeySequence(Qt::Key_F11), this);
+        connect(sc, &QShortcut::activated, [this]()
         {
-            engine().load(&tabwidget_->tab(index).page());
+            window_->main_swap(engine_web_->widget(), right_layout_);
         });
 
-        // add tab
-        tabwidget_->add();
+        auto sc2 = new QShortcut(QKeySequence("ctrl+T"), this);
+        connect(sc2, &QShortcut::activated, [this]()
+        {
+            nxi_core_.tabsystem().on_add(this);
+        });
     }
 
     main::~main()
-    {
-    }
+    {}
 
-    render::engine& main::engine()
+    render::engine* main::engine()
     {
-        return *engine_web_;
-    }
-
-    nxs::network::client& main::client()
-    {
-        return _nxc.client();
+        return static_cast<render::engine*>(engine_web_);
     }
 } // ui

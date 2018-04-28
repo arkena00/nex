@@ -1,20 +1,21 @@
 <RCC>
     <qresource prefix="/image">
-        <file alias="nex">../../graph/nex.png</file>
-        <file alias="hdd">../../graph/hdd.png</file>
-        <file alias="connexion_status_0">../../graph/connexion_status_0.png</file>
-        <file alias="connexion_status_1">../../graph/connexion_status_1.png</file>
-        <file alias="connexion_status_idle">../../graph/connexion_status_idle.png</file>
-        <file alias="folder">../../graph/folder.png</file>
-        <file alias="interface_bar">../../graph/interface_bar.png</file>
-        <file alias="menu">../../graph/menu.png</file>
-        <file alias="network">../../graph/network.png</file>
-        <file alias="resource">../../graph/resource.png</file>
-        <file alias="tab_new">../../graph/tab_new.png</file>
-        <file alias="notification_status_0">../../graph/notification_status_0.png</file>
-        <file alias="notification_status_1">../../graph/notification_status_1.png</file>
+        <file alias="nex">../../graphic/nex.png</file>
+        <file alias="hdd">../../graphic/hdd.png</file>
+        <file alias="connexion_status_0">../../graphic/connexion_status_0.png</file>
+        <file alias="connexion_status_1">../../graphic/connexion_status_1.png</file>
+        <file alias="connexion_status_idle">../../graphic/connexion_status_idle.png</file>
+        <file alias="folder">../../graphic/folder.png</file>
+        <file alias="interface_bar">../../graphic/interface_bar.png</file>
+        <file alias="menu">../../graphic/menu.png</file>
+        <file alias="network">../../graphic/network.png</file>
+        <file alias="resource">../../graphic/resource.png</file>
+        <file alias="tab_new">../../graphic/tab_new.png</file>
+        <file alias="notification_status_0">../../graphic/notification_status_0.png</file>
+        <file alias="notification_status_1">../../graphic/notification_status_1.png</file>
+        <file alias="login_background">../../graphic/login_background.jpg</file>
     </qresource>
     <qresource prefix="/">
-        <file alias="style.qss">../../graph/style.qss</file>
+        <file alias="style.qss">../../graphic/style.qss</file>
     </qresource>
 </RCC>

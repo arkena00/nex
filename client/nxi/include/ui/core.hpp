@@ -4,6 +4,7 @@
 #include <ui/window.hpp>
 
 class QApplication;
+class QSystemTrayIcon;
 
 namespace nxi { class core; }
 
@@ -13,9 +14,10 @@ namespace ui
     {
     private:
         ui::window window_;
+        QSystemTrayIcon* systray_;
 
     public:
-        core(QApplication& app, nxi::core& nxc);
+        core(QApplication& app, nxi::core& nxi_core);
     };
 } // ui
 

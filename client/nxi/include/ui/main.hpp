@@ -1,51 +1,42 @@
 #ifndef UI_MAIN_H_NXI
 #define UI_MAIN_H_NXI
 
-#include <nxs/network/client.hpp>
-#include <nxi/core.hpp>
+namespace nxi { class core; }
+namespace nxw { class vbox_layout; class tabbar; }
 
-#include <vector>
-#include <memory>
+class QPushButton;
 
 #include <QWidget>
-#include <QPushButton>
-#include <QStackedWidget>
-#include <QSystemTrayIcon>
-
-namespace widget { class bar; }
+#include <include/nxw/tabwidget.hpp>
 
 namespace ui
 {
-    class window;
-    class tabbar;
-    class tabwidget;
+    namespace render { class engine; class web; }
 
-    namespace render { class engine; class web; class nazara; }
+    class window;
 
     class main : public QWidget
     {
         Q_OBJECT
-    private:
-        nxi::core& _nxc;
-
-        QPushButton* menu_button_;
-        QPushButton* notification_button_;
-
-        ui::tabwidget* tabwidget_;
-        widget::bar* tool_bar_;
-
-        render::web* engine_web_;
-        render::nazara* engine_nazara_;
-
     public:
         main(ui::window* window);
         ~main();
 
-        nxs::network::client& client();
-        ui::tabwidget& tabwidget();
-        render::engine& engine();
-    };
+        render::engine* engine();
 
+    public:
+        nxi::core& nxi_core_;
+        ui::window* window_;
+
+        render::web* engine_web_;
+
+        nxw::vbox_layout* right_layout_;
+        nxw::vbox_layout* left_layout_;
+
+        QPushButton* menu_button_;
+        nxw::tabwidget* tabwidget_;
+        nxw::tabbar* tabbar_;
+    };
 } // ui
 
 #endif // UI_MAIN_H_NXI

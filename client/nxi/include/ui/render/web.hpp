@@ -2,12 +2,14 @@
 #define UI_RENDER_WEB_H_NXI
 
 #include <ui/render/engine.hpp>
-#include <QWebEngineView>
 
-namespace ui{namespace render
+class QWebEngineView;
+
+namespace ui::render
 {
-    class web : public QWebEngineView, public engine
+    class web : public engine
     {
+        Q_OBJECT
     public:
         web(QWidget* parent);
 
@@ -16,7 +18,9 @@ namespace ui{namespace render
 
         QWidget* widget() override;
 
+    private:
+        QWebEngineView* view_;
     };
-}} // ui::render
+} // ui::render
 
 #endif //UI_RENDER_WEB_H_NXI

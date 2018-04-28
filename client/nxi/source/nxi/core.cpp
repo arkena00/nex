@@ -4,17 +4,22 @@
 namespace nxi
 {
     core::core() :
-        m_client_thread(&nxs::network::client::run, &m_client)
+        client_thread_(&nxs::network::client::run, &client_)
     {}
 
     core::~core()
     {
-        m_client.stop();
-        m_client_thread.join();
+        client_.stop();
+        client_thread_.join();
     }
 
-    nxs::network::client &core::client()
+    nxs::network::client& core::client()
     {
-        return m_client;
+        return client_;
+    }
+
+    nxi::tabsystem& core::tabsystem()
+    {
+        return tabsystem_;
     }
 } // nxi

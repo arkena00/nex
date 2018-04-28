@@ -1,19 +1,28 @@
 #include <ui/render/web_page.hpp>
 
-namespace ui{namespace render
-{
-    web_page::web_page(QWidget* parent) : QWebEnginePage(parent)
-    {
+#include <QWebEnginePage>
 
+namespace ui::render
+{
+    web_page::web_page(QWidget* parent) :
+        render::page(parent)
+    {
+        page_ = new QWebEnginePage(this);
     }
 
     void web_page::load_url(const QString& url)
     {
-        setUrl(QUrl(url));
+        page_->setUrl(QUrl(url));
     }
 
     void web_page::load(const QString& data)
     {
-        setHtml(data);
+        page_->setUrl(QUrl(data));
+        //page_->setHtml(data);
     };
-}} // ui::render
+
+    QWebEnginePage* web_page::widget()
+    {
+        return page_;
+    }
+} // ui::render

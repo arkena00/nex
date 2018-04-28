@@ -9,13 +9,12 @@ int main(int argc, char* argv[])
     try
     {
         QApplication app(argc, argv);
-        app.setAttribute(Qt::AA_ShareOpenGLContexts);
+        QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-        nxi::core nxc;
+        nxi::core nxi_core;
+        ui::core ui_core(app, nxi_core);
 
-        ui::core uic(app, nxc);
-
-        status = app.exec();
+        status = QApplication::exec();
     }
     catch (const std::exception& e)
     {

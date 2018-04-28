@@ -2,11 +2,12 @@
 #define UI_RENDER_WEB_PAGE_H_NXI
 
 #include <ui/render/page.hpp>
-#include <QWebEnginePage>
 
-namespace ui{namespace render
+class QWebEnginePage;
+
+namespace ui::render
 {
-    class web_page : public QWebEnginePage, public render::page
+    class web_page : public render::page
     {
     Q_OBJECT
     public:
@@ -15,7 +16,11 @@ namespace ui{namespace render
         void load_url(const QString& url);
         void load(const QString& data) override;
 
+        QWebEnginePage* widget();
+
+    private:
+        QWebEnginePage* page_;
     };
-}} // ui::render
+} // ui::render
 
 #endif // UI_RENDER_WEB_PAGE_H_NXI

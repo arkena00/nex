@@ -87,7 +87,7 @@ namespace ui
         sc = new QShortcut(QKeySequence("ctrl+T"), this);
         connect(sc, &QShortcut::activated, [this]()
         {
-            nxi_core_.tabsystem().on_add(this);
+            nxi_core_.tabsystem().on_add(tabwidget_);
         });
         /*
         sc = new QShortcut(QKeySequence("F1"), this);

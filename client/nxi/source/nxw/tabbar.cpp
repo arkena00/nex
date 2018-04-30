@@ -1,5 +1,7 @@
 #include <nxw/tabbar.hpp>
-#include <QDebug>
+
+#include <QTabBar>
+
 namespace nxw
 {
     tabbar::tabbar(QWidget* parent) :
@@ -30,6 +32,16 @@ namespace nxw
         blockSignals(true);
         tabbar_->setCurrentIndex(index);
         blockSignals(false);
+    }
+
+    void tabbar::icon_set(int index, const QIcon& icon)
+    {
+        tabbar_->setTabIcon(index, icon);
+    }
+
+    void tabbar::title_set(int index, const QString& title)
+    {
+        tabbar_->setTabText(index, title);
     }
 
     QWidget* tabbar::widget()

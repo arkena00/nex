@@ -1,17 +1,16 @@
 #include <ui/tab.hpp>
+
 #include <ui/tree.hpp>
 #include <ui/main.hpp>
-
+#include <ui/render/engine.hpp>
+#include <ui/render/web_page.hpp>
+#include <ui/tabtree.hpp>
 
 #include <nxw/hbox_layout.hpp>
 #include <nxw/tabbar.hpp>
-
-#include <ui/render/engine.hpp>
-#include <ui/render/web_page.hpp>
-
 #include <nxw/vbox_layout.hpp>
-#include <QtWidgets/QSplitter>
 
+#include <QSplitter>
 #include <QWebEnginePage>
 
 namespace ui
@@ -30,6 +29,16 @@ namespace ui
         page_ = new render::web_page(this);
         page_->load("http://www.google.fr");
         //connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::loadProgress, [this](int progress) { main_->tabbar_->setTabText(0, QString::number(progress)); });
+        connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::iconChanged, [this](const QIcon& icon)
+        {
+            auto index = main_->tabwidget_->index(this);
+            main_->tabwidget_->icon_set(index, icon);
+        });
+        connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::titleChanged, [this](const QString& title)
+        {
+            auto index = main_->tabwidget_->index(this);
+            main_->tabwidget_->title_set(index, title);
+        });
 
         // splitter
         auto splitter = new QSplitter(this);
@@ -45,7 +54,7 @@ namespace ui
 
         engine_layout_ = new nxw::hbox_layout;
 
-        main_layout->addWidget(tree_);
+        //main_layout->addWidget(tree_);
         main_layout->addLayout(engine_layout_);
 
 

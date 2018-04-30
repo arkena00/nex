@@ -1,16 +1,15 @@
 #ifndef NXW_TABWIDGET_H_NXI
 #define NXW_TABWIDGET_H_NXI
 
-#include <QWidget>
-#include <QVector>
 #include <QHash>
+#include <QStackedWidget>
+#include <QVector>
+#include <QWidget>
 
 #include <utility>
 
-class QStackedWidget;
-
 namespace nxi { class tabsystem; }
-namespace ui { struct tabdata; }
+namespace ui { struct tabdata; class tab_base; }
 
 namespace nxw
 {
@@ -35,11 +34,12 @@ namespace nxw
          }
 
         void tabchanger_add(nxw::tabchanger*);
-
-        QWidget* widget();
-
         void change(int index);
+        void icon_set(int index, const QIcon& icon);
+        void title_set(int index, const QString& title);
 
+        int index(ui::tab_base*) const;
+        QWidget* widget();
 
     public:
         nxi::tabsystem& tabsystem_;

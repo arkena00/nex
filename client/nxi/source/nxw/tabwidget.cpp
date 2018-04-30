@@ -64,10 +64,33 @@ namespace nxw
         static_cast<ui::tab_base*>(w)->tab_focus(tabdata_);
     }
 
+    void tabwidget::icon_set(int index, const QIcon& icon)
+    {
+        for (nxw::tabchanger* changer : tabchangers_)
+        {
+            changer->icon_set(index, icon);
+        }
+    }
+
+    void tabwidget::title_set(int index, const QString& title)
+    {
+        for (nxw::tabchanger* changer : tabchangers_)
+        {
+            changer->title_set(index, title);
+        }
+    }
+
+    int tabwidget::index(ui::tab_base* tab) const
+    {
+        for (int i = 0; i != tabstack_->count(); i++)
+        {
+            if (tab == tabstack_->widget(i)) return i;
+        }
+        return 0;
+    }
+
     QWidget* tabwidget::widget()
     {
         return tabstack_;
     }
-
-
 } // nxw

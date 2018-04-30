@@ -13,10 +13,12 @@ namespace ui
     public:
         tabtree(QWidget* widget);
 
-        QWidget* widget();
-
         int add(const QString& text) override;
         void current_set(int index) override;
+        void icon_set(int index, const QIcon& icon) override;
+        void title_set(int index, const QString& title) override;
+
+        QWidget* widget();
 
     private:
         QTreeWidget* tree_;

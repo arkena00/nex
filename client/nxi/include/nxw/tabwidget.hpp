@@ -1,51 +1,52 @@
 #ifndef NXW_TABWIDGET_H_NXI
 #define NXW_TABWIDGET_H_NXI
 
-#include <QStackedWidget>
-#include <ui/tab.hpp>
-
 #include <QWidget>
 #include <QVector>
-#include <QDebug>
 #include <QHash>
 
 #include <utility>
 
+class QStackedWidget;
+
+namespace nxi { class tabsystem; }
+namespace ui { struct tabdata; }
 
 namespace nxw
 {
+
+    class tabchanger;
+
     class tabwidget : public QWidget
     {
         Q_OBJECT
     public:
-        tabwidget(QWidget* parent = nullptr);
+        tabwidget(QWidget* parent, nxi::tabsystem&);
         ~tabwidget();
+
 
         template<class T, class... Args>
         T* add(Args&&... args)
         {
             auto t = new T(std::forward<Args>(args)...);
-            tab_stack_->addWidget(t);
+            tabstack_->addWidget(t);
+
             return t;
          }
 
-        QWidget* current_tab()
-        {
-            return tab_stack_->currentWidget();
-        }
+        void tabchanger_add(nxw::tabchanger*);
 
-        QStackedWidget* stack() { return tab_stack_; }
+        QWidget* widget();
 
+        void change(int index);
 
-        void on_change(int index);
 
     public:
-        int current_index_;
-        QStackedWidget* tab_stack_;
+        nxi::tabsystem& tabsystem_;
 
-        QHash<int, QLayout*> layout_;
-
-        QWidget* widget_ = nullptr;
+        QVector<nxw::tabchanger*> tabchangers_;
+        QStackedWidget* tabstack_;
+        ui::tabdata* tabdata_;
     };
 } // nxw
 

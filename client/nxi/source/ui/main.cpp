@@ -1,5 +1,6 @@
 #include <ui/main.hpp>
 #include <ui/render/web.hpp>
+#include <ui/tabtree.hpp>
 #include <ui/window.hpp>
 #include <nxw/tabbar.hpp>
 #include <nxw/hbox_layout.hpp>
@@ -8,15 +9,7 @@
 
 #include <QIcon>
 #include <QPushButton>
-#include <nxw/vbox_layout.hpp>
-#include <QSplitter>
-
-#include <ui/render/web_page.hpp>
-#include <QtWidgets/QShortcut>
-#include <nxw/tabwidget.hpp>
-#include <include/ui/tree.hpp>
-#include <include/ui/tab.hpp>
-#include <QWebEnginePage>
+#include <QShortcut>
 
 namespace ui
 {
@@ -55,26 +48,10 @@ namespace ui
 
         // tabwidget
         tabbar_ = new nxw::tabbar(this);
-        tabwidget_ = new nxw::tabwidget(this);
-        tabwidget_->widget_ = engine()->widget();
-
-        QObject::connect(tabbar_, &nxw::tabbar::currentChanged, tabwidget_, &nxw::tabwidget::on_change);
-
-        // load tab page
-        QObject::connect(tabbar_, &nxw::tabbar::currentChanged, [this](int index)
-        {
-            auto p = static_cast<ui::tab*>(tabwidget_->stack()->widget(index))->page_;
-
-            qDebug() << "index " << index << "  load page  " << static_cast<render::web_page*>(p)->widget()->url();
-            engine()->load(p);
-        });
-
-
-        // tree
-        auto tree = new ui::tree(this);
-        left_layout_->addWidget(tree);
-        tree->setFixedWidth(200);
-        connect(tree, &QTreeWidget::itemClicked, [this, tree](QTreeWidgetItem *item, int column){ tabwidget_->on_change(tree->indexOfTopLevelItem(item)); });
+        tabtree_ = new ui::tabtree(this);
+        tabwidget_ = new nxw::tabwidget(this, nxi_core_.tabsystem());
+        tabwidget_->tabchanger_add(tabbar_);
+        tabwidget_->tabchanger_add(tabtree_);
 
         // add tab
         auto tab_new = new QPushButton(this);
@@ -83,33 +60,19 @@ namespace ui
         tab_new->setIcon(QIcon(":/image/tab_new"));
         tab_new->setIconSize(QSize(16, 16));
 
-        connect(tab_new, &QPushButton::clicked, [this](){ nxi_core_.tabsystem().on_add(this); });
-
-        connect(&nxi_core_.tabsystem(), &nxi::tabsystem::event_add, [this, tree](QWidget* source)
-        {
-            if (source == this)
-            {
-                auto t = tabwidget_->add<ui::tab>(this);
-                tabbar_->addTab("test");
-
-                auto item = new QTreeWidgetItem(tree);
-                item->setText(0, "test");
-                tree->addTopLevelItem(item);
-            }
-        });
+        connect(tab_new, &QPushButton::clicked, [this](){ nxi_core_.tabsystem().on_add(tabwidget_); });
 
         // fill layouts
         top_layout->addWidget(menu_button_);
-        top_layout->addWidget(tabbar_);
+        top_layout->addWidget(tabbar_->widget());
         top_layout->addWidget(tab_new);
         top_layout->addStretch(1);
         middle_layout->addLayout(left_layout_);
         middle_layout->addLayout(right_layout_);
 
 
-        right_layout_->addWidget(tabwidget_->stack());
-
-
+        left_layout_->addWidget(tabtree_->widget());
+        right_layout_->addWidget(tabwidget_->widget());
 
 
 
@@ -121,11 +84,18 @@ namespace ui
             window_->main_swap(engine_web_->widget(), right_layout_);
         });
 
-        auto sc2 = new QShortcut(QKeySequence("ctrl+T"), this);
-        connect(sc2, &QShortcut::activated, [this]()
+        sc = new QShortcut(QKeySequence("ctrl+T"), this);
+        connect(sc, &QShortcut::activated, [this]()
         {
             nxi_core_.tabsystem().on_add(this);
         });
+        /*
+        sc = new QShortcut(QKeySequence("F1"), this);
+        connect(sc, &QShortcut::activated, [this, tree]()
+        {
+            if (tree->isVisible()) tree->hide();
+            else tree->show();
+        });*/
     }
 
     main::~main()

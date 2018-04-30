@@ -7,13 +7,14 @@ namespace nxw { class vbox_layout; class tabbar; }
 class QPushButton;
 
 #include <QWidget>
-#include <include/nxw/tabwidget.hpp>
+#include <nxw/tabwidget.hpp>
 
 namespace ui
 {
     namespace render { class engine; class web; }
 
     class window;
+    class tabtree;
 
     class main : public QWidget
     {
@@ -36,6 +37,7 @@ namespace ui
         QPushButton* menu_button_;
         nxw::tabwidget* tabwidget_;
         nxw::tabbar* tabbar_;
+        ui::tabtree* tabtree_;
     };
 } // ui
 

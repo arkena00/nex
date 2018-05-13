@@ -19,6 +19,7 @@ namespace ui
     core::core(QApplication& app, nxi::core& nxi_core) :
         nxi_core_{ nxi_core }
     {
+        QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
         // init webengine
         QtWebEngine::initialize();
 

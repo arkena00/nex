@@ -9,7 +9,16 @@ namespace nxi
     core::core() :
         client_thread_{ &nxs::network::client::run, &client_ }
     {
-        ndb::connect<db_main>();
+        try
+        {
+            ndb::connect<db_main>();
+        }
+        catch (const std::exception& e)
+        {
+            client_.stop();
+            client_thread_.join();
+            throw;
+        }
     }
 
     core::~core()

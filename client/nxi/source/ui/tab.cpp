@@ -1,11 +1,12 @@
 #include <ui/tab.hpp>
 
-#include <ui/tree.hpp>
-#include <ui/main.hpp>
 #include <ui/render/engine.hpp>
 #include <ui/render/web_page.hpp>
 #include <ui/tabtree.hpp>
+#include <ui/tabdata.hpp>
+#include <ui/tree.hpp>
 
+#include <nxw/tabwidget.hpp>
 #include <nxw/hbox_layout.hpp>
 #include <nxw/tabbar.hpp>
 #include <nxw/vbox_layout.hpp>
@@ -15,29 +16,33 @@
 
 namespace ui
 {
-    tab::tab(ui::main* ui_main) :
-        tab_base(ui_main),
-        main_{ ui_main }
+    tab::tab(nxw::tabwidget* tabwidget) :
+        tab_base(tabwidget),
+        tabwidget_{ tabwidget }
     {
+        // get engine from tabwidget data
+        engine_ = static_cast<const ui::tabdata&>(tabwidget_->tabdata()).engine;
+
         // tree
         tree_ = new ui::tree(this);
 
         auto main_layout = new nxw::hbox_layout;
+        setLayout(main_layout);
         //main_layout->addWidget(tree_);
 
 
-        page_ = new render::web_page(this);
-        page_->load("http://www.google.fr");
+        engine_page_ = new render::web_page(this);
+        engine_page_->load("http://www.google.fr");
         //connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::loadProgress, [this](int progress) { main_->tabbar_->setTabText(0, QString::number(progress)); });
-        connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::iconChanged, [this](const QIcon& icon)
+
+        // connect web engine events
+        connect(static_cast<render::web_page*>(engine_page_)->widget(), &QWebEnginePage::iconChanged, [this](const QIcon& icon)
         {
-            auto index = main_->tabwidget_->index(this);
-            main_->tabwidget_->icon_set(index, icon);
+            tabwidget_->icon_set(this, icon);
         });
-        connect(static_cast<render::web_page*>(page_)->widget(), &QWebEnginePage::titleChanged, [this](const QString& title)
+        connect(static_cast<render::web_page*>(engine_page_)->widget(), &QWebEnginePage::titleChanged, [this](const QString& title)
         {
-            auto index = main_->tabwidget_->index(this);
-            main_->tabwidget_->title_set(index, title);
+            tabwidget_->title_set(this, title);
         });
 
         // splitter
@@ -56,24 +61,17 @@ namespace ui
 
         //main_layout->addWidget(tree_);
         main_layout->addLayout(engine_layout_);
-
-
-        setLayout(main_layout);
-
     }
 
-    void tab::tab_focus(ui::tabdata* tabdata)
+
+    void tab::on_change()
     {
-        //auto ui_main = static_cast<ui::main*>(widget_main)()
-        qDebug() << "SHOW";
-        main_->engine()->load(page_);
-        engine_layout_->addWidget(main_->engine()->widget());
+        engine_->load(engine_page_);
+        engine_layout_->addWidget(engine_->widget());
     }
 
     tab::~tab()
     {
-        main_->engine()->widget()->setParent(main_);
+        //main_->engine()->widget()->setParent(main_);
     }
-
-
 } // ui

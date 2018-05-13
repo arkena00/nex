@@ -50,8 +50,8 @@ namespace ui
 
     void tabtree::current_set(int index)
     {
-        //tree_->setItemSelected()
-        qDebug() << "current_set " << index;
+        auto item = tree_->topLevelItem(index);
+        tree_->setItemSelected(item, true);
     }
 
     void tabtree::icon_set(int index, const QIcon& icon)

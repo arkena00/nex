@@ -1,43 +1,34 @@
 #ifndef UI_TAB_H_NXI
 #define UI_TAB_H_NXI
 
-#include <QWidget>
-#include <QDebug>
-#include <ui/tab_base.hpp>
-
-class QLineEdit;
-class QLabel;
-class QWebEnginePage;
+#include <nxw/tab_base.hpp>
 
 namespace nxw { class tabwidget; class hbox_layout; }
 
 namespace ui
 {
-    class main;
     class tree;
-    struct tabdata;
 
     namespace render { class engine; class page; }
 
-    class tab : public ui::tab_base
+    class tab : public nxw::tab_base
     {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
-        ui::main* main_;
-        ui::tree* tree_;
-
-        nxw::hbox_layout* engine_layout_;
-
-        void tab_focus(ui::tabdata*) override;
-    public:
-        tab(ui::main* tabwidget);
+        tab(nxw::tabwidget* tabwidget);
         ~tab();
 
-        render::page* page_;
+        void on_change() override;
 
+    private:
+        render::engine* engine_;
+        nxw::hbox_layout* engine_layout_;
+        render::page* engine_page_;
+
+        nxw::tabwidget* tabwidget_;
+        ui::tree* tree_;
     };
-
 } // ui
 
 #endif // UI_TAB_H_NXI

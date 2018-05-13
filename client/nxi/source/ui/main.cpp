@@ -18,7 +18,9 @@ namespace ui
         nxi_core_ { window->nxi_core() },
         window_ { window }
     {
-        // layouts
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////             layouts            ////////////////////////
+////////////////////////////////////////////////////////////////////////////////
         auto main_layout = new nxw::vbox_layout;
         setLayout(main_layout);
 
@@ -33,6 +35,7 @@ namespace ui
         main_layout->addLayout(tool_layout);
         main_layout->addLayout(middle_layout);
         main_layout->addLayout(bot_layout);
+////////////////////////////////////////////////////////////////////////////////
 
         // menu button
         menu_button_ = new QPushButton(this);
@@ -46,12 +49,20 @@ namespace ui
         engine_web_ = new ui::render::web(this);
         engine_web_->hide();
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////               tab              ////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
         // tabwidget
         tabbar_ = new nxw::tabbar(this);
         tabtree_ = new ui::tabtree(this);
         tabwidget_ = new nxw::tabwidget(this, nxi_core_.tabsystem());
         tabwidget_->tabchanger_add(tabbar_);
         tabwidget_->tabchanger_add(tabtree_);
+        // tabdata
+        auto tabdata = std::make_unique<ui::tabdata>();
+        tabdata->engine = engine_web_;
+        tabwidget_->data_add(std::move(tabdata));
 
         // add tab
         auto tab_new = new QPushButton(this);

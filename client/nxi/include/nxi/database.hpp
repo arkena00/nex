@@ -9,9 +9,9 @@
 #include <ndb/query.hpp>
 
 ndb_table(window,
-          ndb_field(id, int, ndb::size<8>, ndb::option<ndb::field_option::autoincrement>),
-          ndb_field(x, int, 8),
-          ndb_field(y, int, 8)
+          ndb_field_id,
+          ndb_field(x, int),
+          ndb_field(y, int)
 )
 
 ndb_model(nxi_model, window)

@@ -12,12 +12,15 @@ namespace ui
 {
     class core
     {
-    private:
-        ui::window window_;
-        QSystemTrayIcon* systray_;
-
     public:
         core(QApplication& app, nxi::core& nxi_core);
+        ~core();
+
+    private:
+        nxi::core& nxi_core_;
+
+        QSystemTrayIcon* systray_;
+
     };
 } // ui
 

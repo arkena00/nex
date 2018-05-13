@@ -1,26 +1,24 @@
 #include <QApplication>
+#include <QMessageBox>
+
 #include <nxi/core.hpp>
 #include <ui/core.hpp>
 
 int main(int argc, char* argv[])
 {
-    int status = 0;
+    QApplication app(argc, argv);
+    QMessageBox error;
 
     try
     {
-        QApplication app(argc, argv);
-        QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-
         nxi::core nxi_core;
         ui::core ui_core(app, nxi_core);
-
-        status = QApplication::exec();
     }
     catch (const std::exception& e)
     {
-        //std::cout << e.what();
+        error.setText(e.what());
+        error.show();
     }
 
-
-    return status;
+    return QApplication::exec();
 }

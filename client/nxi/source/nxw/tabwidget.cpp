@@ -2,6 +2,7 @@
 
 #include <nxi/tabsystem.hpp>
 #include <nxw/tabchanger.hpp>
+#include <nxw/tabdata_base.hpp>
 #include <ui/main.hpp>
 #include <ui/tab.hpp>
 
@@ -11,8 +12,7 @@ namespace nxw
 {
     tabwidget::tabwidget(QWidget* parent, nxi::tabsystem& tabsystem) :
         QWidget(parent),
-        tabsystem_{ tabsystem },
-        tabdata_{ nullptr }
+        tabsystem_{ tabsystem }
     {
         tabstack_ = new QStackedWidget(this);
 
@@ -27,7 +27,10 @@ namespace nxw
                 {
                     changer->add(tab.name);
                 }
-                auto t = add<ui::tab>(dynamic_cast<ui::main*>(parent));
+                // add tab in stack
+                auto new_tab = add<ui::tab>(this);
+                // change to new tab
+                tabsystem_.on_change(source, index(new_tab));
             }
         });
 
@@ -49,19 +52,24 @@ namespace nxw
     {
     }
 
+    void tabwidget::change(int index)
+    {
+        tabstack_->setCurrentIndex(index);
+        auto current_tab = tabstack_->widget(index);
+
+        static_cast<nxw::tab_base*>(current_tab)->on_change();
+    }
+
+    void tabwidget::data_add(std::unique_ptr<nxw::tabdata_base> tabdata)
+    {
+        tabdata_ = std::move(tabdata);
+    }
+
     void tabwidget::tabchanger_add(nxw::tabchanger* tabchanger)
     {
         tabchangers_.push_back(tabchanger);
         connect(tabchanger, &nxw::tabchanger::event_change, [this](int index) { tabsystem_.on_change(this, index); });
 
-    }
-
-    void tabwidget::change(int index)
-    {
-        tabstack_->setCurrentIndex(index);
-        auto w = tabstack_->widget(index);
-
-        static_cast<ui::tab_base*>(w)->tab_focus(tabdata_);
     }
 
     void tabwidget::icon_set(int index, const QIcon& icon)
@@ -72,6 +80,11 @@ namespace nxw
         }
     }
 
+    void tabwidget::icon_set(nxw::tab_base* tab, const QIcon& icon)
+    {
+        icon_set(index(tab), icon);
+    }
+
     void tabwidget::title_set(int index, const QString& title)
     {
         for (nxw::tabchanger* changer : tabchangers_)
@@ -80,13 +93,19 @@ namespace nxw
         }
     }
 
-    int tabwidget::index(ui::tab_base* tab) const
+    void tabwidget::title_set(nxw::tab_base* tab, const QString& title)
     {
-        for (int i = 0; i != tabstack_->count(); i++)
-        {
-            if (tab == tabstack_->widget(i)) return i;
-        }
-        return 0;
+        title_set(index(tab), title);
+    }
+
+    int tabwidget::index(nxw::tab_base* tab) const
+    {
+        return tabstack_->indexOf(tab);
+    }
+
+    const nxw::tabdata_base& tabwidget::tabdata() const
+    {
+        return *tabdata_;
     }
 
     QWidget* tabwidget::widget()

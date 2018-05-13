@@ -1,19 +1,20 @@
 #ifndef NXW_TABWIDGET_H_NXI
 #define NXW_TABWIDGET_H_NXI
 
-#include <QHash>
+#include <nxw/tabdata_base.hpp>
+
 #include <QStackedWidget>
 #include <QVector>
 #include <QWidget>
 
 #include <utility>
+#include <memory>
 
 namespace nxi { class tabsystem; }
-namespace ui { struct tabdata; class tab_base; }
+namespace nxw { class tab_base; }
 
 namespace nxw
 {
-
     class tabchanger;
 
     class tabwidget : public QWidget
@@ -33,20 +34,25 @@ namespace nxw
             return t;
          }
 
-        void tabchanger_add(nxw::tabchanger*);
         void change(int index);
+        void data_add(std::unique_ptr<nxw::tabdata_base>);
+        void tabchanger_add(nxw::tabchanger*);
         void icon_set(int index, const QIcon& icon);
+        void icon_set(nxw::tab_base* tab, const QIcon& icon);
         void title_set(int index, const QString& title);
+        void title_set(nxw::tab_base* tab, const QString& title);
 
-        int index(ui::tab_base*) const;
+        int index(nxw::tab_base*) const;
+
+        const nxw::tabdata_base& tabdata() const;
         QWidget* widget();
 
-    public:
+    private:
         nxi::tabsystem& tabsystem_;
 
         QVector<nxw::tabchanger*> tabchangers_;
         QStackedWidget* tabstack_;
-        ui::tabdata* tabdata_;
+        std::unique_ptr<nxw::tabdata_base> tabdata_;
     };
 } // nxw
 

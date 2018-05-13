@@ -29,7 +29,7 @@ namespace nxi
 
             const auto& win = ndb::models::nxi_model.window;
 
-            //ndb::query<db_main>() + (win.x = w.x, win.y = w.y);
+            ndb::query<db_main>() + (win.x = w.x, win.y = w.y);
 
             emit event_add(windows_.back());
         }
@@ -38,7 +38,7 @@ namespace nxi
         {
             const auto& win = ndb::models::nxi_model.window;
 
-            auto result = ndb::oquery<db_main>() << win.id == 3;
+            auto result = ndb::query<db_main>() << win;
 
 
             for (const auto& line : result)

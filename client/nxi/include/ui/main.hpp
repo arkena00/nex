@@ -2,7 +2,12 @@
 #define UI_MAIN_H_NXI
 
 namespace nxi { class core; }
-namespace nxw { class vbox_layout; class tabbar; }
+namespace nxw
+{
+    class vbox_layout;
+    class tabbar;
+    class shortcut;
+}
 
 class QPushButton;
 
@@ -23,6 +28,9 @@ namespace ui
         main(ui::window* window);
         ~main();
 
+        void keyPressEvent(QKeyEvent* event);
+        void keyReleaseEvent(QKeyEvent* event);
+
         render::engine* engine();
 
     public:
@@ -38,6 +46,8 @@ namespace ui
         nxw::tabwidget* tabwidget_;
         nxw::tabbar* tabbar_;
         ui::tabtree* tabtree_;
+
+        nxw::shortcut* shortcut_;
     };
 } // ui
 

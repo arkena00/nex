@@ -1,9 +1,12 @@
 #include <ui/main.hpp>
 #include <ui/render/web.hpp>
+#include <ui/tabdata.hpp>
 #include <ui/tabtree.hpp>
 #include <ui/window.hpp>
+
 #include <nxw/tabbar.hpp>
 #include <nxw/hbox_layout.hpp>
+#include <nxw/shortcut.hpp>
 
 #include <nxi/core.hpp>
 
@@ -86,7 +89,8 @@ namespace ui
         right_layout_->addWidget(tabwidget_->widget());
 
 
-
+        // shortcut
+        shortcut_ = new nxw::shortcut(this);
 
         // test
         auto sc = new QShortcut(QKeySequence(Qt::Key_F11), this);
@@ -111,6 +115,16 @@ namespace ui
 
     main::~main()
     {}
+
+    void main::keyPressEvent(QKeyEvent* event)
+    {
+        shortcut_->process(event);
+    }
+
+    void main::keyReleaseEvent(QKeyEvent* event)
+    {
+        shortcut_->process(event);
+    }
 
     render::engine* main::engine()
     {

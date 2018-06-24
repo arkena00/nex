@@ -14,13 +14,14 @@ namespace nxw { class vbox_layout; }
 
 namespace ui
 {
+    class core;
     class main;
 
     class window : public QWidget
     {
         Q_OBJECT
     public:
-        window(nxi::core& nxi_core);
+        window(ui::core& ui_core);
         ~window();
 
         void main_swap(QWidget* new_main, QLayout* origin_layout_);
@@ -33,15 +34,17 @@ namespace ui
             return t;
         }
 
-        void mousePressEvent(QMouseEvent* event);
-        void mouseReleaseEvent(QMouseEvent* event);
-        void mouseMoveEvent(QMouseEvent* event);
-        void mouseDoubleClickEvent(QMouseEvent* event);
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+        void closeEvent(QCloseEvent* event) override;
 
         nxi::core& nxi_core();
 
     private:
-        nxi::core& nxi_core_;
+        ui::core& ui_core_;
 
         QWidget* main_;
 

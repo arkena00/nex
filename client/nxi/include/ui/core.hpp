@@ -16,11 +16,14 @@ namespace ui
         core(QApplication& app, nxi::core& nxi_core);
         ~core();
 
+        nxi::core& nxi_core() { return nxi_core_; }
+
     private:
         nxi::core& nxi_core_;
 
-        QSystemTrayIcon* systray_;
+        std::vector<ui::window*> windows_;
 
+        QSystemTrayIcon* systray_;
     };
 } // ui
 

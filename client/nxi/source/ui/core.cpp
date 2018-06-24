@@ -34,25 +34,19 @@ namespace ui
         systray_->setIcon(QIcon(":/image/nex"));
         systray_->show();
 
-        // load window
-        //TODO: webengine crash when window not deleted before exit
 
-
-        QObject::connect(&nxi_core_.window_system(), &nxi::window_system::event_add, [this](nxi::window& w)
+        QObject::connect(&nxi_core_.window_system(), &nxi::window_system::event_add, [this](nxi::window& window)
         {
-            auto window = new ui::window(nxi_core_);
-            window->load<ui::main>();
-            window->move(w.x, w.y);
-            window->show();
+            auto ui_window = new ui::window(*this);
+            ui_window->load<ui::main>();
+            ui_window->move(window.x, window.y);
+            ui_window->show();
+            window.ui = ui_window;
         });
-
-
 
         nxi_core_.window_system().load();
     }
 
     core::~core()
-    {
-       // delete window2_;
-    }
+    {}
 } // ui

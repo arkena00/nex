@@ -7,12 +7,13 @@
 #include <QDesktopWidget>
 #include <QIcon>
 #include <ui/login.hpp>
+#include <include/ui/core.hpp>
 
 
 namespace ui
 {
-    window::window(nxi::core& nxi_core) :
-        nxi_core_{ nxi_core },
+    window::window(ui::core& ui_core) :
+        ui_core_{ ui_core },
         moving_{ false }
     {
         QIcon icon(":image/nex");
@@ -67,7 +68,7 @@ namespace ui
 
     void window::mousePressEvent(QMouseEvent* event)
     {
-        if (event->button() == Qt::RightButton)
+        if (event->button() == Qt::LeftButton)
         {
             moving_ = true;
             move_origin_ = event->globalPos() - pos();
@@ -94,8 +95,13 @@ namespace ui
         }
     }
 
+    void window::closeEvent(QCloseEvent* event)
+    {
+        deleteLater();
+    }
+
     nxi::core& window::nxi_core()
     {
-        return nxi_core_;
+        return ui_core_.nxi_core();
     }
 } // ui

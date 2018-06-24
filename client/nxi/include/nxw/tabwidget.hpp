@@ -10,7 +10,7 @@
 #include <utility>
 #include <memory>
 
-namespace nxi { class tabsystem; }
+namespace nxi { class tab_system; }
 namespace nxw { class tab_base; }
 
 namespace nxw
@@ -21,7 +21,7 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        tabwidget(QWidget* parent, nxi::tabsystem&);
+        tabwidget(QWidget* parent, nxi::tab_system&);
         ~tabwidget();
 
 
@@ -48,7 +48,7 @@ namespace nxw
         QWidget* widget();
 
     private:
-        nxi::tabsystem& tabsystem_;
+        nxi::tab_system& tabsystem_;
 
         QVector<nxw::tabchanger*> tabchangers_;
         QStackedWidget* tabstack_;

@@ -1,6 +1,6 @@
 #include <nxw/tabwidget.hpp>
 
-#include <nxi/tabsystem.hpp>
+#include <nxi/tab_system.hpp>
 #include <nxw/tabchanger.hpp>
 #include <nxw/tabdata_base.hpp>
 #include <ui/main.hpp>
@@ -10,16 +10,16 @@
 
 namespace nxw
 {
-    tabwidget::tabwidget(QWidget* parent, nxi::tabsystem& tabsystem) :
+    tabwidget::tabwidget(QWidget* parent, nxi::tab_system& tab_system) :
         QWidget(parent),
-        tabsystem_{ tabsystem }
+        tabsystem_{ tab_system }
     {
         tabstack_ = new QStackedWidget(this);
 
         // connect tabsystem events to widget and tabchangers
 
         // new tab
-        connect(&tabsystem_, &nxi::tabsystem::event_add, [this, parent](QWidget* source, nxi::tab tab)
+        connect(&tabsystem_, &nxi::tab_system::event_add, [this, parent](QWidget* source, nxi::tab tab)
         {
             if (source == this)
             {
@@ -35,7 +35,7 @@ namespace nxw
         });
 
         // tab changed
-        connect(&tabsystem_, &nxi::tabsystem::event_change, [this](QWidget* source, int index)
+        connect(&tabsystem_, &nxi::tab_system::event_change, [this](QWidget* source, int index)
         {
             if (source == this)
             {

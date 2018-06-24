@@ -1,8 +1,8 @@
-#include <nxi/tabsystem.hpp>
+#include <nxi/tab_system.hpp>
 
 namespace nxi
 {
-    void tabsystem::on_add(QWidget* source)
+    void tab_system::on_add(QWidget* source)
     {
         nxi::tab new_tab;
 
@@ -11,7 +11,7 @@ namespace nxi
         emit event_add(source, new_tab);
     }
 
-    void tabsystem::on_change(QWidget* source, int index)
+    void tab_system::on_change(QWidget* source, int index)
     {
         //tabs_[index]
         emit event_change(source, index);

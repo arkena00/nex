@@ -37,8 +37,8 @@ namespace nxi
         return window_system_;
     }
 
-    nxi::tabsystem& core::tabsystem()
+    nxi::tab_system& core::tab_system()
     {
-        return tabsystem_;
+        return tab_system_;
     }
 } // nxi

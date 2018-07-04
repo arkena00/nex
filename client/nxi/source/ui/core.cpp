@@ -4,15 +4,10 @@
 #include <ui/login.hpp>
 
 #include <nxi/core.hpp>
-#include <nxi/window_system.hpp>
 
 #include <QApplication>
-#include <QFile>
 #include <QSystemTrayIcon>
 #include <QtWebEngine>
-
-
-
 
 namespace ui
 {
@@ -37,11 +32,7 @@ namespace ui
 
         QObject::connect(&nxi_core_.window_system(), &nxi::window_system::event_add, [this](nxi::window& window)
         {
-            auto ui_window = new ui::window(*this);
-            ui_window->load<ui::main>();
-            ui_window->move(window.x, window.y);
-            ui_window->show();
-            window.ui = ui_window;
+            ui::window::make(*this, window);
         });
 
         nxi_core_.window_system().load();

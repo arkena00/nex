@@ -1,9 +1,5 @@
 #include <nxi/core.hpp>
 
-#include <nxi/database.hpp>
-
-#include <nxs/network/client.hpp>
-
 namespace nxi
 {
     core::core() :

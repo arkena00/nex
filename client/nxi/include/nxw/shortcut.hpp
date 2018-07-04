@@ -8,15 +8,23 @@
 #include <QLabel>
 #include <include/nxi/core.hpp>
 
+enum class trigger_mode
+{
+    sequence,
+    combo
+};
+
+static int scid = 0;
+
 struct shortcut_item
 {
+    int id;
+    int parent_id;
+    std::vector<Qt::Key> combo_keys;
+    std::vector<Qt::Key> sequence_keys;
     QString name;
-    std::vector<Qt::Key> seq;
+    QString action;
 
-    shortcut_item(const char* name_, std::vector<Qt::Key> seq_) :
-        name{ name_ },
-        seq{ seq_ }
-    {}
 };
 
 
@@ -34,8 +42,10 @@ namespace nxw
         void showEvent(QShowEvent*) override;
         void add(shortcut_item);
 
-        void event_sequence_end();
-        void event_change(std::vector<Qt::Key>);
+        void event_change(std::vector<shortcut_item>);
+
+        static QString to_string(Qt::Key key);
+        static QString to_string(shortcut_item);
 
     private:
         shortcut* shortcut_;
@@ -48,82 +58,191 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        shortcut(QWidget* parent, nxi::core& nxi_core) :
+        shortcut(QWidget* parent) :
             QWidget(parent)
         {
             view_ = new shortcut_view(this);
 
             // load actions
-            actions_.push_back(shortcut_item{ "T - new tab", { Qt::Key_T } });
-            actions_.push_back(shortcut_item{ "F - find text", { Qt::Key_F } });
-            actions_.push_back(shortcut_item{ "G - find on google", { Qt::Key_G } });
+            add(0, {}, { Qt::Key_Control, Qt::Key_F}, "find page");
+            add(0, { Qt::Key_Control }, { Qt::Key_F, Qt::Key_G}, "find google");
+            add(0, { Qt::Key_Control, Qt::Key_R  }, {  }, "new tab");
+            add(0, { Qt::Key_Control, Qt::Key_Shift }, { Qt::Key_T, Qt::Key_R }, "restore tab");
 
-            trigger_key_ = Qt::Key_Control;
-            untrigger_key_ = Qt::Key_Alt;
+            add(0, { }, { Qt::Key_C, Qt::Key_P, Qt::Key_P }, "find page");
 
-            for (auto item : actions_)
+            /*
+             CTRL E
+            (CTRL) E
+            (CTRL) F F
+            (CTRL R) E E
+
+             COMBO1 + COMBO 2
+             full_sequence SEQ 1    +  SEQ 2  + SEQ 3 + SEQ 4
+             match_combo (SEQ.begin, SEQ.begin + COMBO_SIZE)
+             match_sequence(SEQ.begin + COMBO_SIZE, SEQ.end)
+
+            check sc.combo in input, on match sequence mode
+            check sc.sequence in input*/
+
+            untrigger();
+            view_->show();
+
+            for (auto item : shortcuts_)
             {
                 view_->add(item);
             }
 
+            current_id_ = 0;
         }
         ~shortcut() = default;
 
-        void sequence_start()
+        int add(int parent_id, std::vector<Qt::Key> combo_keys, std::vector<Qt::Key> sequence_keys, QString name, QString action = "")
         {
-            trigger_ = true;
-            view_->show();
+            scid++;
+            //if (parent_id == 0) triggers_.insert(keys[0]);
+            shortcut_item sc;
+            sc.name = name.toStdString().c_str();
+            sc.id = scid;
+            sc.action = "";
+            sc.combo_keys = combo_keys;
+            sc.sequence_keys = sequence_keys;
+            sc.parent_id = parent_id;
+            shortcuts_.push_back( sc );
+            return scid;
         }
 
-        void sequence_end()
+        void untrigger()
         {
-            trigger_ = false;
+            combo_keys_.clear();
             input_.clear();
-            view_->hide();
-            view_->event_change(input_);
+            sequence_match_ = false;
+            combo_match_ = false;
+            executed_ = false;
+            trigger_mode_ = trigger_mode::combo;
+        }
+
+        void exec(shortcut_item sc)
+        {
+            qDebug() << shortcut_view::to_string(sc).toStdString().c_str();
+            untrigger();
+            executed_ = true;
         }
 
         void process(QKeyEvent* event)
         {
-            Qt::Key key = static_cast<Qt::Key>(event->key());
+            if (event->isAutoRepeat()) return;
 
+            std::vector<shortcut_item> shortcut_match;
+            std::stringstream log;
             if (event->type() == QEvent::KeyPress)
             {
+                Qt::Key key = static_cast<Qt::Key>(event->key());
+
+                // store keys
+                if (trigger_mode_ == trigger_mode::combo) combo_keys_.push_back(key);
+                //else sequence_keys_.push_back(key);
                 input_.push_back(key);
 
-                if (key == trigger_key_) sequence_start();
-                if (key == untrigger_key_) sequence_end();
-
-                for (auto action : actions_)
+                for (auto sc : shortcuts_)
                 {
-                    // match, reset
-                    if (action.seq[0] == key)
+                    combo_match_ = false;
+                    sequence_match_ = false;
+                    bool sequence_partial_match = false;
+
+                    // test combo + key
+                    // test combo + nav + key
+                    //qDebug() <<  "\nTEST : " << shortcut_view::to_string(sc).toStdString().c_str();
+
+                    bool fullmatch = combo_keys_.size() > 0 && combo_keys_.size() <= sc.combo_keys.size()
+                                     && std::equal(combo_keys_.begin(), combo_keys_.end(), sc.combo_keys.begin());
+
+                    // combos partial match
+                    bool combo_partial_match = combo_keys_.size() <= sc.combo_keys.size()
+                                               && std::equal(combo_keys_.begin(), combo_keys_.end(), sc.combo_keys.begin());
+
+                    if (combo_partial_match)
                     {
-                        qDebug() << action.name;
-                        sequence_end();
-                        break;
+                        if (combo_keys_.size() == sc.combo_keys.size()) combo_match_ = true;
+                        if (combo_match_ && sc.sequence_keys.size() == 0) return exec(sc);
+
+
+                        //log << " COMBO ";
+                        //log << " PMATCH " << combo_partial_match;
+                        //log <<  " COMBO_MATCH " << combo_match_;
+
+                        // sequences partial match
+                        sequence_partial_match = sequence_keys_.size() <= sc.sequence_keys.size()
+                                                 && std::equal(sequence_keys_.begin(), sequence_keys_.end(), sc.sequence_keys.begin());
+                        if (sequence_partial_match)
+                        {
+                            if (sequence_keys_.size() == sc.sequence_keys.size()) sequence_match_ = true;
+                            log << " SEQ ";
+                            log << " PMATCH " << sequence_partial_match;
+                            log <<  " MATCH " << sequence_match_;
+                        }
                     }
-                }
-                view_->event_change(input_);
+
+
+
+
+                    // full match
+                    if (combo_match_ && sequence_match_)
+                    {
+                        qDebug() << "exec : " << sc.name;
+                        untrigger();
+                    }
+                    else if (combo_partial_match || sequence_partial_match)
+                    {
+                        shortcut_match.push_back(sc);
+                    }
+                    //else untrigger();
+                } // for
+
+
             }
+            Qt::Key key = static_cast<Qt::Key>(event->key());
+
 
             if (event->type() == QEvent::KeyRelease)
             {
-                if (key == untrigger_key_) sequence_end();
+                combo_keys_.erase( std::remove( combo_keys_.begin(), combo_keys_.end(), key ), combo_keys_.end() );
+
+                if (combo_keys_.size() == 0 && sequence_keys_.size() == 0) untrigger();
+
+                if (combo_keys_.size() > 0) trigger_mode_ = trigger_mode::sequence;
             }
 
+            view_->event_change(shortcut_match);
 
+
+            qDebug() << "___COMBO";
+            for (auto k : combo_keys_) qDebug() << k;
+
+            qDebug() << "___INPUT";
+            for (auto k : input_) qDebug() << k;
+
+            //qDebug() << log.str().c_str();
         }
 
     private:
-        std::vector<shortcut_item> actions_;
+        std::vector<shortcut_item> shortcuts_;
         shortcut_view* view_;
 
         std::vector<Qt::Key> input_;
 
-        bool trigger_;
+        std::vector<Qt::Key> sequence_keys_;
+        std::vector<Qt::Key> combo_keys_;
+
+        std::unordered_set<Qt::Key> triggers_;
+        bool match_;
+        trigger_mode trigger_mode_;
+        int sequencing_;
         Qt::Key trigger_key_;
-        Qt::Key untrigger_key_;
+        int current_id_;
+        bool combo_match_;
+        bool sequence_match_;
+        bool executed_;
     };
 } // nxw
 

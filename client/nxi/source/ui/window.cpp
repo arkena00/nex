@@ -7,13 +7,15 @@
 #include <QDesktopWidget>
 #include <QIcon>
 #include <ui/login.hpp>
-#include <include/ui/core.hpp>
+#include <ui/core.hpp>
+#include <nxi/window_system.hpp>
 
 
 namespace ui
 {
-    window::window(ui::core& ui_core) :
+    window::window(ui::core& ui_core, ndb::objects::window window_data) :
         ui_core_{ ui_core },
+        window_data_{ std::move(window_data) },
         moving_{ false }
     {
         QIcon icon(":image/nex");
@@ -78,6 +80,14 @@ namespace ui
     void window::mouseReleaseEvent(QMouseEvent* event)
     {
         moving_ = false;
+        // save position
+        window_data_.x = x();
+        window_data_.y = y();
+        /*
+        ndb::set<nxi::db_main>(nxi_model.window, window_data_);
+        ndb::queries::window::save_geometry(x(), y())
+
+        ui_core_.nxi_core().window_system().window(id).position_set(x(), y());*/
     }
 
     void window::mouseMoveEvent(QMouseEvent* event)
@@ -97,11 +107,30 @@ namespace ui
 
     void window::closeEvent(QCloseEvent* event)
     {
+        /*
+        ndb::object_set<nxi::db_main>(window_data);
+        db::query() >> ((nxi_model.window.x = x(), nxi_model.window.y = y()) << (nxi_model.window.id == id()));
+        ndb::object_del<nxi::db_main>(window_data);
+        db::query() - (nxi_model.window.id == id());*/
         deleteLater();
+    }
+
+    int64_t window::id() const
+    {
+        return window_data_.id;
     }
 
     nxi::core& window::nxi_core()
     {
         return ui_core_.nxi_core();
+    }
+
+    ui::window* window::make(ui::core& ui_core, const nxi::window& window_data)
+    {
+        auto ui_window = new ui::window(ui_core, window_data);
+        ui_window->load<ui::main>();
+        ui_window->move(window_data.x, window_data.y);
+        ui_window->show();
+        return ui_window;
     }
 } // ui

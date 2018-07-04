@@ -44,25 +44,47 @@ namespace nxw
 
     void shortcut_view::add(shortcut_item item)
     {
-        view_->addItem(item.name);
+        view_->addItem(to_string(item) + " | " + item.name);
     }
 
-    void shortcut_view::event_change(std::vector<Qt::Key> keys)
+    void shortcut_view::event_change(std::vector<shortcut_item> shortcuts)
     {
         QString name;
+        view_->clear();
 
-        for (auto key : keys)
+        for (auto shortcut : shortcuts)
         {
-            switch(key)
-            {
-                case Qt::Key_Control: name += "CTRL"; break;
-                case Qt::Key_Shift: name += "SHIFT"; break;
-                case Qt::Key_Alt: name += "ALT"; break;
-                default:
-                    name += QKeySequence(key).toString();
-            }
+            add(shortcut);
         }
 
         label_->setText(name);
+    }
+
+    QString shortcut_view::to_string(Qt::Key key)
+    {
+        QString name;
+        switch(key)
+        {
+            case Qt::Key_Control: name += "CTRL"; break;
+            case Qt::Key_Shift: name += "SHIFT"; break;
+            case Qt::Key_Alt: name += "ALT"; break;
+            default:
+                name += QKeySequence(key).toString();
+        }
+        return name;
+    }
+
+    QString shortcut_view::to_string(shortcut_item item)
+    {
+        QString sc_str;
+        for (auto k : item.combo_keys)
+        {
+            sc_str += "+" + to_string(k);
+        }
+        for (auto k : item.sequence_keys)
+        {
+            sc_str += ">" + to_string(k);
+        }
+        return sc_str;
     }
 } // nxw

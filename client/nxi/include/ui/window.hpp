@@ -1,7 +1,8 @@
 #ifndef UI_WINDOW_H_NXI
 #define UI_WINDOW_H_NXI
 
-namespace nxi { class core; }
+namespace ndb::objects { struct window; };
+namespace nxi { class core;  }
 namespace nxw { class vbox_layout; }
 
 #include <QLayout>
@@ -11,6 +12,7 @@ namespace nxw { class vbox_layout; }
 #include <utility>
 
 #include <nxw/vbox_layout.hpp>
+#include <include/nxi/window_system.hpp>
 
 namespace ui
 {
@@ -21,7 +23,7 @@ namespace ui
     {
         Q_OBJECT
     public:
-        window(ui::core& ui_core);
+        window(ui::core& ui_core, ndb::objects::window window_data);
         ~window();
 
         void main_swap(QWidget* new_main, QLayout* origin_layout_);
@@ -41,10 +43,14 @@ namespace ui
 
         void closeEvent(QCloseEvent* event) override;
 
+        int64_t id() const;
         nxi::core& nxi_core();
+
+        static ui::window* make(ui::core& ui_core, const ndb::objects::window& window);
 
     private:
         ui::core& ui_core_;
+        nxi::window window_data_;
 
         QWidget* main_;
 

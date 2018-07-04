@@ -15,7 +15,7 @@ namespace ui::render
     public:
         enum { engine_web, engine_gl };
 
-        engine(QWidget* parent = nullptr) : QWidget(parent) {}
+        engine(QWidget* parent) : QWidget(parent) {}
 
         virtual void load(render::page*) = 0;
         virtual void load(const QString&) = 0;

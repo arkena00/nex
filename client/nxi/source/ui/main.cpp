@@ -4,6 +4,8 @@
 #include <ui/tabtree.hpp>
 #include <ui/window.hpp>
 
+#include <nxi/window_system.hpp>
+
 #include <nxw/tabbar.hpp>
 #include <nxw/hbox_layout.hpp>
 #include <nxw/shortcut.hpp>
@@ -48,6 +50,10 @@ namespace ui
         menu_button_->setIconSize(QSize(16, 16));
         menu_button_->setCheckable(1);
 
+        QObject::connect(menu_button_, &QPushButton::clicked, [this]()
+        {
+        });
+
         // engine
         engine_web_ = new ui::render::web(this);
         engine_web_->hide();
@@ -59,7 +65,7 @@ namespace ui
         // tabwidget
         tabbar_ = new nxw::tabbar(this);
         tabtree_ = new ui::tabtree(this);
-        tabwidget_ = new nxw::tabwidget(this, nxi_core_.tabsystem());
+        tabwidget_ = new nxw::tabwidget(this, nxi_core_.tab_system());
         tabwidget_->tabchanger_add(tabbar_);
         tabwidget_->tabchanger_add(tabtree_);
         // tabdata
@@ -74,7 +80,7 @@ namespace ui
         tab_new->setIcon(QIcon(":/image/tab_new"));
         tab_new->setIconSize(QSize(16, 16));
 
-        connect(tab_new, &QPushButton::clicked, [this](){ nxi_core_.tabsystem().on_add(tabwidget_); });
+        connect(tab_new, &QPushButton::clicked, [this](){ nxi_core_.tab_system().on_add(tabwidget_); });
 
         // fill layouts
         top_layout->addWidget(menu_button_);
@@ -83,6 +89,8 @@ namespace ui
         top_layout->addStretch(1);
         middle_layout->addLayout(left_layout_);
         middle_layout->addLayout(right_layout_);
+
+
 
 
         left_layout_->addWidget(tabtree_->widget());
@@ -102,7 +110,16 @@ namespace ui
         sc = new QShortcut(QKeySequence("ctrl+T"), this);
         connect(sc, &QShortcut::activated, [this]()
         {
-            nxi_core_.tabsystem().on_add(tabwidget_);
+            nxi_core_.tab_system().on_add(tabwidget_);
+        });
+        sc = new QShortcut(QKeySequence("ctrl+N"), this);
+        connect(sc, &QShortcut::activated, [this]()
+        {
+            nxi::window w;
+            w.x = 500;
+            w.y = 500;
+
+            nxi_core_.window_system().add(w);
         });
         /*
         sc = new QShortcut(QKeySequence("F1"), this);

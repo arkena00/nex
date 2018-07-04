@@ -6,8 +6,6 @@
 #include <nxi/tab_system.hpp>
 #include <nxi/window_system.hpp>
 
-#include <QWidget>
-
 namespace nxi
 {
     class core

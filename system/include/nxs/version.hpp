@@ -4,6 +4,6 @@
 namespace nxs_autoversion
 {
     static const char* version = "0.1";
-	static const char* fullversion = "0.1 - build 20180430134840";
+	static const char* fullversion = "0.1 - build 20180703225851";
 }
 #endif // CORE_VERSION_H_NXS

@@ -52,6 +52,7 @@ configure_file(
 #-------------------------------------------------------
 #                     DEPENDENCIES
 #-------------------------------------------------------
+set(NDB_ENGINE_SQLITE ON)
 add_subdirectory(${THIRD_PARTY_ROOT}/ndb ${THIRD_PARTY_ROOT}/ndb/cmake-build)
 
 target_link_libraries(lib_nxs INTERFACE lib_ndb)

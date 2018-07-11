@@ -1,30 +1,32 @@
 #include <nxi/core.hpp>
 
+#include <nxi/database/ui.hpp>
+
 namespace nxi
 {
     core::core() :
-        client_thread_{ &nxs::network::client::run, &client_ }
+        m_client_thread{ &nxs::network::client::run, &m_client }
     {
         try
         {
-            //ndb::connect<db_main>();
+            ndb::connect<dbs::ui>();
         }
         catch (const std::exception& e)
         {
-            client_.stop();
-            client_thread_.join();
+            m_client.stop();
+            m_client_thread.join();
             throw;
         }
     }
 
     core::~core()
     {
-        client_.stop();
-        client_thread_.join();
+        m_client.stop();
+        m_client_thread.join();
     }
 
     nxi::window_system& core::window_system()
     {
-        return window_system_;
+        return m_window_system;
     }
 } // nxi

@@ -16,12 +16,12 @@ namespace ui
         core(const core&) = delete;
         core& operator=(const core&) = delete;
 
-        nxi::core& nxi_core() { return nxi_core_; }
+        nxi::core& nxi_core();
 
     private:
-        nxi::core& nxi_core_;
+        nxi::core& m_nxi_core;
 
-        QSystemTrayIcon* systray_;
+        QSystemTrayIcon* m_systray;
     };
 } // ui
 

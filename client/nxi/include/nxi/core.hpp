@@ -18,11 +18,11 @@ namespace nxi
         nxi::window_system& window_system();
 
     private:
-        ndb::initializer<ndb::sqlite> ndb_init_;
-        nxs::network::client client_;
-        std::thread client_thread_;
+        ndb::initializer<ndb::sqlite> m_ndb_init;
+        nxs::network::client m_client;
+        std::thread m_client_thread;
 
-        nxi::window_system window_system_;
+        nxi::window_system m_window_system;
     };
 } // nxi
 

@@ -1,5 +1,7 @@
-#ifndef NXI_WINDOWSYSTEM_H_NXI
-#define NXI_WINDOWSYSTEM_H_NXI
+#ifndef NXI_WINDOW_SYSTEM_H_NXI
+#define NXI_WINDOW_SYSTEM_H_NXI
+
+#include <ui/window.hpp>
 
 #include <QObject>
 
@@ -9,27 +11,16 @@ namespace nxi
     {
         Q_OBJECT
     public:
-        void add()
-        {
+        void add(nxi::window);
 
-        }
-
-        void load()
-        {
-
-        }
-
-        void change()
-        {
-
-        }
+        void position_set(ui::window*, int x, int y);
 
     signals:
-
+        void event_add(nxi::window&);
 
     private:
-
+        QVector<nxi::window> m_windows;
     };
 } // nxi
 
-#endif // NXI_WINDOWSYSTEM_H_NXI
+#endif // NXI_WINDOW_SYSTEM_H_NXI

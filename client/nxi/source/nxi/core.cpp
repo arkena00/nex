@@ -1,9 +1,5 @@
 #include <nxi/core.hpp>
 
-#include <nxi/database.hpp>
-
-#include <nxs/network/client.hpp>
-
 namespace nxi
 {
     core::core() :
@@ -11,7 +7,7 @@ namespace nxi
     {
         try
         {
-            ndb::connect<db_main>();
+            //ndb::connect<db_main>();
         }
         catch (const std::exception& e)
         {
@@ -27,18 +23,8 @@ namespace nxi
         client_thread_.join();
     }
 
-    nxs::network::client& core::client()
-    {
-        return client_;
-    }
-
     nxi::window_system& core::window_system()
     {
         return window_system_;
-    }
-
-    nxi::tab_system& core::tab_system()
-    {
-        return tab_system_;
     }
 } // nxi

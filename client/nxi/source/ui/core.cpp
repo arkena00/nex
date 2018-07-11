@@ -1,10 +1,6 @@
 #include <ui/core.hpp>
 
-#include <ui/main.hpp>
-#include <ui/login.hpp>
-
 #include <nxi/core.hpp>
-#include <nxi/window_system.hpp>
 
 #include <QApplication>
 #include <QFile>
@@ -33,16 +29,6 @@ namespace ui
         systray_ = new QSystemTrayIcon;
         systray_->setIcon(QIcon(":/image/nex"));
         systray_->show();
-
-
-        QObject::connect(&nxi_core_.window_system(), &nxi::window_system::event_add, [this](nxi::window& window)
-        {
-            auto ui_window = new ui::window(*this);
-            ui_window->load<ui::main>();
-            ui_window->move(window.x, window.y);
-            ui_window->show();
-            window.ui = ui_window;
-        });
 
         nxi_core_.window_system().load();
     }

@@ -50,14 +50,3 @@ if (!WIN32)
     add_custom_command(TARGET nxi POST_BUILD
             COMMAND ${QT5_WINDEPLOYQT_EXECUTABLE} --qmldir ${CMAKE_SOURCE_DIR} $<TARGET_FILE_DIR:nxi>)
 endif()
-
-########################################################
-###################   VS Filters  ######################
-########################################################
-
-foreach(_source IN ITEMS ${SOURCE_LIST})
-    get_filename_component(_source_path "${_source}" PATH)
-    file(RELATIVE_PATH _source_path_rel "${CMAKE_SOURCE_DIR}" "${_source_path}")
-    string(REPLACE "/" "\\" _group_path "${_source_path_rel}")
-    source_group("${_group_path}" FILES "${_source}")
-endforeach()

@@ -32,3 +32,5 @@
 *.cbp
 *.layout
 *.depend
+/client/nxi/vs2017
+/system/cmake/release

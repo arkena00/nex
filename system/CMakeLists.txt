@@ -42,7 +42,7 @@ endif()
 #-------------------------------------------------------
 set(NXS_VERSION_MAJOR 0)
 set(NXS_VERSION_MINOR 1)
-string(TIMESTAMP NXS_VERSION_BUILD %Y%m%d%H%M%S UTC)
+set(NXS_VERSION_BUILD 1)
 
 configure_file(
         "${NXS_ROOT}/include/nxs/version.hpp.in"

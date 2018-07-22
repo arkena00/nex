@@ -184,7 +184,7 @@ namespace nxs{namespace network
     }
 
     template<io::type IO_Type>
-    constexpr io::type basic_connexion<IO_Type>::iotype() const
+    io::type basic_connexion<IO_Type>::iotype() const
     {
         return IO_Type;
     }

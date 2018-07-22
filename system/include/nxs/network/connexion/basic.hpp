@@ -53,7 +53,7 @@ namespace nxs{namespace network
         void on_close(std::function<void(const network::error_code&)>) override;
 
         size_t id() const override;
-        constexpr io::type iotype() const;
+        io::type iotype() const;
         bool is_alive() const override;
         network::protocol& protocol() override;
         buffer_type& buffer() override;

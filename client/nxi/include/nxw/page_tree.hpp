@@ -13,13 +13,15 @@ namespace nxi
     public:
         void add(nxi::window);
 
-        void position_set(ui::window*, int x, int y);
+        void position_set(unsigned int m_id, int x, int y);
 
     signals:
-        void event_add(nxi::window&);
+        void event_add(const nxi::window&);
+        void event_position_update(int x, int y);
 
     private:
-        QVector<nxi::window> m_windows;
+        QHash<unsigned int, ui::window*> m_windows;
+        unsigned int m_current;
     };
 } // nxi
 

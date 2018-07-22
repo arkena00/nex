@@ -3,8 +3,6 @@
 #include <nxi/core.hpp>
 #include <nxi/database/ui.hpp>
 #include <nxi/system/window.hpp>
-#include <include/nxi/system/window.hpp>
-
 
 namespace nxi
 {

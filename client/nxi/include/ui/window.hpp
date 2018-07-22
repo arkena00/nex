@@ -1,41 +1,43 @@
 #ifndef UI_WINDOW_H_NXI
 #define UI_WINDOW_H_NXI
 
-namespace ndb::objects { struct window; };
-namespace nxi { class core; class window_system; }
+#include <nxi/window.hpp>
 
 #include <QWidget>
 
-namespace nxi
-{
-    using window = ndb::objects::window;
-} // nxi
+class QHBoxLayout;
 
 namespace ui
 {
     class core;
-    class main;
+    class window_system;
+    class interface;
 
     class window : public QWidget
     {
     Q_OBJECT
     public:
-        window(ui::core& ui_core);
+        window(ui::core& ui_core, unsigned int m_id);
         ~window();
-
-        nxi::window_system& window_system();
 
         void mousePressEvent(QMouseEvent* event) override;
         void mouseReleaseEvent(QMouseEvent* event) override;
         void mouseMoveEvent(QMouseEvent* event) override;
         void mouseDoubleClickEvent(QMouseEvent* event) override;
-
         void closeEvent(QCloseEvent* event) override;
 
-        static ui::window* make(ui::core& ui_core, const ndb::objects::window& window);
+        void interface_set(ui::interface* interface);
+
+        unsigned int id() const;
+        ui::window_system& window_system();
 
     private:
         ui::core& m_ui_core;
+        unsigned int m_id;
+
+        QHBoxLayout* m_layout;
+
+        ui::interface* m_interface;
 
         bool m_moving;
         QPoint m_move_origin;

@@ -1,23 +1,35 @@
 #include <ui/window.hpp>
 
 #include <ui/core.hpp>
+#include <ui/interface.hpp>
+#include <ui/system/window.hpp>
 
 #include <nxi/core.hpp>
 #include <nxi/database/ui.hpp>
-#include <nxi/window_system.hpp>
 
 #include <QIcon>
 #include <QMouseEvent>
+#include <QtWidgets/qboxlayout.h>
+
+#include <QHBoxLayout>
+#include <ui/interface/main.hpp>
+#include <include/ui/interface/home.hpp>
+#include <include/ui/window.hpp>
+
 
 namespace ui
 {
-    window::window(ui::core& ui_core) :
-        m_ui_core{ ui_core },
-        m_moving{ false }
+    window::window(ui::core& ui_core, unsigned int id) :
+        m_ui_core{ ui_core }
+        , m_id{ id }
+        , m_moving{ false }
     {
         QIcon icon(":image/nex");
         setWindowIcon(icon);
         setWindowFlags(Qt::CustomizeWindowHint);
+
+        m_layout = new QHBoxLayout;
+        setLayout(m_layout);
     }
 
     window::~window()
@@ -36,7 +48,8 @@ namespace ui
     void window::mouseReleaseEvent(QMouseEvent* event)
     {
         m_moving = false;
-        window_system().position_set(this, x(), y());
+        window_system().move(this, x(), y());
+        window_system().resize(this, width(), height());
     }
 
     void window::mouseMoveEvent(QMouseEvent* event)
@@ -56,19 +69,22 @@ namespace ui
 
     void window::closeEvent(QCloseEvent* event)
     {
-        deleteLater();
+        window_system().close(this);
     }
 
-    ui::window* window::make(ui::core& ui_core, const nxi::window& window_data)
+    void window::interface_set(ui::interface* interface)
     {
-        auto ui_window = new ui::window(ui_core);
-        ui_window->move(window_data.x, window_data.y);
-        ui_window->show();
-        return ui_window;
+        m_interface = interface;
+        m_layout->addWidget(m_interface);
     }
 
-    nxi::window_system& window::window_system()
+    unsigned int window::id() const
     {
-        return m_ui_core.nxi_core().window_system();
+        return m_id;
+    }
+
+    ui::window_system& window::window_system()
+    {
+        return m_ui_core.window_system();
     }
 } // ui

@@ -8,13 +8,21 @@
 #include <QSystemTrayIcon>
 #include <QtWebEngine>
 
+#include <ui/interface/home.hpp>
+#include <ui/interface/page_bar.hpp>
+#include <include/nxw/web_view.hpp>
+#include <include/nxw/tree.hpp>
+#include <include/ui/core.hpp>
+
+
 namespace ui
 {
     core::core(QApplication& app, nxi::core& nxi_core) :
         m_nxi_core{ nxi_core }
+        , m_window_system{ *this }
     {
         QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-        // init webengine
+
         QtWebEngine::initialize();
 
         // load qss
@@ -27,24 +35,20 @@ namespace ui
         m_systray = new QSystemTrayIcon;
         m_systray->setIcon(QIcon(":/image/nex"));
         m_systray->show();
-
-
-        QObject::connect(&m_nxi_core.window_system(), &nxi::window_system::event_add, [this](nxi::window& window)
-        {
-            ui::window::make(*this, window);
-        });
-
-        nxi::window win;
-        win.x = 200;
-        win.y = 200;
-        m_nxi_core.window_system().add(std::move(win));
     }
 
-    core::~core()
-    {}
+    void core::quit() const
+    {
+        QApplication::quit();
+    }
 
     nxi::core& core::nxi_core()
     {
         return m_nxi_core;
+    }
+
+    ui::window_system& core::window_system()
+    {
+        return m_window_system;
     }
 } // ui

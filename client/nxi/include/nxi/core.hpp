@@ -3,7 +3,8 @@
 
 #include <nxs/network/client.hpp>
 
-#include <nxi/window_system.hpp>
+#include <nxi/system/window.hpp>
+#include <nxi/system/page.hpp>
 
 namespace nxi
 {
@@ -16,6 +17,7 @@ namespace nxi
         void operator=(const core&) = delete;
 
         nxi::window_system& window_system();
+        nxi::page_system& page_system();
 
     private:
         ndb::initializer<ndb::sqlite> m_ndb_init;
@@ -23,6 +25,7 @@ namespace nxi
         std::thread m_client_thread;
 
         nxi::window_system m_window_system;
+        nxi::page_system m_page_system;
     };
 } // nxi
 

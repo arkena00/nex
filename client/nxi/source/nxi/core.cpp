@@ -6,10 +6,13 @@ namespace nxi
 {
     core::core() :
         m_client_thread{ &nxs::network::client::run, &m_client }
+		, m_window_system{ *this }
     {
         try
         {
             ndb::connect<dbs::ui>();
+
+            m_window_system.load();
         }
         catch (const std::exception& e)
         {
@@ -28,5 +31,10 @@ namespace nxi
     nxi::window_system& core::window_system()
     {
         return m_window_system;
+    }
+
+    nxi::page_system& core::page_system()
+    {
+        return m_page_system;
     }
 } // nxi

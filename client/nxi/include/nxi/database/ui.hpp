@@ -5,11 +5,12 @@
 
 #include <ndb/preprocessor.hpp>
 
-ndb_table(window,
-          ndb_field_id,
-          ndb_field(x, int),
-          ndb_field(y, int)
-)
+#include <ndb/query.hpp>
+#include <ndb/expression.hpp>
+
+
+#include <nxi/database/window.hpp>
+
 
 ndb_model(nxi_model,
           window

@@ -12,8 +12,12 @@ int main(int argc, char* argv[])
 
     try
     {
+        // init
         nxi::core nxi_core;
         ui::core ui_core(app, nxi_core);
+
+        // load ui
+        ui_core.load();
 
         status = QApplication::exec();
     }

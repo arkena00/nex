@@ -11,10 +11,15 @@ class QTreeWidget;
 
 namespace nxw
 {
-    class tree_entity : public QTreeWidgetItem
+    class tree_item : public QTreeWidgetItem
     {
     public:
-        tree_entity(tree_entity* parent = nullptr);
+        tree_item(int id, tree_item* parent = nullptr);
+
+        int id() const {return id_;}
+
+    private:
+        int id_;
     };
 
 
@@ -24,12 +29,9 @@ namespace nxw
     public:
         tree::tree(ui::core& ui_core);
 
-        void content_interface_set(ui::interface*);
-
         ui::core& m_ui_core;
         QTreeWidget* m_tree;
 
-        ui::interface* m_content_interface;
     };
 } // nxw
 

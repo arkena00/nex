@@ -2,6 +2,7 @@
 
 #include <nxi/core.hpp>
 #include <nxi/database/ui.hpp>
+#include <nxi/log.hpp>
 #include <nxi/system/window.hpp>
 
 namespace nxi
@@ -12,6 +13,8 @@ namespace nxi
 
     void window_system::load()
     {
+        nxi_log << "load window_system";
+
         // load stored windows
         auto res = ndb::query<dbs::ui>() << (
         ndb::get(nxi_model.window.id, nxi_model.window.x, nxi_model.window.y, nxi_model.window.w, nxi_model.window.h)
@@ -37,6 +40,9 @@ namespace nxi
         , nxi_model.window.w = win.w
         , nxi_model.window.h = win.h
         );
+
+
+
         emit event_add(std::move(win));
     }
 

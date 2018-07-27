@@ -34,21 +34,7 @@ namespace ui
                 tabbar_->addTab("test");
                 tabbar_->addTab("test2");
 
-                auto btn = new QPushButton(this);
-                connect(btn, &QPushButton::clicked, this, [this]()
-                {
-                    m_ui_core.nxi_core().page_system().add(m_interface);
-                });
 
-                connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [this]()
-                {
-                    tabbar_->addTab("page_added");
-                });
-
-                connect(tabbar_, &QTabBar::tabBarClicked, this, [this](int index)
-                {
-                    m_ui_core.nxi_core().page_system().change(this, index);
-                });
             }
 
             QTabBar* tabbar_;

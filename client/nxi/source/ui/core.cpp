@@ -2,6 +2,7 @@
 
 #include <nxi/core.hpp>
 #include <nxi/database/ui.hpp>
+#include <nxi/log.hpp>
 
 #include <QApplication>
 #include <QFile>
@@ -10,31 +11,39 @@
 
 #include <ui/interface/home.hpp>
 #include <ui/interface/page_bar.hpp>
-#include <include/nxw/web_view.hpp>
-#include <include/nxw/tree.hpp>
-#include <include/ui/core.hpp>
-
 
 namespace ui
 {
     core::core(QApplication& app, nxi::core& nxi_core) :
-        m_nxi_core{ nxi_core }
+        m_app{ app }
+        , m_nxi_core{ nxi_core }
         , m_window_system{ *this }
+        , m_page_system{ *this }
     {
+        nxi_log << "init ui::core";
+
         QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
         QtWebEngine::initialize();
+    }
+
+    void core::load()
+    {
+        nxi_log << "load ui";
 
         // load qss
         QFile qss_file(":/style.qss");
         qss_file.open(QFile::ReadOnly);
         QString qss = QLatin1String(qss_file.readAll());
-        app.setStyleSheet(qss);
+        m_app.setStyleSheet(qss);
 
         // systray
         m_systray = new QSystemTrayIcon;
         m_systray->setIcon(QIcon(":/image/nex"));
         m_systray->show();
+
+        m_window_system.load();
+        m_page_system.load();
     }
 
     void core::quit() const
@@ -50,5 +59,10 @@ namespace ui
     ui::window_system& core::window_system()
     {
         return m_window_system;
+    }
+
+    ui::page_system& core::page_system()
+    {
+        return m_page_system;
     }
 } // ui

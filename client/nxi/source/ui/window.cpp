@@ -32,9 +32,7 @@ namespace ui
         setLayout(m_layout);
     }
 
-    window::~window()
-    {
-    }
+    window::~window(){ qDebug() << "DELETE win"; }
 
     void window::mousePressEvent(QMouseEvent* event)
     {
@@ -70,11 +68,13 @@ namespace ui
     void window::closeEvent(QCloseEvent* event)
     {
         window_system().close(this);
+        deleteLater();
     }
 
     void window::interface_set(ui::interface* interface)
     {
         m_interface = interface;
+        m_interface->setParent(this);
         m_layout->addWidget(m_interface);
     }
 

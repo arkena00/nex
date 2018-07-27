@@ -2,7 +2,12 @@
 #define UI_INTERFACE_MAIN_H_NXI
 
 #include <ui/interface.hpp>
-#include <include/nxw/tree.hpp>
+
+namespace nxw
+{
+    class tree;
+    class web_view;
+} // nxw
 
 namespace ui::interfaces
 {
@@ -13,7 +18,7 @@ namespace ui::interfaces
         main(ui::core&);
 
         nxw::tree* m_tree;
-
+        nxw::web_view* m_web;
     };
 } // ui::interfaces
 

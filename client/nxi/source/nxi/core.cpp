@@ -1,6 +1,7 @@
 #include <nxi/core.hpp>
 
 #include <nxi/database/ui.hpp>
+#include <nxi/log.hpp>
 
 namespace nxi
 {
@@ -8,11 +9,13 @@ namespace nxi
         m_client_thread{ &nxs::network::client::run, &m_client }
 		, m_window_system{ *this }
     {
+        nxi_log << "init core";
         try
         {
             ndb::connect<dbs::ui>();
 
             m_window_system.load();
+            m_page_system.load();
         }
         catch (const std::exception& e)
         {

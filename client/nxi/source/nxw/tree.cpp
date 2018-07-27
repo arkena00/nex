@@ -10,7 +10,7 @@
 
 namespace nxw
 {
-    tree_entity::tree_entity(tree_entity* parent)
+    tree_item::tree_item(int id, tree_item* parent) : id_{id}
     {
 
     }
@@ -27,7 +27,9 @@ namespace nxw
         btn->show();
         connect(btn, &QPushButton::clicked, this, [this]()
         {
-            m_ui_core.nxi_core().page_system().add(m_content_interface);
+            //auto wp = nxi::web_page;
+            m_ui_core.nxi_core().page_system().add({});
+            //m_ui_core.interface_system().load(web_page);
         });
         layout->addWidget(btn);
 
@@ -51,25 +53,20 @@ namespace nxw
         connect(m_tree, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int)
         {
             QModelIndex index = item->treeWidget()->currentIndex();
-            m_ui_core.nxi_core().page_system().change(m_content_interface, index.row());
-            //ui_core_.nxi_core().page_system().change()
-            //emit tabchanger::event_change(index.row());
+            auto item_id = static_cast<tree_item*>(item)->id();
+            m_ui_core.page_system().change(item_id);
         });
 
-        auto e = new tree_entity;
+        auto e = new tree_item(0);
         e->setText(0, "Web");
         m_tree->addTopLevelItem(e);
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [this]()
+        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [this](nxi::web_page page)
         {
-            auto e = new tree_entity;
+            auto e = new tree_item(page.id);
             e->setText(0, "test");
             m_tree->addTopLevelItem(e);
         });
     }
 
-    void tree::content_interface_set(ui::interface* ui)
-    {
-        m_content_interface = ui;
-    }
 } // nxw

@@ -7,25 +7,40 @@
 
 namespace nxi
 {
+    struct web_page
+    {
+        int id;
+        std::string url;
+        web_page() : id{0}, url{"http://www.google.fr"} {}
+    };
+
     class page_system : public QObject
     {
         Q_OBJECT
     public:
-        void add(ui::interface* ui)
+        void load()
         {
-            emit event_add(ui);
+
         }
 
-        void change(ui::interface* interface, int index)
+        void add(nxi::web_page page)
         {
-            emit event_change(interface, index);
+            page.id = page_.size();
+            page_.push_back(std::move(page));
+            emit event_add(page_.back());
+        }
+
+        void change(int index)
+        {
+            emit event_change(page_.at(index));
         }
 
         signals:
-        void event_add(ui::interface* source);
-        void event_change(ui::interface* source, int index);
+        void event_add(nxi::web_page&);
+        void event_change(nxi::web_page&);
 
-        //QHash<ui::interface*, int> page_index_;
+    private:
+        std::vector<nxi::web_page> page_;
     };
 } // nxi
 

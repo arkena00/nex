@@ -1,25 +1,30 @@
 #include <ui/system/window.hpp>
 
 #include <nxi/core.hpp>
+#include <nxi/log.hpp>
 
 #include <ui/core.hpp>
-
 #include <ui/interface/main.hpp>
-#include <include/ui/system/window.hpp>
+#include <ui/system/window.hpp>
 
 
 namespace ui
 {
 	window_system::window_system(ui::core& ui_core) :
 		m_ui_core{ ui_core }
-	{
-        QObject::connect(&ui_core.nxi_core().window_system(), &nxi::window_system::event_add, [this](const nxi::window& window)
+	{}
+
+	void window_system::load()
+    {
+	    nxi_log << "ui - load windows";
+
+        QObject::connect(&m_ui_core.nxi_core().window_system(), &nxi::window_system::event_add, [this](const nxi::window& window)
         {
             add(window);
         });
 
         // load stored windows
-        for (auto window : m_ui_core.nxi_core().window_system().get())
+        for (const auto& window : m_ui_core.nxi_core().window_system().get())
         {
             add(window);
         }
@@ -34,9 +39,9 @@ namespace ui
             default_window.h = 400;
             m_ui_core.nxi_core().window_system().add(default_window);
         }
-	}
+    }
 
-    ui::window* window_system::add(nxi::window window)
+    ui::window* window_system::add(const nxi::window& window)
     {
         auto ui_window = new ui::window(m_ui_core, window.id);
         // make defaut interface
@@ -57,7 +62,6 @@ namespace ui
 	    else
         {
             m_ui_core.nxi_core().window_system().del(window->id());
-            window->deleteLater();
         }
         m_windows.erase(std::remove(m_windows.begin(), m_windows.end(), window), m_windows.end());
     }

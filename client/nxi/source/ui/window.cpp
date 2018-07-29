@@ -11,7 +11,7 @@
 #include <QMouseEvent>
 #include <QtWidgets/qboxlayout.h>
 
-#include <QHBoxLayout>
+#include <nxw/hbox_layout.hpp>
 #include <ui/interface/main.hpp>
 #include <include/ui/interface/home.hpp>
 #include <include/ui/window.hpp>
@@ -28,7 +28,7 @@ namespace ui
         setWindowIcon(icon);
         setWindowFlags(Qt::CustomizeWindowHint);
 
-        m_layout = new QHBoxLayout;
+        m_layout = new nxw::hbox_layout;
         setLayout(m_layout);
     }
 

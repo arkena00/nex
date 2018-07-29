@@ -6,7 +6,7 @@
 
 #include <QPushButton>
 
-#include <QVBoxLayout>
+#include <nxw/vbox_layout.hpp>
 
 namespace nxw
 {
@@ -18,7 +18,7 @@ namespace nxw
     tree::tree(ui::core& ui_core) :
         m_ui_core { ui_core }
     {
-        auto layout = new QVBoxLayout;
+        auto layout = new nxw::vbox_layout;
 
         setLayout(layout);
 

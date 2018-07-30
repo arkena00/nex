@@ -7,14 +7,13 @@
 #include <QPushButton>
 
 #include <nxw/vbox_layout.hpp>
+#include <nxw/tree.hpp>
+#include <nxw/tree/page_item.hpp>
+#include <include/nxw/tree.hpp>
+
 
 namespace nxw
 {
-    tree_item::tree_item(int id, tree_item* parent) : id_{id}
-    {
-
-    }
-
     tree::tree(ui::core& ui_core) :
         m_ui_core { ui_core }
     {
@@ -27,23 +26,21 @@ namespace nxw
         btn->show();
         connect(btn, &QPushButton::clicked, this, [this]()
         {
-            //auto wp = nxi::web_page;
             m_ui_core.nxi_core().page_system().add({});
-            //m_ui_core.interface_system().load(web_page);
         });
         layout->addWidget(btn);
 
         m_tree = new QTreeWidget(this);
-        m_tree->setHeaderHidden(1);
+        m_tree->setHeaderHidden(true);
         m_tree->setStyleSheet("border: none;");
-        m_tree->setRootIsDecorated(false);
+        //m_tree->setRootIsDecorated(false);
         m_tree->setContextMenuPolicy(Qt::CustomContextMenu);
         m_tree->setEditTriggers(QAbstractItemView::EditKeyPressed);
         m_tree->setFixedWidth(200);
 
-        m_tree->setDragEnabled(1);
-        m_tree->setAcceptDrops(1);
-        m_tree->setDropIndicatorShown(1);
+        m_tree->setDragEnabled(true);
+        m_tree->setAcceptDrops(true);
+        m_tree->setDropIndicatorShown(true);
         m_tree->setDragDropMode(QAbstractItemView::DragDrop);
         m_tree->setDefaultDropAction(Qt::MoveAction);
 
@@ -52,21 +49,39 @@ namespace nxw
         // on click > tab change
         connect(m_tree, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int)
         {
-            QModelIndex index = item->treeWidget()->currentIndex();
-            auto item_id = static_cast<tree_item*>(item)->id();
-            m_ui_core.page_system().change(item_id);
+            static_cast<tree_item*>(item)->load();
         });
 
-        auto e = new tree_item(0);
-        e->setText(0, "Web");
-        m_tree->addTopLevelItem(e);
+        auto web_root = new nxw::tree_page_item(this, 0);
+        web_root->setIcon(0, QIcon(":/image/nex"));
+        web_root->setText(0, "Web");
+        m_tree->addTopLevelItem(web_root);
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [this](nxi::web_page page)
+        // page added
+        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [web_root, this](nxi::web_page page)
         {
-            auto e = new tree_item(page.id);
-            e->setText(0, "test");
-            m_tree->addTopLevelItem(e);
+            auto page_item = new nxw::tree_page_item(this, page.id);
+            page_item->setText(0, QString::fromStdString(page.url));
+            web_root->addChild(page_item);
+            m_page_items.emplace(page.id, page_item);
+            //m_tree->addTopLevelItem(page_item);
         });
+
+        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_update, this,
+        [this](const nxi::web_page& page)
+        {
+            m_page_items[page.id]->setText(0, QString::fromStdString(page.url));
+        });
+    }
+
+    tree_item *tree::current_item() const
+    {
+        return static_cast<tree_item*>(m_tree->currentItem());
+    }
+
+    ui::core& tree::ui_core() const
+    {
+        return m_ui_core;
     }
 
 } // nxw

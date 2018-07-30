@@ -2,7 +2,6 @@
 #define NXW_WEB_VIEW_H_NXI
 
 #include <ui/interface.hpp>
-#include "web_page.hpp"
 
 class QWebEngineView;
 class QWebEnginePage;
@@ -11,6 +10,8 @@ namespace ui{ class core; }
 
 namespace nxw
 {
+    class web_page;
+
     class web_view : public ui::interface
     {
         Q_OBJECT
@@ -21,7 +22,7 @@ namespace nxw
 
         ui::core& m_ui_core;
 
-        std::vector<nxw::web_page*> m_pages;
+        std::unordered_map<int, nxw::web_page*> m_pages;
     };
 } // nxw
 

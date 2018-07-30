@@ -32,7 +32,7 @@ namespace ui
         setLayout(m_layout);
     }
 
-    window::~window(){ qDebug() << "DELETE win"; }
+    window::~window(){ }
 
     void window::mousePressEvent(QMouseEvent* event)
     {

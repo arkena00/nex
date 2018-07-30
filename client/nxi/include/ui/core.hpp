@@ -26,14 +26,12 @@ namespace ui
 
         nxi::core& nxi_core();
         ui::window_system& window_system();
-        ui::page_system& page_system();
 
     private:
         QApplication& m_app;
         nxi::core& m_nxi_core;
 
         ui::window_system m_window_system;
-        ui::page_system m_page_system;
 
         QSystemTrayIcon* m_systray;
     };

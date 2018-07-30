@@ -5,33 +5,28 @@ namespace ui { class core; }
 
 class QTreeWidget;
 
-#include <QWidget>
 #include <ui/interface.hpp>
-#include <QTreeWidgetItem>
+#include <nxw/tree/page_item.hpp>
 
 namespace nxw
 {
-    class tree_item : public QTreeWidgetItem
-    {
-    public:
-        tree_item(int id, tree_item* parent = nullptr);
-
-        int id() const {return id_;}
-
-    private:
-        int id_;
-    };
-
+    class tree_item;
 
     class tree : public ui::interface
     {
-    Q_OBJECT
+        Q_OBJECT
     public:
         tree::tree(ui::core& ui_core);
 
+        tree_item* current_item() const;
+
+        ui::core& ui_core() const;
+
+    private:
         ui::core& m_ui_core;
         QTreeWidget* m_tree;
 
+        std::unordered_map<int, nxw::tree_page_item*> m_page_items;
     };
 } // nxw
 

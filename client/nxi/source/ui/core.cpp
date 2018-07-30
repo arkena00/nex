@@ -18,7 +18,6 @@ namespace ui
         m_app{ app }
         , m_nxi_core{ nxi_core }
         , m_window_system{ *this }
-        , m_page_system{ *this }
     {
         nxi_log << "init ui::core";
 
@@ -43,7 +42,7 @@ namespace ui
         m_systray->show();
 
         m_window_system.load();
-        m_page_system.load();
+        //m_page_system.load();
     }
 
     void core::quit() const
@@ -61,8 +60,9 @@ namespace ui
         return m_window_system;
     }
 
+    /*
     ui::page_system& core::page_system()
     {
         return m_page_system;
-    }
+    }*/
 } // ui

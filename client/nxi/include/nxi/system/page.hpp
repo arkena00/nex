@@ -7,60 +7,78 @@
 
 namespace nxi
 {
-    struct web_page
+    struct page_node
+    {
+        int id;
+    };
+
+    struct page
+    {
+        int id;
+        std::string name;
+        page() : id{0} {}
+    };
+
+    struct web_page : nxi::page
     {
         int id;
         std::string url;
         web_page() : id{0}, url{"http://www.google.fr"} {}
     };
 
+    struct explorer_page : nxi::page
+    {
+        int id;
+        std::string path;
+        explorer_page() : id{0}, path{"/"} {}
+    };
+
     class page_system : public QObject
     {
         Q_OBJECT
     public:
-        void load()
-        {}
+        void load();
 
-        void load(nxi::web_page page)
+        void load(nxi::web_page page);
+
+        nxi::page& get(int id);
+
+        //void add(nxi::page page);
+
+        template<class T>
+        void add(T page)
         {
-            auto& current_page = page_[m_current_index];
-            current_page.url = page.url;
-            emit event_load(current_page);
+            auto id = static_cast<int>(page_.size());
+            auto p = std::make_unique<T>(std::move(page));
+            page_.emplace(id, std::move(p));
+
+            emit event_add(static_cast<T&>(*page_.at(id)));
+            //change(page.id);
         }
 
-        nxi::web_page& get(int id)
-        {
-            return page_[id];
-        }
+        void change(int id);
 
-        void add(nxi::web_page page)
-        {
-            page.id = static_cast<int>(page_.size());
-            page_[page.id] = (page);
-            emit event_add(page_.at(page.id));
-            change(page.id);
-        }
-
-        void change(int id)
-        {
-            m_current_index = id;
-            emit event_change(page_.at(id));
-        }
-
-        void update(int id)
-        {
-            emit event_update(page_.at(id));
-        }
+        void update(int id);
 
         signals:
+        //void event_add(nxi::page_node);
+
+        void event_add(nxi::page&);
+
         void event_add(nxi::web_page&);
+        void event_add(nxi::explorer_page&);
+
+        void event_change(nxi::page&);
         void event_change(nxi::web_page&);
+
         void event_load(nxi::web_page&);
+
+        void event_update(const nxi::page&);
         void event_update(const nxi::web_page&);
 
     private:
         int m_current_index;
-        std::map<int, nxi::web_page> page_;
+        std::map<int, std::unique_ptr<nxi::page>> page_;
     };
 } // nxi
 

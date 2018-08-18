@@ -18,6 +18,8 @@ namespace nxw
     public:
         web_view(ui::core& ui_core);
 
+        QWebEngineView* native();
+
         QWebEngineView* view_;
 
         ui::core& m_ui_core;

@@ -18,23 +18,25 @@ namespace nxw
 
         setLayout(layout);
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add,
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add),
                 [this](nxi::web_page& page)
                 {
                     qDebug() << "page add " << page.id;
                     auto ui_page = new nxw::web_page(m_ui_core, page.id, this);
-                    m_pages.emplace(page.id, ui_page);
+                    ui_page->load(QString::fromStdString(page.url));
+                    m_pages.emplace(page.id, std::move(ui_page));
+                    view_->setPage(m_pages[page.id]->native());
                 });
 
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_change, this,
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_change), this,
                 [this](nxi::web_page& page)
                 {
                     m_pages[page.id]->load(QString::fromStdString(page.url));
                     view_->setPage(m_pages[page.id]->native());
                 });
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_update, this,
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<const nxi::web_page&>::of(&nxi::page_system::event_update), this,
                  [this](const nxi::web_page& page)
                  {
 
@@ -45,6 +47,11 @@ namespace nxw
 
         //view_->setPage()
 
-        m_ui_core.nxi_core().page_system().add({});
+        m_ui_core.nxi_core().page_system().add(nxi::web_page{});
+    }
+
+    QWebEngineView* web_view::native()
+    {
+        return view_;
     }
 }

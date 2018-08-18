@@ -18,9 +18,13 @@ namespace nxw
     public:
         tree::tree(ui::core& ui_core);
 
+        void add(tree_item*);
+
         tree_item* current_item() const;
 
         ui::core& ui_core() const;
+
+        QTreeWidget* native() { return m_tree; }
 
     private:
         ui::core& m_ui_core;

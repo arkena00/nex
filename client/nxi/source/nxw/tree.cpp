@@ -11,7 +11,7 @@
 #include <nxw/tree/page_item.hpp>
 #include <include/nxw/tree.hpp>
 
-
+#include <QDebug>
 namespace nxw
 {
     tree::tree(ui::core& ui_core) :
@@ -22,13 +22,20 @@ namespace nxw
         setLayout(layout);
 
         auto btn = new QPushButton(this);
-        btn->setText("add");
-        btn->show();
+        btn->setText("add web_page");
         connect(btn, &QPushButton::clicked, this, [this]()
         {
-            m_ui_core.nxi_core().page_system().add({});
+            m_ui_core.nxi_core().page_system().add(nxi::web_page{});
         });
         layout->addWidget(btn);
+
+        auto btn_e = new QPushButton(this);
+        btn_e->setText("add explorer_page");
+        connect(btn_e, &QPushButton::clicked, this, [this]()
+        {
+            m_ui_core.nxi_core().page_system().add(nxi::explorer_page{});
+        });
+        layout->addWidget(btn_e);
 
         m_tree = new QTreeWidget(this);
         m_tree->setHeaderHidden(true);
@@ -36,7 +43,7 @@ namespace nxw
         //m_tree->setRootIsDecorated(false);
         m_tree->setContextMenuPolicy(Qt::CustomContextMenu);
         m_tree->setEditTriggers(QAbstractItemView::EditKeyPressed);
-        m_tree->setFixedWidth(200);
+        setFixedWidth(200);
 
         m_tree->setDragEnabled(true);
         m_tree->setAcceptDrops(true);
@@ -52,26 +59,33 @@ namespace nxw
             static_cast<tree_item*>(item)->load();
         });
 
-        auto web_root = new nxw::tree_page_item(this, 0);
-        web_root->setIcon(0, QIcon(":/image/nex"));
-        web_root->setText(0, "Web");
-        m_tree->addTopLevelItem(web_root);
-
         // page added
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_add, this, [web_root, this](nxi::web_page page)
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add), this, [this](nxi::web_page& page)
         {
             auto page_item = new nxw::tree_page_item(this, page.id);
             page_item->setText(0, QString::fromStdString(page.url));
-            web_root->addChild(page_item);
             m_page_items.emplace(page.id, page_item);
-            //m_tree->addTopLevelItem(page_item);
+            add(page_item);
         });
 
-        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_update, this,
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::explorer_page&>::of(&nxi::page_system::event_add), this, [this](nxi::explorer_page& page)
+        {
+            auto page_item = new nxw::tree_page_item(this, page.id);
+            page_item->setText(0, QString::fromStdString(page.path));
+            m_page_items.emplace(page.id, page_item);
+            add(page_item);
+        });
+
+        connect(&m_ui_core.nxi_core().page_system(), QOverload<const nxi::web_page&>::of(&nxi::page_system::event_update), this,
         [this](const nxi::web_page& page)
         {
-            m_page_items[page.id]->setText(0, QString::fromStdString(page.url));
+            //m_page_items[page.id]->setText(0, QString::fromStdString(page.url));
         });
+    }
+
+    void tree::add(tree_item* item)
+    {
+        m_tree->addTopLevelItem(item);
     }
 
     tree_item *tree::current_item() const
@@ -83,5 +97,4 @@ namespace nxw
     {
         return m_ui_core;
     }
-
 } // nxw

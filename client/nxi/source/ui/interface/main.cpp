@@ -26,7 +26,7 @@ namespace ui::interfaces
 
         auto middle_layout = new nxw::hbox_layout(this);
         middle_layout->addWidget(m_tree);
-        middle_layout->addWidget(m_web);
+        middle_layout->addWidget((QWidget*)m_web->native());
 
         main_layout->addLayout(top_layout);
         main_layout->addLayout(middle_layout);

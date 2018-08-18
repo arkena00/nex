@@ -22,6 +22,7 @@ namespace ui
         nxi_log << "init ui::core";
 
         QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+		qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
         QtWebEngine::initialize();
     }

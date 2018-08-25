@@ -18,6 +18,7 @@ namespace nxw
 
         setLayout(layout);
 
+        // page_system add
         connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add),
                 [this](nxi::web_page& page)
                 {
@@ -29,6 +30,7 @@ namespace nxw
                 });
 
 
+        // page_system change
         connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_change), this,
                 [this](nxi::web_page& page)
                 {
@@ -36,6 +38,7 @@ namespace nxw
                     view_->setPage(m_pages[page.id]->native());
                 });
 
+        // page_system update
         connect(&m_ui_core.nxi_core().page_system(), QOverload<const nxi::web_page&>::of(&nxi::page_system::event_update), this,
                  [this](const nxi::web_page& page)
                  {

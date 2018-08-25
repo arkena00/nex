@@ -62,6 +62,7 @@ namespace nxw
         // page added
         connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add), this, [this](nxi::web_page& page)
         {
+
             auto page_item = new nxw::tree_page_item(this, page.id);
             page_item->setText(0, QString::fromStdString(page.url));
             m_page_items.emplace(page.id, page_item);

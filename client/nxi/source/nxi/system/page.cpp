@@ -46,9 +46,8 @@ namespace nxi
 
     void page_system::change(int id)
     {
-        /*
         m_current_index = id;
-        emit event_change(page_.at(id));*/
+        emit event_change(get(id));
     }
 
     void page_system::update(int id)

@@ -4,9 +4,12 @@
 #include <ui/window.hpp>
 
 #include <QObject>
+#include <QDebug>
 
 namespace nxi
 {
+    enum class page_type { web, explorer, node };
+
     struct page_node
     {
         int id;
@@ -16,6 +19,9 @@ namespace nxi
     {
         int id;
         std::string name;
+
+        virtual page_type type() = 0;
+
         page() : id{0} {}
     };
 
@@ -23,6 +29,9 @@ namespace nxi
     {
         int id;
         std::string url;
+
+        page_type type() override { return page_type::web; }
+
         web_page() : id{0}, url{"http://www.google.fr"} {}
     };
 
@@ -30,6 +39,9 @@ namespace nxi
     {
         int id;
         std::string path;
+
+        page_type type() override { return page_type::explorer; }
+
         explorer_page() : id{0}, path{"/"} {}
     };
 
@@ -49,7 +61,9 @@ namespace nxi
         void add(T page)
         {
             auto id = static_cast<int>(page_.size());
+            page.id = id;
             auto p = std::make_unique<T>(std::move(page));
+
             page_.emplace(id, std::move(p));
 
             emit event_add(static_cast<T&>(*page_.at(id)));

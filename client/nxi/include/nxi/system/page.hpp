@@ -57,16 +57,16 @@ namespace nxi
 
         //void add(nxi::page page);
 
-        template<class T>
-        void add(T page)
+        template<class Page>
+        void add(Page page)
         {
             auto id = static_cast<int>(page_.size());
             page.id = id;
-            auto p = std::make_unique<T>(std::move(page));
+            auto p = std::make_unique<Page>(std::move(page));
 
             page_.emplace(id, std::move(p));
 
-            emit event_add(static_cast<T&>(*page_.at(id)));
+            emit event_add(static_cast<Page&>(*page_.at(id)));
             //change(page.id);
         }
 

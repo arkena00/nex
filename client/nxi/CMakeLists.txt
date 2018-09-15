@@ -6,6 +6,27 @@ message("--------------------------------------------------------
                          NXI
 --------------------------------------------------------")
 
+MACRO(SUBDIRLIST result curdir)
+    FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    SET(dirlist "")
+    FOREACH(child ${children})
+        IF(IS_DIRECTORY ${curdir}/${child})
+            LIST(APPEND dirlist ${child})
+        ENDIF()
+    ENDFOREACH()
+    SET(${result} ${dirlist})
+ENDMACRO()
+
+message("Module compilation")
+set(MODULE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/experimental/module")
+
+SUBDIRLIST(SUBDIRS ${MODULE_ROOT})
+
+FOREACH(module ${SUBDIRS})
+    message("- ${module}")
+    include(${MODULE_ROOT}/${module}/${module}.cmake)
+ENDFOREACH()
+
 set(CMAKE_BUILD_TYPE Debug)
 
 # must be set before files scan
@@ -15,7 +36,7 @@ set(CMAKE_AUTORCC ON)
 
 file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 
-add_executable(nxi ${SOURCE_LIST})
+add_executable(nxi ${SOURCE_LIST} ${MODULE_SOURCE_LIST})
 
 # user config config file
 include(user-config.cmake OPTIONAL)
@@ -50,3 +71,6 @@ if (!WIN32)
     add_custom_command(TARGET nxi POST_BUILD
             COMMAND ${QT5_WINDEPLOYQT_EXECUTABLE} --qmldir ${CMAKE_SOURCE_DIR} $<TARGET_FILE_DIR:nxi>)
 endif()
+
+
+message("--------------------------------------------------------")

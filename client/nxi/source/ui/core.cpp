@@ -1,7 +1,7 @@
 #include <ui/core.hpp>
 
 #include <nxi/core.hpp>
-#include <nxi/database/ui.hpp>
+#include <nxi/database.hpp>
 #include <nxi/log.hpp>
 
 #include <QApplication>

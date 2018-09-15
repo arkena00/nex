@@ -5,7 +5,7 @@
 #include <ui/system/window.hpp>
 
 #include <nxi/core.hpp>
-#include <nxi/database/ui.hpp>
+#include <nxi/database.hpp>
 
 #include <QIcon>
 #include <QMouseEvent>

@@ -5,6 +5,7 @@
 
 #include <nxi/system/command.hpp>
 #include <nxi/system/page.hpp>
+#include <nxi/system/module.hpp>
 #include <nxi/system/window.hpp>
 
 namespace nxi
@@ -29,6 +30,7 @@ namespace nxi
         nxi::command_system m_command_system;
         nxi::window_system m_window_system;
         nxi::page_system m_page_system;
+        nxi::module_system m_module_system;
     };
 } // nxi
 

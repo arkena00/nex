@@ -12,19 +12,20 @@ namespace nxw
 
 namespace ui::interfaces
 {
+    class content;
+    class control_bar;
+
     class main : public ui::interface
     {
     Q_OBJECT
     public:
         main(ui::core&);
 
-        ui::core& m_ui_core;
-        nxw::tree* m_tree;
+        ui::core& ui_core_;
+        nxw::tree* tree_;
 
-        QStackedWidget* m_view;
-
-        nxw::web_view* m_web;
-        nxw::explorer_view* m_explorer;
+        ui::interfaces::content* content_;
+        ui::interfaces::control_bar* control_bar_;
     };
 } // ui::interfaces
 

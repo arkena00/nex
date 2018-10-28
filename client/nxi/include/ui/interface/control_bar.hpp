@@ -5,6 +5,7 @@
 
 namespace ui { class core; }
 
+class QComboBox;
 class QLineEdit;
 class QPushButton;
 
@@ -14,12 +15,13 @@ namespace ui::interfaces
     {
     public:
 
-        control_bar(ui::core& ui_core);
+        explicit control_bar(ui::core& ui_core);
 
     private:
         ui::core& m_ui_core;
 
         QLineEdit* m_address_bar;
+        QComboBox* m_context;
     };
 } // ui::interfaces
 

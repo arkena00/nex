@@ -6,47 +6,47 @@
 namespace nxi
 {
     core::core() :
-        m_client_thread{ &nxs::network::client::run, &m_client }
-        , m_command_system{ *this }
-        , m_window_system{ *this }
-        , m_module_system{ *this }
+        client_thread_{ &nxs::network::client::run, &client_ }
+        , command_system_{ *this }
+        , window_system_{ *this }
+        , module_system_{ *this }
     {
         nxi_log << "init core";
         try
         {
             ndb::connect<dbs::core>();
 
-            m_window_system.load();
-            m_page_system.load();
+            window_system_.load();
+            page_system_.load();
 
-            m_module_system.load();
+            module_system_.load();
         }
         catch (const std::exception& e)
         {
-            m_client.stop();
-            m_client_thread.join();
+            client_.stop();
+            client_thread_.join();
             throw;
         }
     }
 
     core::~core()
     {
-        m_client.stop();
-        m_client_thread.join();
+        client_.stop();
+        client_thread_.join();
     }
 
     nxi::command_system& core::command_system()
     {
-        return m_command_system;
+        return command_system_;
     }
 
     nxi::page_system& core::page_system()
     {
-        return m_page_system;
+        return page_system_;
     }
 
     nxi::window_system& core::window_system()
     {
-        return m_window_system;
+        return window_system_;
     }
 } // nxi

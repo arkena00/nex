@@ -4,6 +4,8 @@
 #include <ui/system/window.hpp>
 #include <ui/system/page.hpp>
 
+#include <QWidget>
+
 namespace nxi { class core; }
 
 class QApplication;
@@ -13,8 +15,9 @@ namespace ui
 {
     class window_system;
 
-    class core
+    class core : public QObject
     {
+        Q_OBJECT
     public:
         core(QApplication& app, nxi::core& nxi_core);
         ~core() = default;
@@ -22,18 +25,18 @@ namespace ui
         core& operator=(const core&) = delete;
 
         void load();
-        void quit() const;
+        void quit();
 
         nxi::core& nxi_core();
         ui::window_system& window_system();
 
     private:
-        QApplication& m_app;
-        nxi::core& m_nxi_core;
+        QApplication& app_;
+        nxi::core& nxi_core_;
 
-        ui::window_system m_window_system;
+        ui::window_system window_system_;
 
-        QSystemTrayIcon* m_systray;
+        QSystemTrayIcon* systray_;
     };
 } // ui
 

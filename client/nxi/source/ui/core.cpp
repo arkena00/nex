@@ -11,13 +11,15 @@
 
 #include <ui/interface/home.hpp>
 #include <ui/interface/page_bar.hpp>
+#include <include/ui/core.hpp>
+
 
 namespace ui
 {
     core::core(QApplication& app, nxi::core& nxi_core) :
-        m_app{ app }
-        , m_nxi_core{ nxi_core }
-        , m_window_system{ *this }
+        app_{ app }
+        , nxi_core_{ nxi_core }
+        , window_system_{ *this }
     {
         nxi_log << "init ui::core";
 
@@ -35,30 +37,32 @@ namespace ui
         QFile qss_file(":/style.qss");
         qss_file.open(QFile::ReadOnly);
         QString qss = QLatin1String(qss_file.readAll());
-        m_app.setStyleSheet(qss);
+        app_.setStyleSheet(qss);
 
         // systray
-        m_systray = new QSystemTrayIcon;
-        m_systray->setIcon(QIcon(":/image/nex"));
-        m_systray->show();
+        systray_ = new QSystemTrayIcon;
+        systray_->setIcon(QIcon(":/image/nex"));
+        systray_->show();
 
-        m_window_system.load();
+        window_system_.load();
         //m_page_system.load();
     }
 
-    void core::quit() const
+    void core::quit()
     {
+        window_system_.unload();
+
         QApplication::quit();
     }
 
     nxi::core& core::nxi_core()
     {
-        return m_nxi_core;
+        return nxi_core_;
     }
 
     ui::window_system& core::window_system()
     {
-        return m_window_system;
+        return window_system_;
     }
 
     /*

@@ -30,7 +30,7 @@ namespace nxi
         void event_position_update(int x, int y);
 
     private:
-		nxi::core& m_nxi_core;
+		nxi::core& nxi_core_;
         std::vector<nxi::window> m_windows;
         unsigned int m_current;
     };

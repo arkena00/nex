@@ -6,6 +6,7 @@
 #include <ui/core.hpp>
 #include <ui/interface/main.hpp>
 #include <ui/system/window.hpp>
+#include <ui/system/window.hpp>
 
 
 namespace ui
@@ -38,6 +39,14 @@ namespace ui
             default_window.w = 400;
             default_window.h = 400;
             m_ui_core.nxi_core().window_system().add(default_window);
+        }
+    }
+
+    void window_system::unload()
+    {
+	    for (ui::window* window : m_windows)
+        {
+	        window->deleteLater();
         }
     }
 

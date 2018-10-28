@@ -9,6 +9,8 @@ namespace nxi
 {
 	class core;
 
+	enum class command_context { deduced, web, explorer };
+
     class command_system : public QObject
     {
         Q_OBJECT
@@ -18,10 +20,10 @@ namespace nxi
         void operator=(const command_system&) = delete;
 
         void load();
-        void exec(const QString& command);
+        void exec(const QString& command, command_context context = command_context::deduced);
 
     private:
-		nxi::core& m_nxi_core;
+		nxi::core& nxi_core_;
     };
 } // nxi
 

@@ -3,19 +3,37 @@
 #include <nxi/core.hpp>
 #include <nxi/system/page.hpp>
 
+#include <QUrl>
+
 namespace nxi
 {
     command_system::command_system(nxi::core& nxi_core) :
-        m_nxi_core{ nxi_core }
+        nxi_core_{ nxi_core }
     {}
 
     void command_system::load() {}
 
-    void command_system::exec(const QString& command)
+    void command_system::exec(const QString& command, command_context context)
     {
+        QUrl url{ command };
+        qDebug() << "scheme : " << url.scheme();
 
-        nxi::web_page page;
-        page.url = command.toStdString();
-        m_nxi_core.page_system().load(std::move(page));
+        switch (context)
+        {
+            case command_context::deduced:
+
+
+                break;
+            case command_context::web:
+            {
+                qDebug() << "exec web";
+                nxi::web_page page;
+                page.url = command.toStdString();
+                nxi_core_.page_system().load(std::move(page));
+            }
+                break;
+            case command_context::explorer:
+                break;
+        }
     }
 } // nxi

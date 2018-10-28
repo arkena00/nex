@@ -7,7 +7,7 @@
 namespace nxi
 {
 	window_system::window_system(nxi::core& nxi_core) :
-		m_nxi_core{ nxi_core }
+		nxi_core_{ nxi_core }
 	{}
 
     void window_system::load()
@@ -40,9 +40,9 @@ namespace nxi
         , nxi_model.window.h = win.h
         );
 
+        m_windows.push_back(win);
 
-
-        emit event_add(std::move(win));
+        emit event_add((win));
     }
 
     void window_system::del(int id)

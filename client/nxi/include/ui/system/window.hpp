@@ -16,7 +16,8 @@ namespace ui
     public:
 		window_system(ui::core&);
 
-        void load();
+		void load();
+		void unload();
         ui::window* add(const nxi::window&);
         void close(ui::window*);
 

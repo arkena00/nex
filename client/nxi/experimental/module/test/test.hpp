@@ -1,12 +1,9 @@
 #ifndef EXP_MODULE_TEST_H_NXI
 #define EXP_MODULE_TEST_H_NXI
 
-#include <nxi/core.hpp>
-#include <nxi/window.hpp>
-#include <nxi/system/window.hpp>
-#include <nxi/log.hpp>
+namespace nxi { class core; }
 
-namespace nxi_module
+namespace nxi::modules
 {
     class test
     {
@@ -17,9 +14,9 @@ namespace nxi_module
 
 
     private:
-        nxi::core& m_nxi_core;
+        nxi::core& nxi_core_;
 
     };
-} // nxi
+} // nxi::modules
 
 #endif // EXP_MODULE_TEST_H_NXI

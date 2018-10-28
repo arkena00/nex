@@ -1,8 +1,13 @@
 #include "test.hpp"
 
-namespace nxi_module
+#include <nxi/core.hpp>
+#include <nxi/window.hpp>
+#include <nxi/system/window.hpp>
+#include <nxi/log.hpp>
+
+namespace nxi::modules
 {
-    test::test(nxi::core& nxi_core) : m_nxi_core{ nxi_core } {}
+    test::test(nxi::core& nxi_core) : nxi_core_{ nxi_core } {}
 
     void test::load()
     {
@@ -14,7 +19,7 @@ namespace nxi_module
         tw.w = 300;
         tw.h = 300;
 
-        m_nxi_core.window_system().add(tw);
+        //nxi_core_.window_system().add(tw);
     }
 
-} // nxi
+} // nxi::modules

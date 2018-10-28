@@ -10,11 +10,6 @@ namespace nxi
 {
     enum class page_type { web, explorer, node };
 
-    struct page_node
-    {
-        int id;
-    };
-
     struct page
     {
         int id;
@@ -23,6 +18,13 @@ namespace nxi
         virtual page_type type() = 0;
 
         page() : id{0} {}
+    };
+
+    struct page_node : nxi::page
+    {
+        int id;
+
+        page_type type() override { return page_type::node; }
     };
 
     struct web_page : nxi::page
@@ -66,7 +68,7 @@ namespace nxi
 
             page_.emplace(id, std::move(p));
 
-            emit event_add(static_cast<Page&>(*page_.at(id)));
+            emit event_add(static_cast<Page&>(get(id)));
             //change(page.id);
         }
 
@@ -97,3 +99,10 @@ namespace nxi
 } // nxi
 
 #endif // NXI_PAGE_SYSTEM_H_NXI
+/* add
+ * load
+ * update
+ * focus
+ *
+ *
+ */

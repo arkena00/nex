@@ -1,9 +1,12 @@
 #include <nxi/system/page.hpp>
+#include <nxi/log.hpp>
 
 namespace nxi
 {
     void page_system::load()
-    {}
+    {
+        nxi_log << "load page_system";
+    }
 
     void page_system::load(nxi::web_page page)
     {
@@ -16,33 +19,6 @@ namespace nxi
     {
         return *page_[id];
     }
-
-    /*
-    void page_system::add(nxi::page page)
-    {
-
-        page.id = static_cast<int>(page_.size());
-        page_[page.id] = (page);
-        emit event_add(page_.at(page.id));
-        change(page.id);
-    }*/
-
-    /*
-    void page_system::add(nxi::web_page page)
-    {
-        auto id = static_cast<int>(page_.size());
-        auto p = std::make_unique<nxi::web_page>(std::move(page));
-        page_.emplace(id, std::move(p));
-
-        emit event_add(static_cast<nxi::web_page&>(*page_.at(id)));
-        //change(page.id);
-    }*/
-
-    /*
-    void page_system::add(nxi::explorer_page page)
-    {
-
-    }*/
 
     void page_system::change(int id)
     {

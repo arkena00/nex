@@ -4,12 +4,9 @@
 #include <nxi/core.hpp>
 #include <nxi/system/page.hpp>
 
-#include <QPushButton>
-
 #include <nxw/vbox_layout.hpp>
 #include <nxw/tree.hpp>
 #include <nxw/tree/page_item.hpp>
-#include <include/nxw/tree.hpp>
 
 #include <QDebug>
 namespace nxw
@@ -20,22 +17,6 @@ namespace nxw
         auto layout = new nxw::vbox_layout;
 
         setLayout(layout);
-
-        auto btn = new QPushButton(this);
-        btn->setText("add web_page");
-        connect(btn, &QPushButton::clicked, this, [this]()
-        {
-            m_ui_core.nxi_core().page_system().add(nxi::web_page{});
-        });
-        layout->addWidget(btn);
-
-        auto btn_e = new QPushButton(this);
-        btn_e->setText("add explorer_page");
-        connect(btn_e, &QPushButton::clicked, this, [this]()
-        {
-            m_ui_core.nxi_core().page_system().add(nxi::explorer_page{});
-        });
-        layout->addWidget(btn_e);
 
         m_tree = new QTreeWidget(this);
         m_tree->setHeaderHidden(true);

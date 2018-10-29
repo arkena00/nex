@@ -7,7 +7,6 @@
         <file alias="connexion_status_idle">../../graphic/connexion_status_idle.png</file>
         <file alias="folder">../../graphic/folder.png</file>
         <file alias="interface_bar">../../graphic/interface_bar.png</file>
-        <file alias="menu">../../graphic/menu.png</file>
         <file alias="network">../../graphic/network.png</file>
         <file alias="resource">../../graphic/resource.png</file>
         <file alias="notification_status_0">../../graphic/notification_status_0.png</file>
@@ -15,6 +14,7 @@
         <file alias="login_background">../../graphic/login_background.jpg</file>
     </qresource>
     <qresource prefix="/button">
+        <file alias="menu">../../graphic/menu.png</file>
         <file alias="page_new">../../graphic/page_new.png</file>
         <file alias="page_explorer_new">../../graphic/page_explorer_new.png</file>
         <file alias="page_web_new">../../graphic/page_web_new.png</file>

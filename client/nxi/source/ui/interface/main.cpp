@@ -10,6 +10,7 @@
 #include <ui/core.hpp>
 #include <ui/interface/content.hpp>
 #include <ui/interface/control_bar.hpp>
+#include <ui/interface/page_bar.hpp>
 
 namespace ui::interfaces
 {
@@ -22,13 +23,13 @@ namespace ui::interfaces
         auto top_layout = new nxw::hbox_layout(this);
         auto middle_layout = new nxw::hbox_layout(this);
 
-        control_bar_ = new ui::interfaces::control_bar(ui_core_);
-        tree_ = new nxw::tree(ui_core_);
         content_ = new interfaces::content(ui_core_);
+        control_bar_ = new ui::interfaces::control_bar(ui_core_);
+        page_bar_ = new ui::interfaces::page_bar(ui_core_);
 
         top_layout->addWidget(control_bar_);
 
-        middle_layout->addWidget(tree_);
+        middle_layout->addWidget(page_bar_);
         middle_layout->addWidget(content_);
 
         main_layout->addLayout(top_layout);

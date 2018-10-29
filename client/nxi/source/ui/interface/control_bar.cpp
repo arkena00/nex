@@ -6,9 +6,9 @@
 
 #include <QComboBox>
 #include <QLineEdit>
-#include <QPushButton>
 
 #include <nxw/hbox_layout.hpp>
+#include <nxw/icon_button.hpp>
 
 #include <QMenu>
 
@@ -20,8 +20,7 @@ namespace ui::interfaces
         QHBoxLayout* layout = new nxw::hbox_layout;
         setLayout(layout);
 
-        auto menu_ = new QPushButton(this);
-        menu_->setText("menu");
+        auto btn_menu = new nxw::icon_button(this, "menu", 24);
 
         QMenu* menu = new QMenu(this);
         auto a_quit = new QAction("quit", menu);
@@ -37,7 +36,7 @@ namespace ui::interfaces
         menu->addAction(a_win);
         menu->addAction(a_quit);
 
-        QObject::connect(menu_, &QPushButton::clicked, this, [menu]{ menu->exec(); });
+        QObject::connect(btn_menu, &QPushButton::clicked, this, [menu]{ menu->exec(); });
 
         m_context = new QComboBox(this);
         m_context->addItem("auto");
@@ -54,7 +53,7 @@ namespace ui::interfaces
             m_ui_core.nxi_core().command_system().exec(m_address_bar->text(), context);
         });
 
-        layout->addWidget(menu_);
+        layout->addWidget(btn_menu);
         layout->addWidget(m_context);
         layout->addWidget(m_address_bar);
     }

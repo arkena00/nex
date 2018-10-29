@@ -10,10 +10,14 @@
         <file alias="menu">../../graphic/menu.png</file>
         <file alias="network">../../graphic/network.png</file>
         <file alias="resource">../../graphic/resource.png</file>
-        <file alias="tab_new">../../graphic/tab_new.png</file>
         <file alias="notification_status_0">../../graphic/notification_status_0.png</file>
         <file alias="notification_status_1">../../graphic/notification_status_1.png</file>
         <file alias="login_background">../../graphic/login_background.jpg</file>
+    </qresource>
+    <qresource prefix="/button">
+        <file alias="page_new">../../graphic/page_new.png</file>
+        <file alias="page_explorer_new">../../graphic/page_explorer_new.png</file>
+        <file alias="page_web_new">../../graphic/page_web_new.png</file>
     </qresource>
     <qresource prefix="/">
         <file alias="style.qss">../../graphic/style.qss</file>

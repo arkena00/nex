@@ -18,6 +18,13 @@
         <file alias="page_new">../../graphic/page_new.png</file>
         <file alias="page_explorer_new">../../graphic/page_explorer_new.png</file>
         <file alias="page_web_new">../../graphic/page_web_new.png</file>
+        <file alias="window_minimize">../../graphic/window_minimize.png</file>
+        <file alias="window_maximize">../../graphic/window_maximize.png</file>
+        <file alias="window_close">../../graphic/window_close.png</file>
+        <file alias="notification_none">../../graphic/notification_none.png</file>
+        <file alias="download">../../graphic/download.png</file>
+        <file alias="history_previous">../../graphic/history_previous.png</file>
+        <file alias="history_next">../../graphic/history_next.png</file>
     </qresource>
     <qresource prefix="/">
         <file alias="style.qss">../../graphic/style.qss</file>

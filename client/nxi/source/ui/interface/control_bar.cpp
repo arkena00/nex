@@ -14,6 +14,20 @@
 
 namespace ui::interfaces
 {
+    class window_controls : public ui::interface
+    {
+    public:
+        window_controls::window_controls(ui::core& ui_core)
+        {
+            auto layout = new nxw::hbox_layout;
+            setLayout(layout);
+
+            layout->addWidget(new nxw::icon_button(this, "window_minimize", 32, 16));
+            layout->addWidget(new nxw::icon_button(this, "window_maximize", 32, 16));
+            layout->addWidget(new nxw::icon_button(this, "window_close", 32, 16));
+        }
+    };
+
     control_bar::control_bar(ui::core& ui_core) :
         m_ui_core{ ui_core }
     {
@@ -53,8 +67,20 @@ namespace ui::interfaces
             m_ui_core.nxi_core().command_system().exec(m_address_bar->text(), context);
         });
 
+        auto window_controls = new ui::interfaces::window_controls(ui_core);
+
         layout->addWidget(btn_menu);
+        layout->addSpacing(64);
+
+        layout->addWidget(new nxw::icon_button(this, "history_previous", 32, 24));
+        layout->addWidget(new nxw::icon_button(this, "history_next", 32, 24));
+        layout->addWidget(new nxw::icon_button(this, "notification_none", 32, 24));
+        layout->addWidget(new nxw::icon_button(this, "download", 32, 24));
+
+        layout->addSpacing(16);
         layout->addWidget(m_context);
         layout->addWidget(m_address_bar);
+        layout->addStretch();
+        layout->addWidget(window_controls);
     }
 } // ui::interfaces

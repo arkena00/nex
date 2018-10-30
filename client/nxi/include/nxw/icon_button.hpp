@@ -9,11 +9,12 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        icon_button::icon_button(QWidget* parent, const QString& icon, int size)
+        icon_button(QWidget* parent, const QString& icon, int width, int height = 0)
         {
+            if (height == 0) height = width;
             setIcon(QIcon(":/button/" + icon));
-            setIconSize(QSize(size, size));
-            setFixedSize(size, size);
+            setIconSize(QSize(width, height));
+            setFixedSize(width, height);
         }
     };
 } // nxw

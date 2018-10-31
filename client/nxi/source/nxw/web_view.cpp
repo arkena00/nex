@@ -4,18 +4,17 @@
 #include <nxi/core.hpp>
 #include <nxi/system/page.hpp>
 
+#include <nxw/vbox_layout.hpp>
 #include <nxw/web_page.hpp>
 
 #include <QWebEngineView>
-#include <QVBoxLayout>
 
 namespace nxw
 {
     web_view::web_view(ui::core& ui_core) :
         m_ui_core{ ui_core }
     {
-        auto layout = new QVBoxLayout;
-
+        auto layout = new nxw::vbox_layout;
         setLayout(layout);
 
         // page_system add
@@ -24,9 +23,12 @@ namespace nxw
                 {
                     qDebug() << "page add " << page.id;
                     auto ui_page = new nxw::web_page(m_ui_core, page.id, this);
+
                     ui_page->load(QString::fromStdString(page.url));
                     m_pages.emplace(page.id, std::move(ui_page));
                     view_->setPage(m_pages[page.id]->native());
+
+                    // m_ui_core.nxi_core().page_system().load(page.id);
                 });
 
 

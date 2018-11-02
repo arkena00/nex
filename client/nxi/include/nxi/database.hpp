@@ -8,6 +8,8 @@
 #include <ndb/query.hpp>
 #include <ndb/expression.hpp>
 
+// include type_mapped types
+#include <QString>
 
 #include <nxi/database/window.hpp>
 #include <nxi/database/module.hpp>
@@ -22,6 +24,12 @@ ndb_model(
 ndb_project(nxi_project,
             ndb_database(db_core, nxi_model, ndb::sqlite)
 )
+
+// ndb type_maps
+namespace ndb
+{
+    ndb_bijective_type_map(string_, QString, scope::global);
+}
 
 namespace dbs
 {

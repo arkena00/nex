@@ -11,29 +11,9 @@ namespace nxi
     {
     public:
         module() {}
-    };
-
-    class binary_module : public module
-    {
-    public:
-        binary_module(const QString& name) {}
-    };
-
-
-
-    class web_module : public module
-    {
-        struct content_script
-        {
-            std::vector<QString> matches;
-            std::vector<QString> js;
-        };
-
-    public:
-        web_module(const QString& name);
 
     private:
-        std::vector<content_script> content_scripts_;
+        QString name_;
     };
 } // nxi
 

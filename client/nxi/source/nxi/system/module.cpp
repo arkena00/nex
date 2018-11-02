@@ -1,9 +1,10 @@
 #include <nxi/system/module.hpp>
 
-#include <nxi/database/module.hpp>
 #include <nxi/core.hpp>
-#include <nxi/database.hpp>
+#include <nxi/database/module.hpp>
 #include <nxi/log.hpp>
+#include <nxi/module/web.hpp>
+#include <nxi/module/binary.hpp>
 
 // include modules
 #include "experimental/module/static_module.hpp"

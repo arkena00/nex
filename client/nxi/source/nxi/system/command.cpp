@@ -37,3 +37,8 @@ namespace nxi
         }
     }
 } // nxi
+
+/* /aze/zer // explorer path
+ * proto://host // net path
+ * search_context/ search expression // search in widgets
+ */

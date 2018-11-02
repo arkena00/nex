@@ -33,6 +33,7 @@ namespace ui::interfaces
     {
         QHBoxLayout* layout = new nxw::hbox_layout;
         setLayout(layout);
+        setStyleSheet("border-bottom:1px solid #CCCCCC;");
 
         auto btn_menu = new nxw::icon_button(this, "menu", 24);
 

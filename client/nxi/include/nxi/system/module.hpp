@@ -4,11 +4,14 @@
 #include <nxi/module.hpp>
 
 #include <QObject>
+#include <QString>
 #include <experimental/module/static_module.hpp>
 
 namespace nxi
 {
 	class core;
+
+	enum class module_types { nxi, web };
 
     class module_system : public QObject
     {
@@ -20,11 +23,18 @@ namespace nxi
 
         void load();
 
+        template<class Module>
+        void module_load(const QString& name)
+        {
+            auto module = std::make_unique<Module>(name);
+            modules_.push_back( std::move(module) );
+        }
+
     private:
 		nxi::core& nxi_core_;
-        std::vector<nxi::module> m_modules;
+        std::vector<std::unique_ptr<nxi::module>> modules_;
 
-        nxi::static_module_container m_static_modules;
+        nxi::static_module_container static_modules_;
     };
 } // nxi
 

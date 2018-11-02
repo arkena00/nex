@@ -12,7 +12,7 @@ namespace nxi
 {
     module_system::module_system(nxi::core& nxi_core) :
 		nxi_core_{ nxi_core }
-		, m_static_modules{ nxi_core_ }
+		, static_modules_{ nxi_core_ }
 	{}
 
     void module_system::load()
@@ -20,18 +20,17 @@ namespace nxi
         nxi_log << "load module_system";
 
         // load static modules
-        m_static_modules.load();
+        static_modules_.load();
 
-        auto res = ndb::query<dbs::core>() << (
+        // load db modules
+        auto res = ndb::oquery<dbs::core>() << (
         ndb::get(nxi_model.module.id, nxi_model.module.name, nxi_model.module.type)
         << ndb::source(nxi_model.module));
-        for (auto& line : res)
+        for (const auto& module_data : res)
         {
-            nxi::module m;
-            m.id = line[nxi_model.module.id];
-            m.name = line[nxi_model.module.name];
-            m_modules.push_back(m);
+            QString module_name = module_data[nxi_model.module.name];
+            if (module_data[nxi_model.module.type] == (int)nxi::module_types::nxi) module_load<nxi::binary_module>(module_name);
+            if (module_data[nxi_model.module.type] == (int)nxi::module_types::web) module_load<nxi::web_module>(module_name);
         }
     }
-
 } // nxi

@@ -20,13 +20,20 @@ namespace nxi
     };
 
 
+
     class web_module : public module
     {
+        struct content_script
+        {
+            std::vector<QString> matches;
+            std::vector<QString> js;
+        };
+
     public:
         web_module(const QString& name);
 
     private:
-
+        std::vector<content_script> content_scripts_;
     };
 } // nxi
 

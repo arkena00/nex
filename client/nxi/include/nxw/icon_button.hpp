@@ -1,5 +1,5 @@
-#ifndef NXW_BUTTON_H_NXI
-#define NXW_BUTTON_H_NXI
+#ifndef NXW_ICON_BUTTON_H_NXI
+#define NXW_ICON_BUTTON_H_NXI
 
 #include <QPushButton>
 
@@ -9,14 +9,12 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        icon_button(QWidget* parent, const QString& icon, int width, int height = 0)
+        icon_button(QWidget* parent, const QString& icon)
         {
-            if (height == 0) height = width;
             setIcon(QIcon(":/button/" + icon));
-            setIconSize(QSize(width, height));
-            setFixedSize(width, height);
+            setStyleSheet("QPushButton:hover { border:none; background-color: #DDDDDD; } QPushButton:pressed { border:none; background-color: #BBBBBB; }");
         }
     };
 } // nxw
 
-#endif // NXW_BUTTON_H_NXI
+#endif // NXW_ICON_BUTTON_H_NXI

@@ -22,9 +22,9 @@ namespace ui::interfaces
             auto layout = new nxw::hbox_layout;
             setLayout(layout);
 
-            layout->addWidget(new nxw::icon_button(this, "window_minimize", 32, 16));
-            layout->addWidget(new nxw::icon_button(this, "window_maximize", 32, 16));
-            layout->addWidget(new nxw::icon_button(this, "window_close", 32, 16));
+            layout->addWidget(new nxw::icon_button(this, "window_minimize"));
+            layout->addWidget(new nxw::icon_button(this, "window_maximize"));
+            layout->addWidget(new nxw::icon_button(this, "window_close"));
         }
     };
 
@@ -35,7 +35,7 @@ namespace ui::interfaces
         setLayout(layout);
         setStyleSheet("border-bottom:1px solid #CCCCCC;");
 
-        auto btn_menu = new nxw::icon_button(this, "menu", 24);
+        auto btn_menu = new nxw::icon_button(this, "menu");
 
         QMenu* menu = new QMenu(this);
         auto a_quit = new QAction("quit", menu);
@@ -73,10 +73,10 @@ namespace ui::interfaces
         layout->addWidget(btn_menu);
         layout->addSpacing(64);
 
-        layout->addWidget(new nxw::icon_button(this, "history_previous", 32, 24));
-        layout->addWidget(new nxw::icon_button(this, "history_next", 32, 24));
-        layout->addWidget(new nxw::icon_button(this, "notification_none", 32, 24));
-        layout->addWidget(new nxw::icon_button(this, "download", 32, 24));
+        layout->addWidget(new nxw::icon_button(this, "history_previous"));
+        layout->addWidget(new nxw::icon_button(this, "history_next"));
+        layout->addWidget(new nxw::icon_button(this, "notification_none"));
+        layout->addWidget(new nxw::icon_button(this, "download"));
 
         layout->addSpacing(16);
         layout->addWidget(m_context);

@@ -23,8 +23,8 @@ namespace ui::interfaces
 
         page_tree_ = new nxw::tree(ui_core_);
 
-        auto btn_web_new = new nxw::icon_button(this, "page_web_new", 24);
-        auto btn_explorer_new = new nxw::icon_button(this, "page_explorer_new", 24);
+        auto btn_web_new = new nxw::icon_button(this, "page_web_new");
+        auto btn_explorer_new = new nxw::icon_button(this, "page_explorer_new");
 
         page_control_layout->addWidget(btn_web_new);
         page_control_layout->addWidget(btn_explorer_new);

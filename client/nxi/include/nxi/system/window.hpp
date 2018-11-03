@@ -9,6 +9,8 @@ namespace nxi
 {
 	class core;
 
+	enum class window_states { normal, minimized, maximized };
+
     class window_system : public QObject
     {
         Q_OBJECT
@@ -20,18 +22,20 @@ namespace nxi
         void load();
         void add(nxi::window);
         void del(int id);
-        std::vector<nxi::window>& get();
+        std::map<unsigned int, nxi::window>& get();
 
         void move(unsigned int id, int x, int y);
         void resize(unsigned int id, int w, int h);
+        void minimize(unsigned int id);
 
     signals:
         void event_add(const nxi::window&);
         void event_position_update(int x, int y);
+        void event_state_update(unsigned int id, window_states state);
 
     private:
 		nxi::core& nxi_core_;
-        std::vector<nxi::window> m_windows;
+        std::map<unsigned int, nxi::window> windows_;
         unsigned int m_current;
     };
 } // nxi

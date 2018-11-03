@@ -3,6 +3,8 @@
 #include <nxi/core.hpp>
 #include <nxi/database.hpp>
 #include <nxi/log.hpp>
+#include <include/nxi/system/window.hpp>
+
 
 namespace nxi
 {
@@ -26,13 +28,13 @@ namespace nxi
             w.y = line[nxi_model.window.y];
             w.w = line[nxi_model.window.w];
             w.h = line[nxi_model.window.h];
-            m_windows.push_back(w);
+            windows_.emplace(w.id, std::move(w));
         }
     }
 
     void window_system::add(nxi::window win)
     {
-        win.id = 1;
+        win.id = 0;
         ndb::query<dbs::core>() << ndb::add(
         nxi_model.window.x = win.x
         , nxi_model.window.y = win.y
@@ -40,7 +42,9 @@ namespace nxi
         , nxi_model.window.h = win.h
         );
 
-        m_windows.push_back(win);
+        win.id = ndb::last_id<dbs::core>();
+
+        windows_.emplace(win.id, std::move(win));
 
         emit event_add((win));
     }
@@ -61,8 +65,14 @@ namespace nxi
         ndb::query<dbs::core>() << ndb::set(nxi_model.window.w = w, nxi_model.window.h = h);
     }
 
-    std::vector<nxi::window>& window_system::get()
+    std::map<unsigned int, nxi::window>& window_system::get()
     {
-        return m_windows;
+        return windows_;
+    }
+
+    void window_system::minimize(unsigned int id)
+    {
+	    // windows_[id].state = window_states::minimized;
+        emit event_state_update(id, window_states::minimized);
     }
 } // nxi

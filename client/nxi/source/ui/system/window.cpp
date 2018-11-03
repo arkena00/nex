@@ -2,10 +2,10 @@
 
 #include <nxi/core.hpp>
 #include <nxi/log.hpp>
+#include <nxi/system/window.hpp>
 
 #include <ui/core.hpp>
 #include <ui/interface/main.hpp>
-#include <ui/system/window.hpp>
 #include <ui/system/window.hpp>
 
 
@@ -25,7 +25,7 @@ namespace ui
         });
 
         // load stored windows
-        for (const auto& window : m_ui_core.nxi_core().window_system().get())
+        for (const auto& [id, window] : m_ui_core.nxi_core().window_system().get())
         {
             add(window);
         }
@@ -85,8 +85,15 @@ namespace ui
         m_ui_core.nxi_core().window_system().resize(window->id(), w, h);
     }
 
+    void window_system::minimize(ui::window* window)
+    {
+        m_ui_core.nxi_core().window_system().minimize(window->id());
+        window->showMinimized();
+    }
+
     unsigned int window_system::count() const
     {
         return m_windows.size();
     }
+
 } // ui

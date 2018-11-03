@@ -23,6 +23,7 @@ namespace ui
 
         void move(ui::window*, int x, int y);
         void resize(ui::window*, int w, int h);
+        void minimize(ui::window*);
 
         unsigned int count() const;
 

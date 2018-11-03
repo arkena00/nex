@@ -22,9 +22,18 @@ namespace ui::interfaces
             auto layout = new nxw::hbox_layout;
             setLayout(layout);
 
-            layout->addWidget(new nxw::icon_button(this, "window_minimize"));
+            auto win_minimize = new nxw::icon_button(this, "window_minimize");
+            QObject::connect(win_minimize, &QPushButton::pressed, [this, &ui_core]()
+            {
+                ui_core.window_system().minimize(window());
+            });
+
+            auto win_close = new nxw::icon_button(this, "window_close");
+            QObject::connect(win_close, &QPushButton::pressed, &ui_core, &ui::core::quit);
+
+            layout->addWidget(win_minimize);
             layout->addWidget(new nxw::icon_button(this, "window_maximize"));
-            layout->addWidget(new nxw::icon_button(this, "window_close"));
+            layout->addWidget(win_close);
         }
     };
 

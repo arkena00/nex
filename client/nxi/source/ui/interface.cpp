@@ -1,4 +1,6 @@
 #include <ui/interface.hpp>
+#include <include/ui/interface.hpp>
+
 
 namespace ui
 {
@@ -9,5 +11,10 @@ namespace ui
 
     interface::interface(ui::window* window) : QWidget(window)
     {}
+
+    ui::window* interface::window() const
+    {
+        return static_cast<ui::window*>(QWidget::window());
+    }
 
 } // ui

@@ -33,7 +33,7 @@ namespace ui
             }
 
         public:
-            operator QWidget*() { return this->widget(); }
+            //operator QWidget*() { return this->widget(); }
 
             // ui::interface
             home()

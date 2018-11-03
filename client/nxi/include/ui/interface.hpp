@@ -12,8 +12,7 @@ namespace ui
         interface();
         interface(ui::window*);
 
-
-        QWidget* widget() { return this; }
+        ui::window* window() const;
     };
 } // ui
 

@@ -11,6 +11,8 @@ namespace nxw
 
 namespace ui { class core; }
 
+class QStackedWidget;
+
 namespace ui::interfaces
 {
     class content : public ui::interface

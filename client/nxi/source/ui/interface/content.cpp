@@ -8,6 +8,8 @@
 #include <nxw/web_view.hpp>
 #include <nxw/explorer_view.hpp>
 
+#include <QStackedWidget>
+
 namespace ui::interfaces
 {
     content::content(ui::core& ui_core) :

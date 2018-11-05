@@ -9,8 +9,7 @@
 
 #include <nxw/hbox_layout.hpp>
 #include <nxw/icon_button.hpp>
-
-#include <QMenu>
+#include <nxw/menu.hpp>
 
 namespace ui::interfaces
 {
@@ -46,6 +45,43 @@ namespace ui::interfaces
 
         auto btn_menu = new nxw::icon_button(this, "menu");
 
+        /*
+        class command
+        {
+        private:
+            QString module_;
+            QString name_;
+            nxi::shortcut shortcut_;
+            std::function<void(ui::core&)> function_;
+        };
+
+        nxi::quit
+        nxi:shortcuts
+
+
+        nxi::command cmd("nxi", "quit", [this](){ m_ui_core.quit(););
+        cmd.desc_set("desc");
+        cmd.shortcut_set(nxi::shortcut());
+*/
+
+        auto menu = new nxw::menu{ this };
+        menu->setObjectName("main_menu");
+        menu->add<nxw::menu_item>("new window", [&ui_core](){ ui_core.nxi_core().window_system().add({}); });
+        menu->add<nxw::menu_separator>();
+        auto z = new QComboBox;
+        z->addItem("test");
+        menu->add(z);
+        menu->add<nxw::menu_separator>();
+        menu->add<nxw::menu_item>("options");
+        menu->add<nxw::menu_item>("about");
+        menu->add<nxw::menu_separator>();
+        menu->add<nxw::menu_item>("quit", [&ui_core](){ ui_core.quit(); }, ":/button/quit");
+        menu->show_at(btn_menu);
+
+        QObject::connect(btn_menu, &QPushButton::clicked, menu, &nxw::menu::exec);
+        //menu->add(nxi::command::get("nxi", "quit"), customwidget);
+
+/*
         QMenu* menu = new QMenu(this);
         auto a_quit = new QAction("quit", menu);
         a_quit->setText("quit");
@@ -59,8 +95,9 @@ namespace ui::interfaces
 
         menu->addAction(a_win);
         menu->addAction(a_quit);
+        */
 
-        QObject::connect(btn_menu, &QPushButton::clicked, this, [menu]{ menu->exec(); });
+        //QObject::connect(btn_menu, &QPushButton::clicked, this, [menu]{ menu->exec(); });
 
         m_context = new QComboBox(this);
         m_context->addItem("auto");

@@ -1,32 +1,37 @@
-window
+.ui--window
 {
-	background-color: #EEEEEE;
+	background-color: #F0F0F0;
 }
 
-QLineEdit#address { border:none; border-bottom: 1px solid #EEEEEE; background-color: #EEEEEE; }
-QLineEdit#address::hover, QLineEdit#address::focus { border-bottom: 1px solid #AAAAEE; }
-
-QTabBar#tab::tab
+.nxw--menu_item
 {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                             stop: 0 #FAFAFA, stop: 0.5 #F0F0F0,
-                             stop: 0.5 #EAEAEA, stop: 1.0 #E0E0E0);
-
-	width: 200px;
-	height: 24px;
-        line-height: 24px;
-	border-left: 1px solid #AAAAAA;
-	border-bottom: 1px solid #AAAAAA;
-        padding-left: 10px;
-
+    padding-left: 10px;
+    padding-right: 10px;
+    qproperty-height: 24;
 }
 
-QTabBar#tab::tab:selected
+.nxw--menu_item:hover
 {
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                             stop: 0 #EAEAEA, stop: 0.5 #E0E0E0,
-                             stop: 0.5 #E0E0E0, stop: 1.0 #D0D0D0);
+    background-color: #DDDDDD;
 }
+
+.nxw--menu_separator
+{
+    color: #DDDDDD;
+}
+
+
+
+.nxw--menu
+{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #AAAAAA;
+}
+
+QLineEdit { border: 1px solid #F0F0F0; background-color: #F9F9F9; }
+QLineEdit::hover, QLineEdit::focus { border-bottom: 1px solid #AAAAEE; }
+
 
 QPushButton
 {
@@ -41,67 +46,3 @@ QPushButton:pressed
 {
 	border: 1px inset #AAAAAA;
 }
-
-QPushButton#menu_button { border: none; }
-QPushButton#menu_button::menu-indicator { image: none; }
-QPushButton#menu_button:hover
-{
-	border: 1px solid #DDDDDD;
-	background-color: #E0E0E0;
-}
-QPushButton#menu_button:pressed { border: 1px inset #DDDDDD; }
-
-QPushButton#tab_new { border: none; }
-QPushButton#tab_new:hover
-{
-	border: 1px solid #DDDDDD;
-	background-color: #E0E0E0;
-}
-QPushButton#tab_new:pressed { border: 1px inset #DDDDDD; }
-
-
-QLabel#resource_head
-{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-						 stop: 0 #FAFAFA, stop: 0.33 #F0F0F0,
-						 stop: 0.33 #F0F0F0, stop: 0.66 #EAEAEA,
-						 stop: 0.66 #EAEAEA, stop: 1.0 #E0E0E0);
-
-	font-weight: bold;
-}
-
-QTabBar#interface::tab
-{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-						 stop: 0 #FAFAFA, stop: 0.33 #F0F0F0,
-						 stop: 0.33 #F0F0F0, stop: 0.66 #EAEAEA,
-						 stop: 0.66 #EAEAEA, stop: 1.0 #E0E0E0);
-
-	min-width: 200px;
-	height: 24px;
-	border-left: 1px solid #AAAAAA;
-}
-
-QTabBar#interface::tab:selected
-{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-					 stop: 0 #FAFAFA, stop: 0.33 #DDE0FF,
-					 stop: 0.33 #DDE0FF, stop: 0.66 #CCE1FF,
-					 stop: 0.66 #CCE1FF, stop: 1.0 #ACE1FF);
-}
-
-
-QLabel#interface_bar
-{
-	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-						 stop: 0 #FAFAFA, stop: 0.33 #F0F0F0,
-						 stop: 0.33 #F0F0F0, stop: 0.66 #EAEAEA,
-						 stop: 0.66 #EAEAEA, stop: 1.0 #E0E0E0);
-
-}
-
-QProgressBar#request_progress {
-
-}
-
-QTreeWidget::item{ height: 20px; }

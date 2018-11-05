@@ -1,4 +1,7 @@
 <RCC>
+    <qresource prefix="/ui">
+        <file alias="menu_separator">../../graphic/menu_separator.png</file>
+    </qresource>
     <qresource prefix="/image">
         <file alias="nex">../../graphic/nex.png</file>
         <file alias="hdd">../../graphic/hdd.png</file>
@@ -25,6 +28,7 @@
         <file alias="download">../../graphic/download.png</file>
         <file alias="history_previous">../../graphic/history_previous.png</file>
         <file alias="history_next">../../graphic/history_next.png</file>
+        <file alias="quit">../../graphic/quit.png</file>
     </qresource>
     <qresource prefix="/">
         <file alias="style.qss">../../graphic/style.qss</file>

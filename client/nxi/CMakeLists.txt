@@ -27,7 +27,6 @@ FOREACH(module ${SUBDIRS})
     include(${MODULE_ROOT}/${module}/${module}.cmake)
 ENDFOREACH()
 
-set(CMAKE_BUILD_TYPE Debug)
 
 # must be set before files scan
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

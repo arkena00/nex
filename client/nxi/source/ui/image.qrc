@@ -1,7 +1,4 @@
 <RCC>
-    <qresource prefix="/ui">
-        <file alias="menu_separator">../../graphic/menu_separator.png</file>
-    </qresource>
     <qresource prefix="/image">
         <file alias="nex">../../graphic/nex.png</file>
         <file alias="hdd">../../graphic/hdd.png</file>

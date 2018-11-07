@@ -46,6 +46,8 @@ namespace ui
 
         window_system_.load();
         //m_page_system.load();
+
+        QObject::connect(&nxi_core_, &nxi::core::event_quit, this, &core::quit);
     }
 
     void core::quit()

@@ -10,17 +10,24 @@
 
 namespace nxi
 {
-    class core
+    class core : public QObject
     {
+        Q_OBJECT
     public:
         core();
         ~core();
         core(const core&) = delete;
         void operator=(const core&) = delete;
 
+        void quit() const;
+
         nxi::command_system& command_system();
+        nxi::module_system& module_system();
         nxi::page_system& page_system();
         nxi::window_system& window_system();
+
+    signals:
+        void event_quit() const;
 
     private:
         ndb::initializer<ndb::sqlite> ndb_init_;

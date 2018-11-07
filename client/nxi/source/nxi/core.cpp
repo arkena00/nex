@@ -16,10 +16,12 @@ namespace nxi
         {
             ndb::connect<dbs::core>();
 
+            // load modules before other systems
+            module_system_.load();
+
+            command_system_.load();
             window_system_.load();
             page_system_.load();
-
-            module_system_.load();
         }
         catch (const std::exception& e)
         {
@@ -35,9 +37,19 @@ namespace nxi
         client_thread_.join();
     }
 
+    void core::quit() const
+    {
+        emit event_quit();
+    }
+
     nxi::command_system& core::command_system()
     {
         return command_system_;
+    }
+
+    nxi::module_system& core::module_system()
+    {
+        return module_system_;
     }
 
     nxi::page_system& core::page_system()

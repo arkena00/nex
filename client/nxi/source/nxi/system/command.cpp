@@ -4,6 +4,11 @@
 #include <nxi/system/page.hpp>
 
 #include <QUrl>
+#include <nxi/system/command.hpp>
+#include <nxi/system/module.hpp>
+#include <nxi/error.hpp>
+#include <include/nxi/module/web.hpp>
+
 
 namespace nxi
 {
@@ -11,12 +16,55 @@ namespace nxi
         nxi_core_{ nxi_core }
     {}
 
-    void command_system::load() {}
+    void command_system::load()
+    {
+        // add nxi commands
+        nxi::command cmd("nxi", "quit", std::bind(&nxi::core::quit, &nxi_core_));
+        add(std::move(cmd));
+
+
+        // load module commands
+        for (auto& module : nxi_core_.module_system().get())
+        {
+            if (module->type() == module_type::web)
+            {
+                auto web_module = static_cast<const nxi::web_module&>(*module);
+                nxi::command cmd("wx-" + module->name(), web_module.browser_action().default_title, std::bind(&nxi::core::quit, &nxi_core_), "module/webextension/test/" + web_module.browser_action().default_icon);
+                add(std::move(cmd));
+            }
+        }
+
+/*        nxi::module_load
+        if (is_module_command) nxi.command_system()get(cmd).exec()
+        else ui.command_system().get(cmd).exec()
+
+        button { "nxi:quit" }*/
+    }
+
+    const std::vector<nxi::command>& command_system::get()
+    {
+        return commands_;
+    }
+
+    const nxi::command& command_system::get(const QString& action_name, const QString& module_name) const
+    {
+        if (!command_indexes_.count(action_name)) nxi_error << "command not found : " << action_name.toStdString();
+        return commands_[command_indexes_[action_name]];
+    }
+
+    void command_system::add(nxi::command command)
+    {
+        size_t index = commands_.size();
+        command_indexes_.insert(command.action_name(), index);
+        commands_.push_back(std::move(command));
+
+        emit event_add(commands_[index]);
+    }
 
     void command_system::exec(const QString& command, command_context context)
     {
         QUrl url{ command };
-        qDebug() << "scheme : " << url.scheme();
+        qDebug() << "scheme : " << url.scheme() << "__" << url.path();
 
         switch (context)
         {

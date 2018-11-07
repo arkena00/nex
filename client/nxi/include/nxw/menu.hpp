@@ -48,9 +48,9 @@ namespace nxw
             layout_->addStretch(1);
         }
 
-        void mouseReleaseEvent(QMouseEvent* event)
+        void mouseReleaseEvent(QMouseEvent* event) override
         {
-            command_();
+            if (command_) command_();
         }
 
         int height() const { return height_; }
@@ -83,6 +83,12 @@ namespace nxw
         {
             auto widget = new Widget(std::forward<Args>(args)...);
             layout_->addWidget(widget);
+        }
+
+        void add(const nxi::command& command)
+        {
+            command.action_name();
+            add<nxw::menu_item>(command.action_name(), command.function(), ":/button/" + command.action_name());
         }
 
         void add(QWidget* widget)

@@ -21,6 +21,7 @@ namespace nxi
 		module_system(const module_system&) = delete;
         void operator=(const module_system&) = delete;
 
+        const std::vector<std::unique_ptr<nxi::module>>& get() const;
         void load();
 
         template<class Module>

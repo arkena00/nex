@@ -27,6 +27,7 @@ namespace nxi
             module_file.close();
 
             // manifest keys
+            name_ = obj["name"].toString();
             auto background = obj["background"].toObject();
             auto scripts = background["scripts"].toArray();
 
@@ -52,6 +53,14 @@ namespace nxi
 
                     content_scripts_.push_back(std::move(content_script));
                 }
+            }
+
+            // browser_action
+            if (obj["browser_action"].isObject())
+            {
+                browser_action_.default_title = obj["browser_action"].toObject()["default_title"].toString();
+                browser_action_.default_icon = obj["browser_action"].toObject()["default_icon"].toString();
+                qDebug() << browser_action_.default_title;
             }
 
             for (web_module::content_script cs : content_scripts_)

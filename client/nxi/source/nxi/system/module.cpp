@@ -5,6 +5,8 @@
 #include <nxi/log.hpp>
 #include <nxi/module/web.hpp>
 #include <nxi/module/binary.hpp>
+#include <include/nxi/system/module.hpp>
+
 
 // include modules
 #include "experimental/module/static_module.hpp"
@@ -15,6 +17,11 @@ namespace nxi
 		nxi_core_{ nxi_core }
 		, static_modules_{ nxi_core_ }
 	{}
+
+    const std::vector<std::unique_ptr<nxi::module>>& module_system::get() const
+    {
+        return modules_;
+    }
 
     void module_system::load()
     {
@@ -34,4 +41,5 @@ namespace nxi
             if (module_data[nxi_model.module.type] == (int)nxi::module_types::web) module_load<nxi::web_module>(module_name);
         }
     }
+
 } // nxi

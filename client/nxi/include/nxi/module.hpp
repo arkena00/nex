@@ -3,6 +3,8 @@
 
 #include <nxi/database.hpp>
 
+enum class module_type { web, binary };
+
 class QString;
 
 namespace nxi
@@ -11,6 +13,9 @@ namespace nxi
     {
     public:
         module() {}
+
+        virtual const QString& name() const = 0;
+        virtual module_type type() const = 0;
 
     private:
         QString name_;

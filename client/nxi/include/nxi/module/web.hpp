@@ -13,7 +13,7 @@ namespace nxi
             std::vector<QString> scripts;
         };
 
-        struct browser_action
+        struct browser_action_data
         {
             bool browser_style = false;
             QString default_area;
@@ -36,11 +36,17 @@ namespace nxi
     public:
         web_module(const QString& name);
 
+        const QString& name() const override { return name_; }
+
+        module_type type() const override { return module_type::web; }
+
+        auto& browser_action() const { return browser_action_; }
+
     private:
         // applications
         QString author_;
         background background_;
-        browser_action browser_action_;
+        browser_action_data browser_action_;
         // chrome_settings_overrides
         // chrome_url_overrides
         commands commands_;

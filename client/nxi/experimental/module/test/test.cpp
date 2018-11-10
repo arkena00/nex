@@ -7,19 +7,19 @@
 
 namespace nxi::modules
 {
-    test::test(nxi::core& nxi_core) : nxi_core_{ nxi_core } {}
+    test::test(nxi::core& nxi_core)
+        : module("static_module_test", module_type::compiled)
+        , nxi_core_{ nxi_core }
+    {}
 
-    void test::load()
+    void test::on_load()
     {
-        nxi_log << "load test module";
+        nxi_log << "load static test module";
 
-        nxi::window tw;
-        tw.x = 20;
-        tw.y = 20;
-        tw.w = 300;
-        tw.h = 300;
+        auto cmd = nxi::command("static_module_test", "action", std::bind(&nxi::core::quit, &nxi_core_));
 
-        //nxi_core_.window_system().add(tw);
+
+        nxi_core_.command_system().add(cmd);
     }
 
 } // nxi::modules

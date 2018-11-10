@@ -11,15 +11,22 @@
 #include <QJsonValue>
 
 #include <QDebug>
+#include <nxi/core.hpp>
+#include <nxi/command.hpp>
+#include <nxi/system/command.hpp>
+#include <nxi/module/web.hpp>
+
 
 namespace nxi
 {
 
-    web_module::web_module(const QString& name)
+    web_module::web_module(nxi::core& nxi_core, const QString& name)
+        : module(name, module_type::web)
+        , nxi_core_{ nxi_core }
     {
         QFile module_file("./module/webextension/"+ name +"/manifest.json");
 
-        if (!module_file.open(QFile::ReadOnly)) qDebug() << "read error";
+        if (!module_file.open(QFile::ReadOnly)) qDebug() << "read error : " << module_file.fileName();
         else
         {
             QJsonDocument doc = QJsonDocument::fromJson(module_file.readAll());
@@ -28,6 +35,8 @@ namespace nxi
 
             // manifest keys
             name_ = obj["name"].toString();
+            description_ = obj["description"].toString();
+
             auto background = obj["background"].toObject();
             auto scripts = background["scripts"].toArray();
 
@@ -35,8 +44,6 @@ namespace nxi
             {
                 nxi_log << "load web_module script " << s.toString().toStdString();
             }
-
-            auto str = obj["description"].toString();
 
             // content_scripts
             if (obj["content_scripts"].isArray())
@@ -60,7 +67,7 @@ namespace nxi
             {
                 browser_action_.default_title = obj["browser_action"].toObject()["default_title"].toString();
                 browser_action_.default_icon = obj["browser_action"].toObject()["default_icon"].toString();
-                qDebug() << browser_action_.default_title;
+                browser_action_.default_popup = obj["browser_action"].toObject()["default_popup"].toString();
             }
 
             for (web_module::content_script cs : content_scripts_)
@@ -69,5 +76,17 @@ namespace nxi
                 for (auto j : cs.js) qDebug() << "j__" << j;
             }
         }
+    }
+
+    void web_module::on_load()
+    {
+        // add module commands
+        auto f = [this]()
+        {
+            if (browser_action_.default_popup.isEmpty()) nxi_core_.page_system().add(nxi::web_page{});
+            else nxi_core_.command_system().get("quit").exec();
+        };
+        nxi::command command{ "wm-" + name(), "main", f, "./module/webextension/"+ name() +"/" + browser_action_.default_icon };
+        nxi_core_.command_system().add(std::move(command));
     }
 } // nxi

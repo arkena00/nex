@@ -8,6 +8,7 @@
 #include <nxw/web_view.hpp>
 #include <ui/core.hpp>
 #include <QWebEnginePage>
+#include <QWebEngineSettings>
 
 namespace nxw
 {
@@ -27,6 +28,9 @@ namespace nxw
                 page.url = url.toString().toStdString();
                 m_ui_core.nxi_core().page_system().update(page.id);
             });
+
+            page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+            page_->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
         }
 
         QWebEnginePage* native()

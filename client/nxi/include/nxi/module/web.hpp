@@ -6,6 +6,8 @@
 
 namespace nxi
 {
+    class core;
+
     class web_module : public module
     {
         struct background
@@ -34,15 +36,15 @@ namespace nxi
         };
 
     public:
-        web_module(const QString& name);
+        web_module(nxi::core&, const QString& name);
 
-        const QString& name() const override { return name_; }
-
-        module_type type() const override { return module_type::web; }
+        void on_load() override;
 
         auto& browser_action() const { return browser_action_; }
 
     private:
+        nxi::core& nxi_core_;
+
         // applications
         QString author_;
         background background_;

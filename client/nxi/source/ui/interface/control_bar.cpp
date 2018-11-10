@@ -10,6 +10,23 @@
 #include <nxw/hbox_layout.hpp>
 #include <nxw/icon_button.hpp>
 #include <nxw/menu.hpp>
+#include <include/ui/interface/control_bar.hpp>
+#include <include/nxw/web_view.hpp>
+#include <QWebEngineView>
+#include <include/nxi/module/web.hpp>
+
+namespace nxw
+{
+    class popup : public QWebEngineView
+    {
+    public:
+        popup(const QString& url)
+        {
+            load(QUrl::fromLocalFile(url));
+        }
+    };
+}
+
 
 namespace ui::interfaces
 {
@@ -45,24 +62,6 @@ namespace ui::interfaces
 
         auto btn_menu = new nxw::icon_button(this, ":/button/menu");
 
-        /*
-        class command
-        {
-        private:
-            QString module_;
-            QString name_;
-            nxi::shortcut shortcut_;
-            std::function<void(ui::core&)> function_;
-        };
-
-        nxi::quit
-        nxi:shortcuts
-
-
-        nxi::command cmd("nxi", "quit", [this](){ m_ui_core.quit(););
-        cmd.desc_set("desc");
-        cmd.shortcut_set(nxi::shortcut());
-*/
 
         auto menu = new nxw::menu{ this };
         menu->setObjectName("main_menu");
@@ -94,18 +93,16 @@ namespace ui::interfaces
 
 
         // module command
-        auto module_controls = new nxw::hbox_layout;
+        // init
+        module_controls_ = new nxw::hbox_layout;
         for (const auto& command : m_ui_core.nxi_core().command_system().get())
         {
-            auto button = new nxw::icon_button(this, command);
-            button->setText(command.command_name());
-            module_controls->addWidget(button);
+            command_add(*command);
         }
-        QObject::connect(&ui_core.nxi_core().command_system(), &nxi::command_system::event_add, [&](const nxi::command& command)
+        // event
+        QObject::connect(&ui_core.nxi_core().command_system(), &nxi::command_system::event_add, [this](const nxi::command& command)
         {
-            auto button = new nxw::icon_button(this, command);
-            button->setText(command.command_name());
-            module_controls->addWidget(button);
+            command_add(command);
         });
 
 
@@ -122,8 +119,37 @@ namespace ui::interfaces
         layout->addSpacing(16);
         layout->addWidget(m_context);
         layout->addWidget(m_address_bar);
-        layout->addLayout(module_controls);
+        layout->addLayout(module_controls_);
         layout->addStretch();
         layout->addWidget(window_controls);
+    }
+
+    void control_bar::command_add(const nxi::command& command)
+    {
+        auto button = new nxw::icon_button(this, command.icon());
+        connect(button, &nxw::icon_button::pressed, [this, &command]()
+        {
+            /*
+            nxi::internal_command
+            nxi::web_module_command
+
+            if (command.is_internal()) command.exec();
+            if (command.is_webaction())
+            {
+
+            }*/
+
+            command.exec();
+            /*
+            QString path = "C:\\Projet\\nk\\nex\\bin\\nxi\\module\\webextension\\beastify\\popup\\choose_beast.html";
+            auto popup = new nxw::popup(path);
+            popup->show();*/
+        });
+
+        button->setText(command.name());
+
+        //popup->show_at(button);
+
+        module_controls_->addWidget(button);
     }
 } // ui::interfaces

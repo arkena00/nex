@@ -5,9 +5,12 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QAbstractItemModel>
 
 namespace nxi
 {
+
+
     enum class page_type { web, explorer, node };
 
     struct page
@@ -47,6 +50,11 @@ namespace nxi
         explorer_page() : id{0}, path{"/"} {}
     };
 
+
+    // page : ID | page_name | page_type
+    // page_connection : source_id | target_id
+
+
     class page_system : public QObject
     {
         Q_OBJECT
@@ -57,10 +65,15 @@ namespace nxi
 
         nxi::page& get(int id);
 
+        /*std::vector<nxi::page&> list(unsigned int id)
+        {
+
+        }*/
+
         //void add(nxi::page page);
 
         template<class Page>
-        void add(Page page)
+        void add(Page page, unsigned int node_id = 0)
         {
             auto id = static_cast<int>(page_.size());
             page.id = id;

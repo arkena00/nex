@@ -36,10 +36,19 @@ namespace nxi
         << ndb::source(nxi_model.module));
         for (const auto& module_data : res)
         {
-            QString module_name = module_data[nxi_model.module.name];
-            if (module_data[nxi_model.module.type] == (int)nxi::module_types::nxi) module_load<nxi::binary_module>(module_name);
-            if (module_data[nxi_model.module.type] == (int)nxi::module_types::web) module_load<nxi::web_module>(module_name);
+            std::unique_ptr<nxi::module> module;
+            const QString& module_name = module_data[nxi_model.module.name];
+
+            if (module_data[nxi_model.module.type] == (int)nxi::module_type::dynamic) module = std::make_unique<nxi::dynamic_module>(nxi_core_, module_name);
+            else if (module_data[nxi_model.module.type] == (int)nxi::module_type::web) module = std::make_unique<nxi::web_module>(nxi_core_, module_name);
+            else nxi_error << "module load type";
+
+            // if (state == enable)
+            module->load();
+
+            modules_.push_back(std::move(module));
         }
+        //emit event_load(module_name);
     }
 
 } // nxi

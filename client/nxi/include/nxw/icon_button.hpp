@@ -11,14 +11,6 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        icon_button(QWidget* parent, const nxi::command& command)
-        {
-            command.exec();
-            setIcon(QIcon(command.icon()));
-            setStyleSheet("QPushButton:hover { border:none; background-color: #DDDDDD; } QPushButton:pressed { border:none; background-color: #BBBBBB; }");
-            connect(this, &icon_button::pressed, [&command](){ command.exec(); });
-        }
-
         icon_button(QWidget* parent, const QString& icon)
         {
             setIcon(QIcon(icon));

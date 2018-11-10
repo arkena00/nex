@@ -3,22 +3,31 @@
 
 #include <nxi/database.hpp>
 
-enum class module_type { web, binary };
-
 class QString;
 
 namespace nxi
 {
+    enum class module_type { compiled, dynamic, web };
+
     class module
     {
     public:
-        module() {}
+        module(QString name, module_type);
 
-        virtual const QString& name() const = 0;
-        virtual module_type type() const = 0;
+        void load();
+        void unload();
+
+        virtual void on_load();
+        virtual void on_unload();
+
+        const QString& name() const;
+        module_type type() const;
+        bool is_loaded() const;
 
     private:
         QString name_;
+        module_type type_;
+        bool loaded_;
     };
 } // nxi
 

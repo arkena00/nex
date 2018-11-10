@@ -24,7 +24,7 @@ namespace nxi
 
         void load();
 
-        const std::vector<nxi::command>& get();
+        const std::vector<std::unique_ptr<nxi::command>>& get();
         const nxi::command& get(const QString& module_action, const QString& module_name = "nxi") const;
 		void add(nxi::command command);
         void exec(const QString& command, command_context context = command_context::deduced);
@@ -35,7 +35,7 @@ namespace nxi
     private:
 		nxi::core& nxi_core_;
 
-		std::vector<nxi::command> commands_;
+		std::vector<std::unique_ptr<nxi::command>> commands_;
 		QHash<QString, size_t> command_indexes_;
 		//QHash<shortcut, unsigned int
     };

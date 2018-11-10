@@ -24,13 +24,6 @@ namespace nxi
         const std::vector<std::unique_ptr<nxi::module>>& get() const;
         void load();
 
-        template<class Module>
-        void module_load(const QString& name)
-        {
-            auto module = std::make_unique<Module>(name);
-            modules_.push_back( std::move(module) );
-        }
-
     private:
 		nxi::core& nxi_core_;
         std::vector<std::unique_ptr<nxi::module>> modules_;

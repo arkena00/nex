@@ -6,15 +6,14 @@
 
 namespace nxi
 {
-    class binary_module : public module
+    class core;
+
+    class dynamic_module : public module
     {
     public:
-        binary_module(const QString& name) {}
+        dynamic_module(nxi::core&, const QString& name) : module(name, module_type::dynamic) {}
 
-        const QString& name() const override { return "binary"; }
-
-        module_type type() const override { return module_type::binary; }
     };
 } // nxi
 
-#endif // NXI_MODULE_H_NXI
+#endif // NXI_MODULE_BINARY_H_NXI

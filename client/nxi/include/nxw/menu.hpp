@@ -36,7 +36,7 @@ namespace nxw
             auto icon = new QLabel(this);
             if (!str_icon.isEmpty())
             {
-                icon->setPixmap(QPixmap(str_icon));
+                icon->setPixmap(QPixmap(str_icon).scaledToWidth(16));
             }
             icon->setFixedWidth(24);
 
@@ -66,11 +66,12 @@ namespace nxw
         Q_OBJECT
 
     public:
-        menu(QWidget* parent) :
-            QFrame(parent)
+        menu(QWidget* parent)
+            : QFrame(parent)
             , widget_origin_{ nullptr }
         {
-            setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);
+            setAttribute(Qt::WA_ShowWithoutActivating);
+            setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
             layout_ = new nxw::vbox_layout;
             layout_->setAlignment(layout_, Qt::AlignTop);
@@ -78,17 +79,25 @@ namespace nxw
             setLayout(layout_);
         }
 
+        void clear()
+        {
+            while (auto item = layout_->takeAt(0))
+            {
+                delete item->widget();
+            }
+        }
+
         template<class Widget, class... Args>
         void add(Args&&... args)
         {
             auto widget = new Widget(std::forward<Args>(args)...);
             layout_->addWidget(widget);
+            adjustSize();
         }
 
         void add(const nxi::command& command)
         {
-            command.action_name();
-            add<nxw::menu_item>(command.action_name(), command.function(), ":/button/" + command.action_name());
+            add<nxw::menu_item>(command.name(), command.function(), command.icon());
         }
 
         void add(QWidget* widget)

@@ -8,6 +8,7 @@
 #include <nxi/system/module.hpp>
 #include <nxi/error.hpp>
 #include <include/nxi/module/web.hpp>
+#include <include/nxi/system/command.hpp>
 
 
 namespace nxi
@@ -19,8 +20,11 @@ namespace nxi
     void command_system::load()
     {
         // add nxi commands
-        nxi::command cmd("nxi", "quit", std::bind(&nxi::core::quit, &nxi_core_));
-        add(std::move(cmd));
+        nxi::command quit("nxi", "quit", std::bind(&nxi::core::quit, &nxi_core_), ":/button/quit");
+        add(std::move(quit));
+
+        nxi::command zeta("nxi", "zeta", std::bind(&nxi::core::quit, &nxi_core_), ":/image/nex");
+        add(std::move(zeta));
 
 
         // load module commands
@@ -84,6 +88,19 @@ namespace nxi
             case command_context::explorer:
                 break;
         }
+    }
+
+    std::vector<nxi::command> command_system::search(const QString& search_string)
+    {
+        std::vector<nxi::command> commands;
+
+        for (const auto& command : commands_)
+        {
+            qDebug() << "search " << search_string << " match : " << command->name();
+            if (command->name().contains(search_string)) commands.push_back(*command);
+        }
+
+        return commands;
     }
 } // nxi
 

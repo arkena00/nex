@@ -28,6 +28,7 @@ namespace nxi
         const nxi::command& get(const QString& module_action, const QString& module_name = "nxi") const;
 		void add(nxi::command command);
         void exec(const QString& command, command_context context = command_context::deduced);
+        std::vector<nxi::command> search(const QString&);
 
         signals:
         void event_add(const nxi::command&);

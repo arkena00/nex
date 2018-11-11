@@ -4,8 +4,8 @@
 #include <ui/interface.hpp>
 
 namespace nxi { class command; }
-namespace nxw { class hbox_layout; }
-namespace ui { class core; }
+namespace nxw { class hbox_layout; class command; }
+namespace ui { class core;  }
 
 class QComboBox;
 class QLineEdit;
@@ -24,7 +24,7 @@ namespace ui::interfaces
     private:
         ui::core& m_ui_core;
 
-        QLineEdit* m_address_bar;
+        nxw::command* command_bar_;
         QComboBox* m_context;
         nxw::hbox_layout* module_controls_;
     };

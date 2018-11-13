@@ -24,7 +24,7 @@ namespace nxw
 
         ui::core& m_ui_core;
 
-        std::unordered_map<int, nxw::web_page*> m_pages;
+        std::unordered_map<unsigned int, nxw::web_page*> m_pages;
     };
 } // nxw
 

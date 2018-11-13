@@ -13,41 +13,49 @@ namespace nxi
 
     enum class page_type { web, explorer, node };
 
-    struct page
+    class page
     {
-        int id;
-        std::string name;
+    public:
+        unsigned int id() const { return id_; }
+        const QString& name() const { return name_; }
 
-        virtual page_type type() = 0;
+    protected:
+        page(unsigned int id, const QString& name)
+            : id_{ id }
+            , name_{ name }
+        {}
 
-        page() : id{0} {}
+    private:
+        unsigned int id_;
+        QString name_;
     };
 
-    struct page_node : nxi::page
+    class page_node : public nxi::page
     {
-        int id;
+    public:
+        page_node(unsigned int id) : nxi::page(id, "new node") {}
 
-        page_type type() override { return page_type::node; }
+        page_node(unsigned int id, const QString& name) : nxi::page(id, name) {}
+
+    private:
     };
 
-    struct web_page : nxi::page
+    class web_page : public nxi::page
     {
-        int id;
-        std::string url;
+    public:
+        web_page(unsigned int id) : nxi::page(id, "web_page"), url_{ "http://www.google.fr" } {}
 
-        page_type type() override { return page_type::web; }
+        const QString& url() const { return url_; }
 
-        web_page() : id{0}, url{"http://www.google.fr"} {}
+    private:
+        QString url_;
     };
 
     struct explorer_page : nxi::page
     {
-        int id;
         std::string path;
 
-        page_type type() override { return page_type::explorer; }
-
-        explorer_page() : id{0}, path{"/"} {}
+        explorer_page(unsigned int id) : nxi::page(id, "explorer_page") {}
     };
 
 
@@ -73,19 +81,27 @@ namespace nxi
         //void add(nxi::page page);
 
         template<class Page>
-        void add(Page page, unsigned int node_id = 0)
+        void add(unsigned int source_id = 0)
         {
-            auto id = static_cast<int>(page_.size());
-            page.id = id;
-            auto p = std::make_unique<Page>(std::move(page));
+            auto id = static_cast<unsigned int>(pages_.size());
 
-            page_.emplace(id, std::move(p));
+            auto p = std::make_unique<Page>(id);
 
-            emit event_add(static_cast<Page&>(get(id)));
+            pages_.emplace(id, std::move(p));
+            page_connections_.emplace(source_id, id);
+
+            emit event_add(static_cast<Page&>(get(id)), source_id);
             //change(page.id);
         }
 
-        void change(int id);
+        void change(unsigned int id);
+
+        template<class Page>
+        void change(unsigned int id)
+        {
+            emit event_change(static_cast<Page&>(get(id)));
+            emit event_change(get(id));
+        }
 
         void update(int id);
 
@@ -94,11 +110,12 @@ namespace nxi
 
         void event_add(nxi::page&);
 
-        void event_add(nxi::web_page&);
-        void event_add(nxi::explorer_page&);
+        void event_add(nxi::page_node&, unsigned int source_id);
+        void event_add(nxi::web_page&, unsigned int source_id);
+        void event_add(nxi::explorer_page&, unsigned int source_id);
 
         void event_change(nxi::page&);
-        void event_change(nxi::web_page&);
+        //void event_change(nxi::web_page&);
 
         void event_load(nxi::web_page&);
 
@@ -106,8 +123,11 @@ namespace nxi
         void event_update(const nxi::web_page&);
 
     private:
-        int m_current_index;
-        std::map<int, std::unique_ptr<nxi::page>> page_;
+        nxi::page* current_page_;
+        std::vector<nxi::page*> visible_pages_;
+
+        std::map<int, std::unique_ptr<nxi::page>> pages_;
+        std::unordered_map<int, int> page_connections_;
     };
 } // nxi
 

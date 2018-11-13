@@ -24,9 +24,10 @@ namespace nxw
             page_ = new QWebEnginePage(this);
             connect(page_, &QWebEnginePage::urlChanged, this, [this](const QUrl& url)
             {
+                /*
                 auto& page = static_cast<nxi::web_page&>(m_ui_core.nxi_core().page_system().get(m_id));
                 page.url = url.toString().toStdString();
-                m_ui_core.nxi_core().page_system().update(page.id);
+                m_ui_core.nxi_core().page_system().update(page.id);*/
             });
 
             page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);

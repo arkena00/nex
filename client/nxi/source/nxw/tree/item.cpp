@@ -1,8 +1,8 @@
 #include <nxw/tree/item.hpp>
 
-namespace nxw
+namespace ui
 {
-    tree_item::tree_item(nxw::tree* tree, tree_item* parent) :
+    tree_item::tree_item(ui::page_tree* tree, tree_item* parent) :
         QTreeWidgetItem(parent)
         , m_tree(tree)
     {

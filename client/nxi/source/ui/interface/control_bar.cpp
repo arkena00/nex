@@ -36,7 +36,9 @@ class command : public QLineEdit
             setFixedWidth(400);
 
             menu_ = new nxw::menu(this);
+            menu_->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
             menu_->setFixedWidth(width());
+            menu_->hide();
 
             connect(this, &QLineEdit::editingFinished, [this]()
             {
@@ -48,12 +50,20 @@ class command : public QLineEdit
             {
                 menu_->clear();
                 auto result = ui_core_.nxi_core().command_system().search(text());
-                for (auto cmd : result)
+                if (result.size() > 0)
                 {
-                    menu_->add(cmd);
+                    for (auto cmd : result)
+                    {
+                        menu_->add(cmd);
+                    }
+                    menu_->show_at(this);
+                    menu_->exec();
                 }
-                menu_->show_at(this);
-                menu_->exec();
+            });
+
+            connect(&ui_core_.nxi_core().page_system(), &nxi::page_system::event_change, this, [this](nxi::page& page)
+            {
+                setText(page.name());
             });
 
         }

@@ -18,26 +18,28 @@ namespace nxw
         setLayout(layout);
 
         // page_system add
-        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add),
-                [this](nxi::web_page& page)
-                {
-                    qDebug() << "page add " << page.id;
-                    auto ui_page = new nxw::web_page(m_ui_core, page.id, this);
 
-                    ui_page->load(QString::fromStdString(page.url));
-                    m_pages.emplace(page.id, std::move(ui_page));
-                    view_->setPage(m_pages[page.id]->native());
+        connect(&m_ui_core.nxi_core().page_system(), qOverload<nxi::web_page&, unsigned int>(&nxi::page_system::event_add),
+                [this](nxi::web_page& page, unsigned int)
+                {
+                    auto ui_page = new nxw::web_page(m_ui_core, page.id(), this);
+
+                    ui_page->load(page.url());
+                    m_pages.emplace(page.id(), std::move(ui_page));
+                    view_->setPage(m_pages[page.id()]->native());
 
                     // m_ui_core.nxi_core().page_system().load(page.id);
                 });
 
 
         // page_system change
-        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_change), this,
-                [this](nxi::web_page& page)
+
+        connect(&m_ui_core.nxi_core().page_system(), &nxi::page_system::event_change, this,
+                [this](nxi::page& page)
                 {
-                    m_pages[page.id]->load(QString::fromStdString(page.url));
-                    view_->setPage(m_pages[page.id]->native());
+                    //m_pages[page.id]->load(QString::fromStdString(page.url));
+                    //view_->setPage(m_pages[page.id]->native());
+                    view_->load(QUrl(page.name()));
                 });
 
         // page_system update
@@ -52,7 +54,7 @@ namespace nxw
 
         //view_->setPage()
 
-        m_ui_core.nxi_core().page_system().add(nxi::web_page{});
+        m_ui_core.nxi_core().page_system().add<nxi::web_page>();
     }
 
     QWebEngineView* web_view::native()

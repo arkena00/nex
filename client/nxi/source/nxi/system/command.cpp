@@ -79,10 +79,11 @@ namespace nxi
                 break;
             case command_context::web:
             {
+                /*
                 qDebug() << "exec web";
                 nxi::web_page page;
                 page.url = command.toStdString();
-                nxi_core_.page_system().load(std::move(page));
+                nxi_core_.page_system().load(std::move(page));*/
             }
                 break;
             case command_context::explorer:
@@ -96,7 +97,7 @@ namespace nxi
 
         for (const auto& command : commands_)
         {
-            qDebug() << "search " << search_string << " match : " << command->name();
+            //qDebug() << "search " << search_string << " match : " << command->name();
             if (command->name().contains(search_string)) commands.push_back(*command);
         }
 

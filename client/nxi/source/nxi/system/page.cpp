@@ -17,13 +17,15 @@ namespace nxi
 
     nxi::page& page_system::get(int id)
     {
-        return *page_[id];
+        return *pages_[id];
     }
 
-    void page_system::change(int id)
+    void page_system::change(unsigned int id)
     {
-        m_current_index = id;
-        emit event_change(get(id));
+        current_page_ = &get(id);
+        //current_page_->change();
+        // emit event_change(static_cast<Page*>(current_page_));
+        emit event_change(*current_page_);
     }
 
     void page_system::update(int id)

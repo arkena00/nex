@@ -27,12 +27,14 @@ namespace ui::interfaces
 
         layout->addWidget(view_stack_);
 
+        // interface_system::event_view_change
         connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::page&>::of(&nxi::page_system::event_change),
                 [this](nxi::page& page)
                 {
                     //content_view_->context_update(page.type());
-                    if (page.type() == nxi::page_type::web) view_stack_->setCurrentIndex(0);
-                    if (page.type() == nxi::page_type::explorer) view_stack_->setCurrentIndex(1);
+                    //if (page.type() == nxi::page_type::web) view_stack_->setCurrentIndex(0);
+                    //if (page.type() == nxi::page_type::explorer) view_stack_->setCurrentIndex(1);
+                    // page.update_view()
                 });
     }
 } // ui::interfaces

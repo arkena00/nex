@@ -5,7 +5,9 @@ namespace ui { class core; }
 
 #include <ui/interface.hpp>
 #include "vbox_layout.hpp"
+#include "hbox_layout.hpp"
 #include <QLabel>
+#include <QtCore/QEvent>
 
 namespace nxw
 {
@@ -70,8 +72,8 @@ namespace nxw
             : QFrame(parent)
             , widget_origin_{ nullptr }
         {
-            setAttribute(Qt::WA_ShowWithoutActivating);
-            setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+            //setAttribute(Qt::WA_ShowWithoutActivating);
+            setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
             layout_ = new nxw::vbox_layout;
             layout_->setAlignment(layout_, Qt::AlignTop);
@@ -100,6 +102,11 @@ namespace nxw
             add<nxw::menu_item>(command.name(), command.function(), command.icon());
         }
 
+        void add(const QString& action_name, std::function<void()> function)
+        {
+            add<nxw::menu_item>(action_name, std::move(function));
+        }
+
         void add(QWidget* widget)
         {
             layout_->addWidget(widget);
@@ -112,9 +119,15 @@ namespace nxw
 
         void exec()
         {
-            // move menu to widget global position
-            auto p = widget_origin_->mapToGlobal(widget_origin_->rect().bottomLeft());
-            move(p);
+            QPoint position = QCursor::pos();
+
+            if (widget_origin_)
+            {
+                // move menu to widget global position
+                position = widget_origin_->mapToGlobal(widget_origin_->rect().bottomLeft());
+            }
+
+            move(position);
             show();
         }
 

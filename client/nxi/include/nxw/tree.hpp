@@ -7,30 +7,31 @@ class QTreeWidget;
 
 #include <ui/interface.hpp>
 #include <nxw/tree/page_item.hpp>
+#include <include/nxi/system/page.hpp>
 
-namespace nxw
+namespace ui
 {
+    class core;
     class tree_item;
+    class tree_page_item;
 
-    class tree : public ui::interface
+    class page_tree : public QTreeWidget
     {
         Q_OBJECT
     public:
-        tree::tree(ui::core& ui_core);
+        page_tree::page_tree(ui::core&);
 
+        void add(const nxi::page& page, unsigned int source_id);
         void add(tree_item*);
+        void add(tree_item* item, tree_item* source_item);
+        tree_item* get(unsigned int id) const;
+
 
         tree_item* current_item() const;
 
-        ui::core& ui_core() const;
-
-        QTreeWidget* native() { return m_tree; }
-
     private:
-        ui::core& m_ui_core;
-        QTreeWidget* m_tree;
-
-        std::unordered_map<int, nxw::tree_page_item*> m_page_items;
+        ui::core& ui_core_;
+        std::unordered_map<int, ui::tree_page_item*> page_items_;
     };
 } // nxw
 

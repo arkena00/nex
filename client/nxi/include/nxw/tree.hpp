@@ -21,7 +21,7 @@ namespace ui
     public:
         page_tree::page_tree(ui::core&);
 
-        void add(const nxi::page& page, unsigned int source_id);
+        ui::tree_page_item* add(nxi::page& page, nxi::page_id source_id);
         void add(tree_item*);
         void add(tree_item* item, tree_item* source_item);
         tree_item* get(unsigned int id) const;
@@ -31,7 +31,7 @@ namespace ui
 
     private:
         ui::core& ui_core_;
-        std::unordered_map<int, ui::tree_page_item*> page_items_;
+        std::unordered_map<nxi::page_id, ui::tree_page_item*> page_items_;
     };
 } // nxw
 

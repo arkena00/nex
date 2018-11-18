@@ -5,6 +5,16 @@
 #include <ui/core.hpp>
 #include <include/nxw/tree/page_item.hpp>
 
+#include <QWidget>
+#include <include/nxw/hbox_layout.hpp>
+#include <QtWidgets/QLabel>
+
+
+
+
+
+
+
 
 namespace ui
 {
@@ -14,6 +24,22 @@ namespace ui
         , tree_{ tree }
     {
         setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled | Qt::ItemIsDragEnabled);
+
+        auto icon = new QLabel;
+        icon->setPixmap(QPixmap(":/image/nex").scaledToWidth(16));
+
+        //tree_->setItemDelegate(new CloseButton{});
+
+        /*
+        auto layout = new nxw::hbox_layout;
+        layout->addWidget(icon);
+        layout->addWidget(new QLabel("test"));
+
+        auto page_widget = new QWidget(this);
+        page_widget->setLayout(layout);
+        page_widget->show();
+
+        tree_->setItemWidget(this, 0, page_widget);*/
     }
 
     void tree_page_item::change()

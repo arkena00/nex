@@ -12,6 +12,7 @@
         <file alias="notification_status_0">../../graphic/notification_status_0.png</file>
         <file alias="notification_status_1">../../graphic/notification_status_1.png</file>
         <file alias="login_background">../../graphic/login_background.jpg</file>
+        <file alias="node">../../graphic/node.png</file>
     </qresource>
     <qresource prefix="/button">
         <file alias="menu">../../graphic/menu.png</file>

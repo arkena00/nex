@@ -11,14 +11,16 @@
 // include type_mapped types
 #include <QString>
 
-#include <nxi/database/window.hpp>
 #include <nxi/database/module.hpp>
-
+#include <nxi/database/page.hpp>
+#include <nxi/database/window.hpp>
 
 ndb_model(
     nxi_model
-    , window
     , module
+    , page
+    , page_connection
+    , window
 )
 
 ndb_project(nxi_project,

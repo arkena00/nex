@@ -9,6 +9,7 @@
 #include <nxw/explorer_view.hpp>
 
 #include <QStackedWidget>
+#include <QWebEngineView>
 
 namespace ui::interfaces
 {
@@ -26,6 +27,10 @@ namespace ui::interfaces
         view_stack_->addWidget(explorer_view_);
 
         layout->addWidget(view_stack_);
+
+        auto web_view2 = new nxw::web_view(ui_core_);
+        web_view2->native()->load(QUrl("http://www.google.fr"));
+        layout->addWidget(web_view2);
 
         // interface_system::event_view_change
         connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::page&>::of(&nxi::page_system::event_change),

@@ -3,6 +3,9 @@
 
 #include <ui/interface.hpp>
 
+#include <unordered_map>
+#include <QObject>
+
 class QWebEngineView;
 class QWebEnginePage;
 
@@ -20,11 +23,10 @@ namespace nxw
 
         QWebEngineView* native();
 
+    private:
+        ui::core& ui_core_;
         QWebEngineView* view_;
-
-        ui::core& m_ui_core;
-
-        std::unordered_map<unsigned int, nxw::web_page*> m_pages;
+        std::unordered_map<unsigned int, nxw::web_page*> pages_;
     };
 } // nxw
 

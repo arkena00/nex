@@ -9,6 +9,7 @@
 #include <ui/core.hpp>
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
+#include <nxi/page/web.hpp>
 
 namespace nxw
 {
@@ -21,32 +22,42 @@ namespace nxw
             , m_id{ id }
             , m_ui_core{ ui_core }
         {
-            page_ = new QWebEnginePage(this);
-            connect(page_, &QWebEnginePage::urlChanged, this, [this](const QUrl& url)
+            native_page_ = new QWebEnginePage(this);
+            connect(native_page_, &QWebEnginePage::urlChanged, this, [this](const QUrl& url)
             {
-                /*
                 auto& page = static_cast<nxi::web_page&>(m_ui_core.nxi_core().page_system().get(m_id));
-                page.url = url.toString().toStdString();
-                m_ui_core.nxi_core().page_system().update(page.id);*/
+                page.url_update(url.toString());
             });
 
-            page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
-            page_->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
+            connect(native_page_, &QWebEnginePage::titleChanged, this, [this](const QString& name)
+            {
+                auto& page = m_ui_core.nxi_core().page_system().get(m_id);
+                page.name_update(name);
+            });
+
+            connect(native_page_, &QWebEnginePage::iconChanged, this, [this](const QIcon& icon)
+            {
+                auto& page = static_cast<nxi::web_page&>(m_ui_core.nxi_core().page_system().get(m_id));
+                emit page.event_update_icon(icon);
+            });
+
+            native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+            native_page_->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
         }
 
         QWebEnginePage* native()
         {
-            return page_;
+            return native_page_;
         }
 
         void load_url(const QString& url){}
-        void load(const QString& data){page_->setUrl(QUrl(data));}
+        void load(const QString& data){native_page_->setUrl(QUrl(data));}
 
     private:
         ui::core& m_ui_core;
         int m_id;
 
-        QWebEnginePage* page_;
+        QWebEnginePage* native_page_;
     };
 
 } // nxw

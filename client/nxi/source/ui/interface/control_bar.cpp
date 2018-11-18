@@ -61,7 +61,7 @@ class command : public QLineEdit
                 }
             });
 
-            connect(&ui_core_.nxi_core().page_system(), &nxi::page_system::event_change, this, [this](nxi::page& page)
+            connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::page&>(&nxi::page_system::event_change), this, [this](nxi::page& page)
             {
                 setText(page.name());
             });

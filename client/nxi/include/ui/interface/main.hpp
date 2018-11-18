@@ -3,6 +3,8 @@
 
 #include <ui/interface.hpp>
 
+namespace ui { class core; }
+
 namespace ui::interfaces
 {
     class content;

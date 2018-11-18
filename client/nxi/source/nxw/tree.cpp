@@ -13,6 +13,95 @@
 #include <include/nxw/tree.hpp>
 #include <include/nxw/menu.hpp>
 
+#include <nxi/page/node.hpp>
+#include <nxi/page/web.hpp>
+
+
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QtCore/QEvent>
+#include <QMouseEvent>
+
+/*
+class tree_page_item_delegate : public QStyledItemDelegate {
+
+public:
+
+    explicit tree_page_item_delegate(QObject *parent = 0,
+                         const QPixmap &closeIcon = QPixmap())
+    : QStyledItemDelegate(parent)
+    , m_closeIcon(closeIcon)
+    {
+        if(m_closeIcon.isNull())
+        {
+            m_closeIcon = QPixmap(":/button/window_close").scaledToWidth(16);
+        }
+    }
+
+    QPoint closeIconPos(const QStyleOptionViewItem &option) const {
+        return QPoint(option.rect.right() - m_closeIcon.width() - margin,
+                      option.rect.center().y() - m_closeIcon.height()/2);
+    }
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const {
+        QStyledItemDelegate::paint(painter, option, index);
+        // Only display the close icon for top level items...
+
+
+        painter->drawText(option.rect, "test");
+        if(
+            // ...and when the mouse is hovering the item
+            // (mouseTracking must be enabled on the view)
+        (option.state & QStyle::State_MouseOver))
+        {
+            painter->drawPixmap(closeIconPos(option), m_closeIcon);
+            painter->drawText(option.rect, "test");
+        }
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const
+    {
+        QSize size = QStyledItemDelegate::sizeHint(option, index);
+
+        // Make some room for the close icon
+
+            size.rwidth() += m_closeIcon.width() + margin * 2;
+            size.setHeight(qMax(size.height(),
+                                m_closeIcon.height() + margin * 2));
+
+        return size;
+    }
+
+    bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                     const QStyleOptionViewItem &option,
+                     const QModelIndex &index)
+    {
+        // Emit a signal when the icon is clicked
+        if(!index.parent().isValid() &&
+           event->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+
+            QRect closeButtonRect = m_closeIcon.rect()
+            .translated(closeIconPos(option));
+
+            if(closeButtonRect.contains(mouseEvent->pos()))
+            {
+                qDebug() << "CLOSE";
+            }
+        }
+        return false;
+    }
+
+signals:
+
+private:
+    QPixmap m_closeIcon;
+    static const int margin = 2; // pixels to keep arount the icon
+
+};
+*/
 
 namespace ui
 {
@@ -27,6 +116,7 @@ namespace ui
         //setRootIsDecorated(false);
         setContextMenuPolicy(Qt::CustomContextMenu);
         setEditTriggers(QAbstractItemView::EditKeyPressed);
+        setSelectionMode(QAbstractItemView::ExtendedSelection);
         setFixedWidth(200);
 
         setDragEnabled(true);
@@ -34,6 +124,12 @@ namespace ui
         setDropIndicatorShown(true);
         setDragDropMode(QAbstractItemView::DragDrop);
         setDefaultDropAction(Qt::MoveAction);
+
+        // load stored page
+        for (const auto& [id, page] : ui_core_.nxi_core().page_system().get())
+        {
+            add(*page, 0);
+        }
 
         // tree option menu
         connect(this, &ui::page_tree::customContextMenuRequested, [this](const QPoint& point)
@@ -50,14 +146,23 @@ namespace ui
         });
 
         // page_system::event_add
-        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::page_node&, unsigned int>(&nxi::page_system::event_add), this, [this](nxi::page_node& page, unsigned int source_id)
+        // page_node
+        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::page_node&, nxi::page_id>(&nxi::page_system::event_add), this, [this](nxi::page_node& page, nxi::page_id source_id)
         {
-            add(page, source_id);
+            auto page_item = add(page, source_id);
+            page_item->setIcon(0, QIcon(":/image/node"));
         });
 
-        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&, unsigned int>(&nxi::page_system::event_add), this, [this](nxi::web_page& page, unsigned int source_id)
+        // web_page
+        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&, nxi::page_id>(&nxi::page_system::event_add), this, [this](nxi::web_page& page, nxi::page_id source_id)
         {
-            add(page, source_id);
+            auto page_item = add(page, source_id);
+            page_item->setIcon(0, QIcon(":/image/network"));
+
+            connect(&page, &nxi::web_page::event_update_icon, [page_item](const QIcon& icon)
+            {
+                page_item->setIcon(0, icon);
+            });
         });
 
         // item click
@@ -65,48 +170,17 @@ namespace ui
         {
             auto item = static_cast<ui::tree_page_item*>(base_item);
 
-            item->change();
+            //item->change();
             // ui_core_.nxi_core().page_system().change<nxi::web_page>(id());
             ui_core_.nxi_core().page_system().change(item->id());
         });
-
-        /*// on click > tab change
-        connect(m_tree, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int)
-        {
-            static_cast<tree_item*>(item)->load();
-        });
-
-        // page added
-        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_add), this, [this](nxi::web_page& page)
-        {
-
-            auto page_item = new nxw::tree_page_item(this, page.id);
-            page_item->setText(0, QString::fromStdString(page.url));
-            page_items_.emplace(page.id, page_item);
-            add(page_item);
-        });
-
-        connect(&m_ui_core.nxi_core().page_system(), QOverload<nxi::explorer_page&>::of(&nxi::page_system::event_add), this, [this](nxi::explorer_page& page)
-        {
-            auto page_item = new nxw::tree_page_item(this, page.id);
-            page_item->setText(0, QString::fromStdString(page.path));
-            page_items_.emplace(page.id, page_item);
-            add(page_item);
-        });
-
-        connect(&m_ui_core.nxi_core().page_system(), QOverload<const nxi::web_page&>::of(&nxi::page_system::event_update), this,
-        [this](const nxi::web_page& page)
-        {
-            //page_items_[page.id]->setText(0, QString::fromStdString(page.url));
-        });
-
-         */
     }
 
-    void page_tree::add(const nxi::page& page, unsigned int source_id)
+    ui::tree_page_item* page_tree::add(nxi::page& page, nxi::page_id source_id)
     {
         auto page_item = new ui::tree_page_item(this, page.id());
         page_item->setText(0, page.name());
+
         page_items_.emplace(page.id(), page_item);
 
         if (source_id == 0) add(page_item);
@@ -116,10 +190,19 @@ namespace ui
             auto source_item = get(source_id);
             add(page_item, source_item);
         }
+
+        // page update
+        connect(&page, &nxi::page::event_update_name, [page_item](const QString& name)
+        {
+            page_item->setText(0, name);
+        });
+
+        return page_item;
     }
 
     void page_tree::add(tree_item* item)
     {
+        //setItemDelegate(new tree_page_item_delegate{this});
         addTopLevelItem(item);
     }
 
@@ -133,7 +216,7 @@ namespace ui
         return static_cast<ui::tree_item*>(currentItem());
     }
 
-    tree_item* page_tree::get(unsigned int id) const
+    tree_item* page_tree::get(nxi::page_id id) const
     {
         assert(page_items_.count(id));
 

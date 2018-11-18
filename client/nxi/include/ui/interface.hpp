@@ -1,10 +1,11 @@
 #ifndef UI_INTERFACE_H_NXI
 #define UI_INTERFACE_H_NXI
 
-#include <ui/window.hpp>
+#include <QWidget>
 
 namespace ui
 {
+    class window;
 
     class interface : public QWidget
     {

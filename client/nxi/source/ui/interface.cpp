@@ -1,6 +1,6 @@
 #include <ui/interface.hpp>
-#include <include/ui/interface.hpp>
 
+#include <ui/window.hpp>
 
 namespace ui
 {

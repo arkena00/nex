@@ -7,7 +7,7 @@
 #include <ui/core.hpp>
 #include <ui/interface/main.hpp>
 #include <ui/system/window.hpp>
-
+#include <ui/window.hpp>
 
 namespace ui
 {

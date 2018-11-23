@@ -13,34 +13,14 @@ namespace ui
 {
 	window_system::window_system(ui::core& ui_core) :
 		m_ui_core{ ui_core }
-	{}
-
-	void window_system::load()
-    {
-	    nxi_log << "ui - load windows";
+	{
+        nxi_log << "ui - init windows";
 
         QObject::connect(&m_ui_core.nxi_core().window_system(), &nxi::window_system::event_add, [this](const nxi::window& window)
         {
             add(window);
         });
-
-        // load stored windows
-        for (const auto& [id, window] : m_ui_core.nxi_core().window_system().get())
-        {
-            add(window);
-        }
-
-        // no windows, create one
-        if (m_windows.size() == 0)
-        {
-            nxi::window default_window;
-            default_window.x = 200;
-            default_window.y = 200;
-            default_window.w = 400;
-            default_window.h = 400;
-            m_ui_core.nxi_core().window_system().add(default_window);
-        }
-    }
+	}
 
     void window_system::unload()
     {

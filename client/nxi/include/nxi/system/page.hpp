@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <unordered_map>
+#include <stdz/observer_ptr.hpp>
 
 #include <nxi/page/web.hpp>
 
@@ -15,20 +16,17 @@ namespace nxi
 {
     class page;
     class page_node;
-    //class web_page;
+    class web_page;
     class explorer_page;
-
-
-    // page : ID | page_name | page_type
-    // page_connection : source_id | target_id
-
 
     class page_system : public QObject
     {
         Q_OBJECT
 
         using pages_type = std::unordered_map<nxi::page_id, std::unique_ptr<nxi::page>>;
-        using page_connections_type = std::unordered_map<nxi::page_id, nxi::page_id>;
+        using pages_view = std::vector<stdz::observer_ptr<nxi::page>>;
+
+        using page_connections_type = std::unordered_multimap<nxi::page_id, nxi::page_id>;
 
     public:
         void load();
@@ -36,40 +34,45 @@ namespace nxi
         void load(nxi::page_id page);
 
 
-        const pages_type& get() const;
-        const page_connections_type& connection_get() const;
+        const pages_view& get() const;
+        const page_connections_type& connections() const;
         nxi::page& get(nxi::page_id id) const;
 
         template<class Page>
         void add(nxi::page_id source_id = 0)
         {
+            // add page
             ndb::query<dbs::core>() << ndb::add(
                 nxi_model.page.name = QString("test")
-                , nxi_model.page.type = (int)Page::type()
+                , nxi_model.page.type = Page::type()
             );
 
             auto page_id = static_cast<nxi::page_id>(ndb::last_id<dbs::core>());
 
-            auto page = std::make_unique<Page>(*this, page_id);
+            internal_add<Page>(*this, page_id);
 
-            pages_.emplace(page_id, std::move(page));
+            // add connection
+            ndb::query<dbs::core>() << ndb::add(
+                nxi_model.page_connection.source_id = (int)source_id
+                , nxi_model.page_connection.target_id = (int)page_id
+            );
+
             page_connections_.emplace(source_id, page_id);
 
             emit event_add(static_cast<Page&>(get(page_id)), source_id);
-            //change(page.id);
         }
 
-        void change(nxi::page_id id);
+        void focus(nxi::page_id id);
 
         template<class Page>
-        void change(nxi::page_id id)
+        void focus(nxi::page_id id)
         {
-            emit event_change(static_cast<Page&>(get(id)));
-            emit event_change(get(id));
+            emit event_focus(static_cast<Page&>(get(id)));
+            emit event_focus(get(id));
         }
 
-        void change(nxi::web_page& page);
-        void change(nxi::page_node& node);
+        void focus(nxi::web_page& page);
+        void focus(nxi::page_node& node);
 
         void update(nxi::page_id id);
 
@@ -81,10 +84,10 @@ namespace nxi
         void event_add(nxi::web_page&, nxi::page_id source_id);
         void event_add(nxi::explorer_page&, nxi::page_id source_id);
 
-        void event_change(nxi::page&);
-        void event_change(nxi::page_node&);
-        void event_change(nxi::web_page&);
-        void event_change(nxi::explorer_page&);
+        void event_focus(nxi::page&);
+        void event_focus(nxi::page_node&);
+        void event_focus(nxi::web_page&);
+        void event_focus(nxi::explorer_page&);
 
         void event_load(nxi::web_page&);
 
@@ -92,10 +95,21 @@ namespace nxi
         void event_update(const nxi::web_page&);
 
     private:
+        template<class Page, class... Args>
+        void internal_add(Args&&... args)
+        {
+            auto page = std::make_unique<Page>(std::forward<Args>(args)...);
+            auto page_ptr = stdz::make_observer<nxi::page>(page.get());
+            pages_view_.emplace_back(std::move(page_ptr));
+            pages_.emplace(page->id(), std::move(page));
+        }
+
         nxi::page* current_page_;
         std::vector<nxi::page*> visible_pages_;
 
         pages_type pages_;
+        pages_view pages_view_;
+
         page_connections_type page_connections_;
     };
 } // nxi

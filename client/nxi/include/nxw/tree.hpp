@@ -30,6 +30,10 @@ namespace ui
         tree_item* current_item() const;
 
     private:
+        void init_ui();
+        void init_data();
+        void init_event();
+
         ui::core& ui_core_;
         std::unordered_map<nxi::page_id, ui::tree_page_item*> page_items_;
     };

@@ -21,17 +21,10 @@ namespace ui
         , nxi_core_{ nxi_core }
         , window_system_{ *this }
     {
-        nxi_log << "init ui::core";
-
         QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 		qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
 
         QtWebEngine::initialize();
-    }
-
-    void core::load()
-    {
-        nxi_log << "load ui";
 
         // load qss
         QFile qss_file(":/style.qss");
@@ -43,9 +36,6 @@ namespace ui
         systray_ = new QSystemTrayIcon;
         systray_->setIcon(QIcon(":/image/nex"));
         systray_->show();
-
-        window_system_.load();
-        //m_page_system.load();
 
         QObject::connect(&nxi_core_, &nxi::core::event_quit, this, &core::quit);
     }

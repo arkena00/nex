@@ -10,31 +10,22 @@ namespace nxi
         , command_system_{ *this }
         , window_system_{ *this }
         , module_system_{ *this }
-    {
-        nxi_log << "init core";
-        try
-        {
-            ndb::connect<dbs::core>();
-
-            // load modules before other systems
-            module_system_.load();
-
-            command_system_.load();
-            window_system_.load();
-            page_system_.load();
-        }
-        catch (const std::exception& e)
-        {
-            client_.stop();
-            client_thread_.join();
-            throw;
-        }
-    }
+    {}
 
     core::~core()
     {
         client_.stop();
         client_thread_.join();
+    }
+
+    void core::load()
+    {
+        // load modules before other systems
+        module_system_.load();
+
+        command_system_.load();
+        window_system_.load();
+        page_system_.load();
     }
 
     void core::quit() const

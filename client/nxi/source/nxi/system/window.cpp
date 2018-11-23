@@ -10,7 +10,9 @@ namespace nxi
 {
 	window_system::window_system(nxi::core& nxi_core) :
 		nxi_core_{ nxi_core }
-	{}
+	{
+        nxi_log << "init window_system";
+	}
 
     void window_system::load()
     {
@@ -29,6 +31,7 @@ namespace nxi
             w.w = line[nxi_model.window.w];
             w.h = line[nxi_model.window.h];
             windows_.emplace(w.id, std::move(w));
+            emit event_add((w));
         }
     }
 

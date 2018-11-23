@@ -33,7 +33,7 @@ namespace ui::interfaces
         layout->addWidget(web_view2);
 
         // interface_system::event_view_change
-        connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::page&>::of(&nxi::page_system::event_change),
+        connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::page&>::of(&nxi::page_system::event_focus),
                 [this](nxi::page& page)
                 {
                     //content_view_->context_update(page.type());

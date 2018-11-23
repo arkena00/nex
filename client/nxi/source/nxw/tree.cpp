@@ -107,10 +107,17 @@ namespace ui
 {
     page_tree::page_tree(ui::core& ui_core) : ui_core_{ ui_core }
     {
+        init_ui();
+        init_data();
+        init_event();
+    }
+
+    void page_tree::init_ui()
+    {
         auto layout = new nxw::vbox_layout;
 
         setLayout(layout);
-        
+
         setHeaderHidden(true);
         setStyleSheet("border: none;");
         //setRootIsDecorated(false);
@@ -124,13 +131,40 @@ namespace ui
         setDropIndicatorShown(true);
         setDragDropMode(QAbstractItemView::DragDrop);
         setDefaultDropAction(Qt::MoveAction);
+    }
 
+    void page_tree::init_data()
+    {
         // load stored page
-        for (const auto& [id, page] : ui_core_.nxi_core().page_system().get())
+        for (const auto& page : ui_core_.nxi_core().page_system().get())
         {
-            add(*page, 0);
+            auto page_item = new ui::tree_page_item(this, page->id());
+            page_item->setText(0, page->name());
+            page_items_.emplace(page->id(), page_item);
         }
 
+        // connect pages
+        for (const auto& [source_id, target_id] : ui_core_.nxi_core().page_system().connections())
+        {
+            qDebug() << "s: " << source_id << " t: " << target_id;
+
+            if (source_id == 0) add(get(target_id));
+
+            //ui_core_.nxi_core().page_system().get()
+            /*
+            qDebug() << "s: " << source_id << " t: " << target_id;
+            auto source = get(source_id);
+            auto target = get(target_id);
+
+            takeTopLevelItem(indexOfTopLevelItem(target));
+
+            source->addChild(target);
+             */
+        }
+    }
+
+    void page_tree::init_event()
+    {
         // tree option menu
         connect(this, &ui::page_tree::customContextMenuRequested, [this](const QPoint& point)
         {
@@ -172,7 +206,7 @@ namespace ui
 
             //item->change();
             // ui_core_.nxi_core().page_system().change<nxi::web_page>(id());
-            ui_core_.nxi_core().page_system().change(item->id());
+            ui_core_.nxi_core().page_system().focus(item->id());
         });
     }
 

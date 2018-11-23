@@ -3,6 +3,7 @@
 
 #include <nxi/database.hpp>
 #include <nxi/module.hpp>
+#include <nxi/type.hpp>
 
 namespace nxi
 {

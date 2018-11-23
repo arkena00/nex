@@ -1,6 +1,8 @@
 #ifndef CORE_H_NXI
 #define CORE_H_NXI
 
+#include <ndb/connector.hpp>
+
 #include <nxs/network/client.hpp>
 
 #include <nxi/system/command.hpp>
@@ -19,6 +21,7 @@ namespace nxi
         core(const core&) = delete;
         void operator=(const core&) = delete;
 
+        void load();
         void quit() const;
 
         nxi::command_system& command_system();
@@ -31,6 +34,8 @@ namespace nxi
 
     private:
         ndb::initializer<ndb::sqlite> ndb_init_;
+        ndb::connector<dbs::core> ndb_connector_;
+
         nxs::network::client client_;
         std::thread client_thread_;
 

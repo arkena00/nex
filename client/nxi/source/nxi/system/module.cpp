@@ -31,22 +31,28 @@ namespace nxi
         static_modules_.load();
 
         // load db modules
-        auto res = ndb::oquery<dbs::core>() << (
-        ndb::get(nxi_model.module.id, nxi_model.module.name, nxi_model.module.type)
-        << ndb::source(nxi_model.module));
-        for (const auto& module_data : res)
+        for (auto& module : ndb::oget<dbs::core>(nxi_model.module))
         {
-            std::unique_ptr<nxi::module> module;
-            const QString& module_name = module_data[nxi_model.module.name];
+            std::unique_ptr<nxi::module> module_ptr;
 
-            if (module_data[nxi_model.module.type] == (int)nxi::module_type::dynamic) module = std::make_unique<nxi::dynamic_module>(nxi_core_, module_name);
-            else if (module_data[nxi_model.module.type] == (int)nxi::module_type::web) module = std::make_unique<nxi::web_module>(nxi_core_, module_name);
-            else nxi_error << "module load type";
+            switch(module.type)
+            {
+                case nxi::module_type::dynamic:
+                    module_ptr = std::make_unique<nxi::dynamic_module>(nxi_core_, module.name);
+                    break;
+
+                case nxi::module_type::web:
+                    module_ptr = std::make_unique<nxi::web_module>(nxi_core_, module.name);
+                    break;
+
+                default:
+                    nxi_error << "module load type";
+            }
 
             // if (state == enable)
-            module->load();
+            module_ptr->load();
 
-            modules_.push_back(std::move(module));
+            modules_.push_back(std::move(module_ptr));
         }
         //emit event_load(module_name);
     }

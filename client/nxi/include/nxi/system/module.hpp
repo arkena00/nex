@@ -11,8 +11,6 @@ namespace nxi
 {
 	class core;
 
-	enum class module_types { nxi, web };
-
     class module_system : public QObject
     {
         Q_OBJECT

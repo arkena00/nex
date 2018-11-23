@@ -2,13 +2,12 @@
 #define NXI_MODULE_H_NXI
 
 #include <nxi/database.hpp>
+#include <nxi/type.hpp>
 
 class QString;
 
 namespace nxi
 {
-    enum class module_type { compiled, dynamic, web };
-
     class module
     {
     public:

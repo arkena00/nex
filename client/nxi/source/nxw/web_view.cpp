@@ -17,6 +17,15 @@ namespace nxw
         auto layout = new nxw::vbox_layout;
         setLayout(layout);
 
+        for (const auto& page : ui_core_.nxi_core().page_system().get())
+        {
+
+            auto ui_page = new nxw::web_page(ui_core_, page->id(), this);
+            ui_page->load(static_cast<nxi::web_page*>(page.get())->url());
+
+            pages_.emplace(page->id(), std::move(ui_page));
+        }
+
         // page_system add
         connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&, nxi::page_id>(&nxi::page_system::event_add),
         [this](nxi::web_page& page, unsigned int)
@@ -33,7 +42,7 @@ namespace nxw
 
         // page_system change
 
-        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&>(&nxi::page_system::event_change), this,
+        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&>(&nxi::page_system::event_focus), this,
         [this](nxi::web_page& page)
         {
             view_->setPage(pages_[page.id()]->native());
@@ -48,6 +57,9 @@ namespace nxw
 
         view_ = new QWebEngineView(this);
         layout->addWidget(view_);
+
+        view_->page()->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+        view_->load(QUrl("http://www.google.fr"));
 
     }
 

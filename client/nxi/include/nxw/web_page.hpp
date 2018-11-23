@@ -41,7 +41,7 @@ namespace nxw
                 emit page.event_update_icon(icon);
             });
 
-            native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+            //native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
             native_page_->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
         }
 

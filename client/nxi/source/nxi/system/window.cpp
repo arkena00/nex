@@ -3,7 +3,8 @@
 #include <nxi/core.hpp>
 #include <nxi/database.hpp>
 #include <nxi/log.hpp>
-#include <include/nxi/system/window.hpp>
+
+#include <QDesktopWidget>
 
 
 namespace nxi
@@ -19,25 +20,29 @@ namespace nxi
         nxi_log << "load window_system";
 
         // load stored windows
-        auto res = ndb::query<dbs::core>() << (
-        ndb::get(nxi_model.window.id, nxi_model.window.x, nxi_model.window.y, nxi_model.window.w, nxi_model.window.h)
-        << ndb::source(nxi_model.window));
-        for (auto& line : res)
+        for (auto& window : ndb::oget<dbs::core>(nxi_model.window))
         {
-            nxi::window w;
-            w.id = line[nxi_model.window.id];
-            w.x = line[nxi_model.window.x];
-            w.y = line[nxi_model.window.y];
-            w.w = line[nxi_model.window.w];
-            w.h = line[nxi_model.window.h];
-            windows_.emplace(w.id, std::move(w));
-            emit event_add((w));
+            windows_.emplace(window.id, std::move(window));
+            emit event_add(window);
+        }
+
+        if (windows_.empty())
+        {
+            QDesktopWidget screen;
+            QRect screen_size = screen.availableGeometry(screen.primaryScreen());
+
+            nxi::window window;
+            window.w = screen_size.width() * 0.8;
+            window.h = screen_size.height() * 0.7;
+            window.x = (screen_size.width() - window.w) / 2;
+            window.y = (screen_size.height() - window.h) / 2;
+
+            add(window);
         }
     }
 
     void window_system::add(nxi::window win)
     {
-        win.id = 0;
         ndb::query<dbs::core>() << ndb::add(
         nxi_model.window.x = win.x
         , nxi_model.window.y = win.y

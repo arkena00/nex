@@ -12,8 +12,8 @@ ndb_table(
 
 ndb_table(
     page_connection
-    , ndb_field(source_id, int)
-    , ndb_field(target_id, int)
+    , ndb_field(source_id, nxi::page_id)
+    , ndb_field(target_id, nxi::page_id)
 )
 
 #endif // DATABASE_PAGE_H_NXI

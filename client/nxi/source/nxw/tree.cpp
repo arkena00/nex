@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QtCore/QEvent>
 #include <QMouseEvent>
+#include <include/nxi/log.hpp>
 
 /*
 class tree_page_item_delegate : public QStyledItemDelegate {
@@ -199,6 +200,14 @@ namespace ui
             });
         });
 
+        // connection move
+        connect(&ui_core_.nxi_core().page_system(), &nxi::page_system::event_move, this, [this](nxi::page_id page_id, nxi::page_id source_id, nxi::page_id target_id)
+        {
+            qDebug() << "EVENT MOVE" << page_id << " : " << source_id << " " << target_id;
+            connection_del(source_id, page_id);
+            connection_add(target_id, page_id);
+        });
+
         // item click
         connect(this, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* base_item, int)
         {
@@ -217,13 +226,7 @@ namespace ui
 
         page_items_.emplace(page.id(), page_item);
 
-        if (source_id == 0) add(page_item);
-        else
-        {
-            // get source item
-            auto source_item = get(source_id);
-            add(page_item, source_item);
-        }
+        connection_add(source_id, page.id());
 
         // page update
         connect(&page, &nxi::page::event_update_name, [page_item](const QString& name)
@@ -255,5 +258,70 @@ namespace ui
         assert(page_items_.count(id));
 
         return page_items_.at(id);
+    }
+
+    void page_tree::connection_add(nxi::page_id source_id, nxi::page_id target_id)
+    {
+        if (source_id == 0) add(get(target_id));
+        else add(get(target_id), get(source_id));
+    }
+
+    void page_tree::connection_del(nxi::page_id source_id, nxi::page_id target_id)
+    {
+        if (source_id == 0)
+        {
+            takeTopLevelItem(indexOfTopLevelItem(get(target_id)));
+        }
+        else
+        {
+            auto source = get(source_id);
+            source->takeChild(source->indexOfChild(get(target_id)));
+        }
+    }
+
+    void page_tree::dropEvent(QDropEvent* event)
+    {
+        // internal source
+        if (event->source() == this)
+        {
+            nxi::page_id target_id = 0;
+            nxi::page_id source_id = 0;
+
+            for (auto selected_item : selectedItems())
+            {
+                // selected page
+                nxi::page_id page_id = static_cast<ui::tree_page_item*>(selected_item)->id();
+
+                // target is root
+                auto item = itemAt(event->pos());
+                // target is a page
+                if (item) target_id = static_cast<ui::tree_page_item*>(item)->id();
+
+                // source is root
+                auto selected_item_source = selected_item->parent();
+                // source is a page
+                if (selected_item_source) source_id = static_cast<ui::tree_page_item*>(selected_item_source)->id();
+
+                if (event->dropAction() == Qt::MoveAction)
+                {
+                    ui_core_.nxi_core().page_system().move(page_id, source_id, target_id);
+                    qDebug() << "SELECTED : " << page_id << " CURRENT : " << source_id << " TARGET : " << target_id;
+                }
+                if (event->dropAction() == Qt::CopyAction)
+                {
+                    //
+                }
+            }
+            // ignore event, we use page_system events
+            return;
+        }
+        // external source
+        else
+        {
+            const QMimeData* data = event->mimeData();
+            // exec command nxi::dnd;source;target;data;
+        }
+
+        QTreeWidget::dropEvent(event);
     }
 } // nxw

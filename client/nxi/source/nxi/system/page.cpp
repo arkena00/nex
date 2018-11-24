@@ -14,28 +14,21 @@ namespace nxi
     {
         nxi_log << "load page_system";
 
-        // load pages
-        auto pages = ndb::query<dbs::core>() << (
-        ndb::get(nxi_model.page.id, nxi_model.page.name, nxi_model.page.type)
-        << ndb::source(nxi_model.page));
-
-        for (auto& page_data : pages)
+        // load pages, connect all pages to root
+        for (auto& page_data : ndb::oget<dbs::core>(nxi_model.page))
         {
-            std::unique_ptr<nxi::page> page;
-            auto page_id = page_data[nxi_model.page.id];
-            auto page_type = static_cast<nxi::page_type>(page_data[nxi_model.page.type]);
+            auto page_id = page_data.id;
+            auto page_type = page_data.type;
 
             // make_page(page_type, args...)
             switch(page_type)
             {
                 case page_type::node:
-                    internal_add<nxi::page_node>(*this, page_id, page_data[nxi_model.page.name]);
-
+                    internal_add<nxi::page_node>(0, *this, page_id, page_data.name);
                     break;
 
                 case page_type::web:
-                    internal_add<nxi::web_page>(*this, page_id);
-
+                    internal_add<nxi::web_page>(0, *this, page_id);
                     break;
 
                 case page_type::explorer:
@@ -47,17 +40,12 @@ namespace nxi
             }
         }
 
-        // load page connections
-        auto page_connections = ndb::query<dbs::core>() << (
-        ndb::get(nxi_model.page_connection.source_id, nxi_model.page_connection.target_id)
-        << ndb::source(nxi_model.page_connection));
-
-        for (auto& line : page_connections)
+        // load page connections, move pages from root to real source
+        for (auto& line : ndb::oget<dbs::core>(nxi_model.page_connection))
         {
-            auto source_id = static_cast<nxi::page_id>(line[nxi_model.page_connection.source_id]);
-            auto target_id = static_cast<nxi::page_id>(line[nxi_model.page_connection.target_id]);
-
-            page_connections_.emplace(source_id, target_id);
+            //page_connections_.emplace(line.source_id, line.target_id);
+            // if source_id == 0, page didn't move
+            if (line.source_id != 0) emit event_move(line.target_id, 0, line.source_id);
         }
     }
 
@@ -97,6 +85,24 @@ namespace nxi
         current_page_->focus();
         // emit event_change(static_cast<Page*>(current_page_));
         //emit event_focus(*current_page_);
+    }
+
+    void page_system::move(nxi::page_id page_id, nxi::page_id source_id, nxi::page_id target_id)
+    {
+        const auto& pc = nxi_model.page_connection;
+
+        nxi_log << "PS MOVE : " << page_id << source_id << target_id;
+
+        // page doesn't move
+        if (source_id == target_id) return;
+
+        ndb::query<dbs::core>() << (
+            ndb::set(pc.source_id = target_id, pc.target_id = page_id)
+            << ndb::filter(pc.source_id == source_id && pc.target_id == page_id)
+        );
+
+
+        emit event_move(page_id, source_id, target_id);
     }
 
     void page_system::update(nxi::page_id id)

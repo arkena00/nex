@@ -6,6 +6,7 @@ message("--------------------------------------------------------
                          NXI
 --------------------------------------------------------")
 
+# functions
 MACRO(SUBDIRLIST result curdir)
     FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
     SET(dirlist "")
@@ -17,16 +18,29 @@ MACRO(SUBDIRLIST result curdir)
     SET(${result} ${dirlist})
 ENDMACRO()
 
-message("Module compilation")
-set(MODULE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/experimental/module")
+# module_add
+macro(module_add name)
+    add_library(module_${name} INTERFACE)
+    target_include_directories(module_${name} INTERFACE ${MODULE_ROOT}/${name})
+    set(MODULE_LIST ${MODULE_LIST} "module_${name};" PARENT_SCOPE)
+endmacro()
 
-SUBDIRLIST(SUBDIRS ${MODULE_ROOT})
+# module_load
+macro(module_build name)
+    set(NXI_MODULE_${name} ON)
+endmacro()
 
-FOREACH(module ${SUBDIRS})
-    message("- ${module}")
-    include(${MODULE_ROOT}/${module}/${module}.cmake)
-ENDFOREACH()
+# module_source
+macro(module_source)
+    foreach (SRC ${ARGN})
+        list (APPEND MODULE_SOURCE_LIST "${MODULE_ROOT}/${MODULE_CURRENT}/${SRC}")
+    endforeach()
+    target_sources(module_${MODULE_CURRENT} INTERFACE ${MODULE_SOURCE_LIST})
+endmacro()
 
+
+# user config file
+include(user-config.cmake OPTIONAL)
 
 # must be set before files scan
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -35,20 +49,45 @@ set(CMAKE_AUTORCC ON)
 
 file(GLOB_RECURSE SOURCE_LIST "source/*.cpp" "source/*.qrc" "include/*.hpp")
 
-add_executable(nxi ${SOURCE_LIST} ${MODULE_SOURCE_LIST})
+########################################################
+######################   Modules  ######################
+########################################################
+message("Module build")
+set(MODULE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/experimental/module")
 
-# user config config file
-include(user-config.cmake OPTIONAL)
+SUBDIRLIST(SUBDIRS ${MODULE_ROOT})
+
+# add modules
+foreach(module ${SUBDIRS})
+    option(NXI_MODULE_${module} "Module ${module}" ${NXI_MODULE_${module}})
+    message("- ${module} : ${NXI_MODULE_${module}}")
+    if (NXI_MODULE_${module})
+        set(MODULE_CURRENT ${module})
+        add_subdirectory(${MODULE_ROOT}/${module})
+        # create variables for generated file
+        string(APPEND  NXI_MODULE_STATIC_INCLUDE "#include \"experimental/module/${module}/${module}.hpp\"\n")
+        string(APPEND  NXI_MODULE_STATIC_INIT ", ${module}_{ nxi_core }\n")
+        string(APPEND  NXI_MODULE_STATIC_LOAD "${module}_.load();\n")
+        string(APPEND  NXI_MODULE_STATIC_MEMBER "nxi::modules::${module} ${module}_;\n")
+    endif()
+endforeach()
+
+# create container file
+configure_file(
+        "${MODULE_ROOT}/static_module.hpp.in"
+        "${MODULE_ROOT}/static_module.hpp"
+)
+
 
 ########################################################
-#######################   Qt  ##########################
+#######################   Bin  #########################
 ########################################################
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Gui WebEngine WebEngineWidgets)
 
 
-
+add_executable(nxi ${SOURCE_LIST})
 target_include_directories(nxi PUBLIC include)
-target_link_libraries(nxi lib_nxs)
+target_link_libraries(nxi lib_nxs ${MODULE_LIST})
 
 
 target_link_libraries(nxi ${NXS_LIB_LIST}

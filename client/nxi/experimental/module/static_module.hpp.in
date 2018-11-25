@@ -1,9 +1,7 @@
 #ifndef NXI_STATIC_MODULE_H_NXI
 #define NXI_STATIC_MODULE_H_NXI
 
-#include "experimental/module/strateon/strateon.hpp"
-#include "experimental/module/test/test.hpp"
-
+@NXI_MODULE_STATIC_INCLUDE@
 
 namespace nxi
 {
@@ -14,24 +12,18 @@ namespace nxi
     public:
 		explicit static_module_container(nxi::core& nxi_core) :
 			nxi_core_{ nxi_core }
-            , strateon_{ nxi_core }
-, test_{ nxi_core }
-
+            @NXI_MODULE_STATIC_INIT@
 		{}
 
         void load()
 		{
-            strateon_.load();
-test_.load();
-
+            @NXI_MODULE_STATIC_LOAD@
 		}
 
     private:
 		nxi::core& nxi_core_;
 
-        nxi::modules::strateon strateon_;
-nxi::modules::test test_;
-
+        @NXI_MODULE_STATIC_MEMBER@
     };
 } // nxi
 

@@ -22,6 +22,7 @@
 #include <QtCore/QEvent>
 #include <QMouseEvent>
 #include <include/nxi/log.hpp>
+#include <include/nxi/page/custom.hpp>
 
 /*
 class tree_page_item_delegate : public QStyledItemDelegate {
@@ -136,32 +137,7 @@ namespace ui
 
     void page_tree::init_data()
     {
-        // load stored page
-        for (const auto& page : ui_core_.nxi_core().page_system().get())
-        {
-            auto page_item = new ui::tree_page_item(this, page->id());
-            page_item->setText(0, page->name());
-            page_items_.emplace(page->id(), page_item);
-        }
 
-        // connect pages
-        for (const auto& [source_id, target_id] : ui_core_.nxi_core().page_system().connections())
-        {
-            qDebug() << "s: " << source_id << " t: " << target_id;
-
-            if (source_id == 0) add(get(target_id));
-
-            //ui_core_.nxi_core().page_system().get()
-            /*
-            qDebug() << "s: " << source_id << " t: " << target_id;
-            auto source = get(source_id);
-            auto target = get(target_id);
-
-            takeTopLevelItem(indexOfTopLevelItem(target));
-
-            source->addChild(target);
-             */
-        }
     }
 
     void page_tree::init_event()
@@ -172,11 +148,12 @@ namespace ui
             unsigned int source_id = 0;
 
             auto item = itemAt(point);
-            if (item) source_id = static_cast<ui::tree_page_item*>(item)->id();
+            if (item) source_id = static_cast<ui::tree_page_item*>(item)->page().id();
 
             auto menu = new nxw::menu(this);
             menu->add("new node", [this, source_id](){ ui_core_.nxi_core().page_system().add<nxi::page_node>(source_id); });
             menu->add("new web_page", [this, source_id](){ ui_core_.nxi_core().page_system().add<nxi::web_page>(source_id); });
+
             menu->exec();
         });
 
@@ -200,28 +177,31 @@ namespace ui
             });
         });
 
+        // custom_page
+        connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::custom_page&, nxi::page_id>(&nxi::page_system::event_add), this, [this](nxi::custom_page& page, nxi::page_id source_id)
+        {
+            auto page_item = add(page, source_id);
+            page_item->setIcon(0, QIcon(":/strateon/logo"));
+        });
+
         // connection move
         connect(&ui_core_.nxi_core().page_system(), &nxi::page_system::event_move, this, [this](nxi::page_id page_id, nxi::page_id source_id, nxi::page_id target_id)
         {
-            qDebug() << "EVENT MOVE" << page_id << " : " << source_id << " " << target_id;
             connection_del(source_id, page_id);
             connection_add(target_id, page_id);
         });
 
-        // item click
+        // page focus
         connect(this, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* base_item, int)
         {
-            auto item = static_cast<ui::tree_page_item*>(base_item);
-
-            //item->change();
-            // ui_core_.nxi_core().page_system().change<nxi::web_page>(id());
-            ui_core_.nxi_core().page_system().focus(item->id());
+            auto page_item = static_cast<ui::tree_page_item*>(base_item);
+            page_item->page().focus();
         });
     }
 
     ui::tree_page_item* page_tree::add(nxi::page& page, nxi::page_id source_id)
     {
-        auto page_item = new ui::tree_page_item(this, page.id());
+        auto page_item = new ui::tree_page_item(this, page);
         page_item->setText(0, page.name());
 
         page_items_.emplace(page.id(), page_item);
@@ -290,22 +270,21 @@ namespace ui
             for (auto selected_item : selectedItems())
             {
                 // selected page
-                nxi::page_id page_id = static_cast<ui::tree_page_item*>(selected_item)->id();
+                nxi::page_id page_id = static_cast<ui::tree_page_item*>(selected_item)->page().id();
 
                 // target is root
                 auto item = itemAt(event->pos());
                 // target is a page
-                if (item) target_id = static_cast<ui::tree_page_item*>(item)->id();
+                if (item) target_id = static_cast<ui::tree_page_item*>(item)->page().id();
 
                 // source is root
                 auto selected_item_source = selected_item->parent();
                 // source is a page
-                if (selected_item_source) source_id = static_cast<ui::tree_page_item*>(selected_item_source)->id();
+                if (selected_item_source) source_id = static_cast<ui::tree_page_item*>(selected_item_source)->page().id();
 
                 if (event->dropAction() == Qt::MoveAction)
                 {
                     ui_core_.nxi_core().page_system().move(page_id, source_id, target_id);
-                    qDebug() << "SELECTED : " << page_id << " CURRENT : " << source_id << " TARGET : " << target_id;
                 }
                 if (event->dropAction() == Qt::CopyAction)
                 {

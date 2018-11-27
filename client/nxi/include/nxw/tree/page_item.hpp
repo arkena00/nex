@@ -4,6 +4,8 @@
 #include <nxw/tree/item.hpp>
 #include <include/nxw/tree.hpp>
 
+namespace nxi { class page; }
+
 namespace ui
 {
     class page_tree;
@@ -11,17 +13,17 @@ namespace ui
     class tree_page_item : public ui::tree_item
     {
     public:
-        tree_page_item(ui::page_tree*, unsigned int id, tree_item* parent = nullptr);
+        tree_page_item(ui::page_tree*, nxi::page&, tree_item* parent = nullptr);
         ~tree_page_item() = default;
 
-        int id() const {return id_;}
+        nxi::page& page() { return page_; }
         void change() override;
         void list() override {}
         void option() override;
 
     private:
         ui::page_tree* tree_;
-        unsigned int id_;
+        nxi::page& page_;
     };
 } // nxw
 

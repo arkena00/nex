@@ -7,6 +7,7 @@
 
 #include <nxi/log.hpp>
 #include <nxi/error.hpp>
+#include <include/nxi/page/custom.hpp>
 
 namespace nxi
 {
@@ -35,6 +36,10 @@ namespace nxi
                     //page = std::make_unique<nxi::explorer_page>(*this, page_id);
                     break;
 
+                case page_type::custom:
+                    internal_add<nxi::custom_page>(0, *this, page_id);
+                    break;
+
                 default:
                     nxi_assert("unknown page type");
             }
@@ -57,6 +62,12 @@ namespace nxi
         emit event_load(current_page);*/
     }
 
+    void page_system::load(nxi::web_page& page)
+    {
+        // set loaded
+        emit event_load(page);
+    }
+
     const page_system::pages_view& page_system::get() const
     {
         return pages_view_;
@@ -75,8 +86,9 @@ namespace nxi
         return *page_it->second;
     }
 
-    void page_system::focus(nxi::web_page& page) { nxi_log << "FOCUS webpage"; emit event_focus(page); }
+    void page_system::focus(nxi::web_page& page) { emit event_focus(page); }
     void page_system::focus(nxi::page_node& node) { emit event_focus(node); }
+    void page_system::focus(nxi::custom_page& page) { emit event_focus(page); }
 
     void page_system::focus(nxi::page_id id)
     {

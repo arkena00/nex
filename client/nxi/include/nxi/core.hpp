@@ -24,6 +24,11 @@ namespace nxi
         void load();
         void quit() const;
 
+        void test(QWidget* w)
+        {
+            emit event_test(w);
+        }
+
         nxi::command_system& command_system();
         nxi::module_system& module_system();
         nxi::page_system& page_system();
@@ -31,6 +36,7 @@ namespace nxi
 
     signals:
         void event_quit() const;
+        void event_test(QWidget*);
 
     private:
         ndb::initializer<ndb::sqlite> ndb_init_;

@@ -19,6 +19,7 @@ namespace nxi
         const QString& name() const;
 
         virtual void focus() = 0;
+        virtual void load();
 
         void name_update(const QString& name);
 
@@ -33,6 +34,7 @@ namespace nxi
 
     signals:
         void event_update_name(const QString&);
+        void event_load();
     };
 } // nxi
 

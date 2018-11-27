@@ -8,7 +8,7 @@
 
 #define nxi_assert(C) Q_ASSERT(C)
 
-#define nxi_log std::cout << "\n[nxi] "
+#define nxi_log std::cout << std::endl << "[nxi] "
 
 using nxs::log;
 

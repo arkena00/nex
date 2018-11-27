@@ -1,5 +1,7 @@
 #include <nxw/web_view.hpp>
 
+#include <nxw/web_page.hpp>
+
 #include <ui/core.hpp>
 #include <nxi/core.hpp>
 #include <nxi/system/page.hpp>
@@ -8,6 +10,7 @@
 #include <nxw/web_page.hpp>
 
 #include <QWebEngineView>
+#include <include/nxi/error.hpp>
 
 namespace nxw
 {
@@ -17,27 +20,22 @@ namespace nxw
         auto layout = new nxw::vbox_layout;
         setLayout(layout);
 
-        for (const auto& page : ui_core_.nxi_core().page_system().get())
-        {
-
-            auto ui_page = new nxw::web_page(ui_core_, page->id(), this);
-            ui_page->load(static_cast<nxi::web_page*>(page.get())->url());
-
-            pages_.emplace(page->id(), std::move(ui_page));
-        }
-
         // page_system add
         connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&, nxi::page_id>(&nxi::page_system::event_add),
-        [this](nxi::web_page& page, unsigned int)
+        [this](nxi::web_page& page, nxi::page_id)
         {
-            auto ui_page = new nxw::web_page(ui_core_, page.id(), this);
-
+            auto ui_page = new nxw::web_page(ui_core_, page, this);
             ui_page->load(page.url());
-            pages_.emplace(page.id(), std::move(ui_page));
-            view_->setPage(pages_[page.id()]->native());
 
-            // ui_core_.nxi_core().page_system().load(page.id);
+            qDebug() << "event_add " << page.id();
+            pages_.emplace(page.id(), ui_page);
+            //view_->setPage(get(page)->native());
+
+            qDebug() << "event_add";
+            // load the page on add
+            //page.load();
         });
+
 
 
         // page_system change
@@ -45,22 +43,22 @@ namespace nxw
         connect(&ui_core_.nxi_core().page_system(), qOverload<nxi::web_page&>(&nxi::page_system::event_focus), this,
         [this](nxi::web_page& page)
         {
-            view_->setPage(pages_[page.id()]->native());
+            qDebug() << "event_focus " << page.id() <<  p1 << "-" << p2;
+            view_->setPage(get(page)->native());
+
         });
 
-        // page_system update
-        connect(&ui_core_.nxi_core().page_system(), QOverload<const nxi::web_page&>::of(&nxi::page_system::event_update), this,
-                 [this](const nxi::web_page& page)
-                 {
 
-                 });
 
         view_ = new QWebEngineView(this);
         layout->addWidget(view_);
+    }
 
-        view_->page()->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
-        view_->load(QUrl("http://www.google.fr"));
-
+    nxw::web_page* web_view::get(const nxi::web_page& page) const
+    {
+        auto page_it = pages_.find(page.id());
+        nxi_assert(page_it != pages_.end());
+        return page_it->second;
     }
 
     QWebEngineView* web_view::native()

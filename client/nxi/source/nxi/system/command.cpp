@@ -19,7 +19,10 @@ namespace nxi
 
     void command_system::load()
     {
+        // TODO use node system
+
         // add nxi commands
+
         nxi::command quit("nxi", "quit", std::bind(&nxi::core::quit, &nxi_core_), ":/button/quit");
         add(std::move(quit));
 
@@ -61,7 +64,7 @@ namespace nxi
     {
         size_t index = commands_.size();
         command_indexes_.insert(command.action_name(), index);
-        commands_.push_back(std::make_unique<nxi::command>(std::move(command)));
+        commands_.emplace_back(std::make_unique<nxi::command>(std::move(command)));
 
         emit event_add(*commands_[index]);
     }
@@ -91,14 +94,14 @@ namespace nxi
         }
     }
 
-    std::vector<nxi::command> command_system::search(const QString& search_string)
+    command_system::commands_view command_system::search(const QString& search_string)
     {
-        std::vector<nxi::command> commands;
+        commands_view commands;
 
         for (const auto& command : commands_)
         {
             //qDebug() << "search " << search_string << " match : " << command->name();
-            if (command->name().contains(search_string)) commands.push_back(*command);
+            if (command->name().contains(search_string)) commands.emplace_back(command.get());
         }
 
         return commands;

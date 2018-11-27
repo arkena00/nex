@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/strateon/logo">
-        <file>logo.png</file>
+    <qresource prefix="/strateon">
+        <file alias="logo">logo.png</file>
     </qresource>
 </RCC>

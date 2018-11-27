@@ -3,7 +3,7 @@
 
 namespace nxi
 {
-    enum class page_type { node, web, explorer };
+    enum class page_type { node, web, explorer, custom };
     enum class module_type { compiled, dynamic, web };
 
 } // nxi

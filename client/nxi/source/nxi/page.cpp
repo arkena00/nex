@@ -19,6 +19,11 @@ namespace nxi
         emit event_update_name(name_);
     }
 
+    void page::load()
+    {
+        emit event_load();
+    }
+
 
     nxi::page_id page::id() const
     {

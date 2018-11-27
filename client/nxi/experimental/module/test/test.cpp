@@ -19,7 +19,7 @@ namespace nxi::modules
         auto cmd = nxi::command("static_module_test", "action", std::bind(&nxi::core::quit, &nxi_core_));
 
 
-        nxi_core_.command_system().add(cmd);
+        nxi_core_.command_system().add(std::move(cmd));
     }
 
 } // nxi::modules

@@ -10,6 +10,7 @@
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
 #include <nxi/page/web.hpp>
+#include <nxi/system/page.hpp>
 
 namespace nxw
 {
@@ -17,31 +18,43 @@ namespace nxw
     {
         Q_OBJECT
     public:
-        web_page(ui::core& ui_core, int id, nxw::web_view* parent) :
+        web_page(ui::core& ui_core, nxi::web_page& page, nxw::web_view* parent) :
             QObject(parent)
-            , m_id{ id }
-            , m_ui_core{ ui_core }
+            , page_{ page }
+            , ui_core_{ ui_core }
         {
             native_page_ = new QWebEnginePage(this);
+            native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+
             connect(native_page_, &QWebEnginePage::urlChanged, this, [this](const QUrl& url)
             {
-                auto& page = static_cast<nxi::web_page&>(m_ui_core.nxi_core().page_system().get(m_id));
-                page.url_update(url.toString());
+                page_.url_update(url.toString());
+            });
+
+            connect(native_page_, &QWebEnginePage::loadFinished, this, [this](bool n)
+            {
+                qDebug() << "COMPELTE " << n;
             });
 
             connect(native_page_, &QWebEnginePage::titleChanged, this, [this](const QString& name)
             {
-                auto& page = m_ui_core.nxi_core().page_system().get(m_id);
-                page.name_update(name);
+                page_.name_update(name);
             });
 
             connect(native_page_, &QWebEnginePage::iconChanged, this, [this](const QIcon& icon)
             {
-                auto& page = static_cast<nxi::web_page&>(m_ui_core.nxi_core().page_system().get(m_id));
-                emit page.event_update_icon(icon);
+                emit page_.event_update_icon(icon);
             });
 
-            //native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
+
+
+            connect(&page_, &nxi::web_page::event_load, this, [this]()
+            {
+                qDebug() << "LOAD PAGE";
+                native_page_->load(QUrl(page_.url()));
+            });
+
+            native_page_->settings()->setAttribute(QWebEngineSettings::ScrollAnimatorEnabled, true);
             native_page_->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
         }
 
@@ -51,11 +64,11 @@ namespace nxw
         }
 
         void load_url(const QString& url){}
-        void load(const QString& data){native_page_->setUrl(QUrl(data));}
+        void load(const QString& data){ native_page_->load(QUrl(data)); }
 
     private:
-        ui::core& m_ui_core;
-        int m_id;
+        ui::core& ui_core_;
+        nxi::web_page& page_;
 
         QWebEnginePage* native_page_;
     };

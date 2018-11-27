@@ -8,4 +8,10 @@ namespace nxi
     {
         page_system_.focus(*this);
     }
+
+    void web_page::load()
+    {
+        emit event_load();
+        page_system_.load(*this);
+    }
 } // nxi

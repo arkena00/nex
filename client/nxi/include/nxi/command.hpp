@@ -12,12 +12,15 @@ namespace nxi
 {
 	class core;
 
-
-
 	class command
 	{
 	public:
 		command(const QString& module_name, const QString& action_name, std::function<void()> fn, const QString& icon = ":/image/nex");
+        command(command&&) = default;
+        command& operator=(command&&) = default;
+
+        command(const command&) = delete;
+        command& operator=(const command&) = delete;
 
 		void exec() const;
 

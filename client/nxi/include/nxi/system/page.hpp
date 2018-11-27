@@ -18,6 +18,7 @@ namespace nxi
     class page_node;
     class web_page;
     class explorer_page;
+    class custom_page;
 
     class page_system : public QObject
     {
@@ -32,6 +33,7 @@ namespace nxi
         void load();
 
         void load(nxi::page_id page);
+        void load(nxi::web_page& page);
 
 
         const pages_view& get() const;
@@ -50,8 +52,9 @@ namespace nxi
             emit event_focus(get(id));
         }
 
-        void focus(nxi::web_page& page);
-        void focus(nxi::page_node& node);
+        void focus(nxi::web_page&);
+        void focus(nxi::page_node&);
+        void focus(nxi::custom_page&);
 
         void move(nxi::page_id page_id, nxi::page_id source_id, nxi::page_id target_id);
 
@@ -62,11 +65,13 @@ namespace nxi
         void event_add(nxi::page_node&, nxi::page_id source_id);
         void event_add(nxi::web_page&, nxi::page_id source_id);
         void event_add(nxi::explorer_page&, nxi::page_id source_id);
+        void event_add(nxi::custom_page&, nxi::page_id source_id);
 
         void event_focus(nxi::page&);
         void event_focus(nxi::page_node&);
         void event_focus(nxi::web_page&);
         void event_focus(nxi::explorer_page&);
+        void event_focus(nxi::custom_page&);
 
         void event_load(nxi::web_page&);
 

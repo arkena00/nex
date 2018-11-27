@@ -17,6 +17,7 @@ namespace nxi
         {}
 
         void focus();
+        void load();
 
         const QString& url() const { return url_; }
         void url_update(const QString& url) { url_ = url; }
@@ -28,6 +29,8 @@ namespace nxi
 
     signals:
         void event_update_icon(const QIcon&);
+        //void event_load_begin();
+        //void event_load_end();
     };
 } // nxi
 

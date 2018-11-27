@@ -28,18 +28,21 @@ namespace ui::interfaces
 
         layout->addWidget(view_stack_);
 
-        auto web_view2 = new nxw::web_view(ui_core_);
-        web_view2->native()->load(QUrl("http://www.google.fr"));
-        layout->addWidget(web_view2);
+        view_stack_->setCurrentIndex(0);
 
+        /*
         // interface_system::event_view_change
-        connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::page&>::of(&nxi::page_system::event_focus),
-                [this](nxi::page& page)
+        connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::web_page&>::of(&nxi::page_system::event_focus),
+                [this](nxi::web_page& page)
                 {
-                    //content_view_->context_update(page.type());
-                    //if (page.type() == nxi::page_type::web) view_stack_->setCurrentIndex(0);
-                    //if (page.type() == nxi::page_type::explorer) view_stack_->setCurrentIndex(1);
-                    // page.update_view()
+                    view_stack_->setCurrentIndex(0);
                 });
+
+        connect(&ui_core_.nxi_core().page_system(), QOverload<nxi::custom_page&>::of(&nxi::page_system::event_focus),
+                [this](nxi::custom_page& page)
+                {
+                    view_stack_->setCurrentIndex(2);
+                });
+                */
     }
 } // ui::interfaces

@@ -54,7 +54,7 @@ class command : public QLineEdit
                 {
                     for (auto cmd : result)
                     {
-                        menu_->add(cmd);
+                        menu_->add(*cmd);
                     }
                     menu_->show_at(this);
                     menu_->exec();
@@ -175,7 +175,7 @@ namespace ui::interfaces
     void control_bar::command_add(const nxi::command& command)
     {
         auto button = new nxw::icon_button(this, command.icon());
-        connect(button, &nxw::icon_button::pressed, [this, &command]()
+        connect(button, &nxw::icon_button::clicked, [this, &command]()
         {
             /*
             nxi::internal_command
@@ -187,7 +187,9 @@ namespace ui::interfaces
 
             }*/
 
+            //
             command.exec();
+
             /*
             QString path = "C:\\Projet\\nk\\nex\\bin\\nxi\\module\\webextension\\beastify\\popup\\choose_beast.html";
             auto popup = new nxw::popup(path);

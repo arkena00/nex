@@ -5,6 +5,8 @@
 #include <nxi/window.hpp>
 
 #include <functional>
+#include <stdz/observer_ptr.hpp>
+
 #include <QObject>
 #include <QHash>
 
@@ -16,6 +18,8 @@ namespace nxi
 
     class command_system : public QObject
     {
+    	using commands_view = std::vector<stdz::observer_ptr<nxi::command>>;
+
         Q_OBJECT
     public:
 		command_system(nxi::core&);
@@ -28,7 +32,7 @@ namespace nxi
         const nxi::command& get(const QString& module_action, const QString& module_name = "nxi") const;
 		void add(nxi::command command);
         void exec(const QString& command, command_context context = command_context::deduced);
-        std::vector<nxi::command> search(const QString&);
+		commands_view search(const QString&);
 
         signals:
         void event_add(const nxi::command&);

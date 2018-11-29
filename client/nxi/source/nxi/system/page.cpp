@@ -86,9 +86,9 @@ namespace nxi
         return *page_it->second;
     }
 
-    void page_system::focus(nxi::web_page& page) { emit event_focus(page); }
-    void page_system::focus(nxi::page_node& node) { emit event_focus(node); }
-    void page_system::focus(nxi::custom_page& page) { emit event_focus(page); }
+    void page_system::focus(nxi::web_page& page) { emit event_focus(page); emit event_focus(static_cast<nxi::page&>(page)); }
+    void page_system::focus(nxi::page_node& node) { emit event_focus(node); emit event_focus(static_cast<nxi::page&>(node)); }
+    void page_system::focus(nxi::custom_page& page) { emit event_focus(page); emit event_focus(static_cast<nxi::page&>(page)); }
 
     void page_system::focus(nxi::page_id id)
     {

@@ -35,6 +35,8 @@ namespace nxi::modules
 
         auto action = [this]()
         {
+            //custom_page.on_add([](){ auto win = new MainWindow; })
+            //custom_page.on_render([](){ auto win = new MainWindow; })
             nxi_core_.page_system().add<custom_page>(0);
         };
 

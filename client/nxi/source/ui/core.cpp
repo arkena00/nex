@@ -4,6 +4,9 @@
 #include <nxi/database.hpp>
 #include <nxi/log.hpp>
 
+#include <ui/system/page.hpp>
+#include <ui/system/window.hpp>
+
 #include <QApplication>
 #include <QFile>
 #include <QSystemTrayIcon>
@@ -11,7 +14,6 @@
 
 #include <ui/interface/home.hpp>
 #include <ui/interface/page_bar.hpp>
-#include <include/ui/core.hpp>
 
 
 namespace ui
@@ -19,6 +21,7 @@ namespace ui
     core::core(QApplication& app, nxi::core& nxi_core) :
         app_{ app }
         , nxi_core_{ nxi_core }
+        , page_system_{ *this }
         , window_system_{ *this }
     {
         QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -50,6 +53,11 @@ namespace ui
     nxi::core& core::nxi_core()
     {
         return nxi_core_;
+    }
+
+    ui::page_system& core::page_system()
+    {
+        return page_system_;
     }
 
     ui::window_system& core::window_system()

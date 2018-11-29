@@ -1,8 +1,6 @@
 #ifndef NXW_TREE_H_NXI
 #define NXW_TREE_H_NXI
 
-namespace ui { class core; }
-
 class QTreeWidget;
 
 #include <ui/interface.hpp>

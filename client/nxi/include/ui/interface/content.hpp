@@ -2,6 +2,7 @@
 #define UI_CONTENT_H_NXI
 
 #include <ui/interface.hpp>
+#include <ui/render_view.hpp>
 
 namespace nxw
 {
@@ -9,7 +10,7 @@ namespace nxw
     class explorer_view;
 } // nxw
 
-namespace ui { class core; }
+namespace ui { class core; class web_view; }
 
 class QStackedWidget;
 
@@ -24,10 +25,7 @@ namespace ui::interfaces
     private:
         ui::core& ui_core_;
 
-        QStackedWidget* view_stack_;
-
-        nxw::web_view* web_view_;
-        nxw::explorer_view* explorer_view_;
+        ui::render_view* render_view_;
     };
 } // ui::interfaces
 

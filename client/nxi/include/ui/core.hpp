@@ -13,6 +13,7 @@ class QSystemTrayIcon;
 
 namespace ui
 {
+    class page_system;
     class window_system;
 
     class core : public QObject
@@ -28,12 +29,14 @@ namespace ui
         void quit();
 
         nxi::core& nxi_core();
+        ui::page_system& page_system();
         ui::window_system& window_system();
 
     private:
         QApplication& app_;
         nxi::core& nxi_core_;
 
+        ui::page_system page_system_;
         ui::window_system window_system_;
 
         QSystemTrayIcon* systray_;

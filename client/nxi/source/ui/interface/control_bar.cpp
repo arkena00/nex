@@ -11,7 +11,7 @@
 #include <nxw/icon_button.hpp>
 #include <nxw/menu.hpp>
 #include <include/ui/interface/control_bar.hpp>
-#include <include/nxw/web_view.hpp>
+#include <ui/web_view.hpp>
 #include <QWebEngineView>
 #include <include/nxi/module/web.hpp>
 

@@ -3,7 +3,7 @@
 #include <nxi/core.hpp>
 
 #include <ui/core.hpp>
-#include <ui/web_page.hpp>
+#include <ui/page/web.hpp>
 
 #include <QObject>
 

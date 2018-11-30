@@ -2,7 +2,7 @@
 #define UI_CONTENT_H_NXI
 
 #include <ui/interface.hpp>
-#include <ui/render_view.hpp>
+#include <ui/renderer_view.hpp>
 
 namespace nxw
 {
@@ -25,7 +25,7 @@ namespace ui::interfaces
     private:
         ui::core& ui_core_;
 
-        ui::render_view* render_view_;
+        ui::renderer_view* render_view_;
     };
 } // ui::interfaces
 

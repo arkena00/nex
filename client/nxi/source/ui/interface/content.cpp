@@ -11,7 +11,7 @@
 #include <QStackedWidget>
 #include <QWebEngineView>
 
-#include <ui/render_view.hpp>
+#include <ui/renderer_view.hpp>
 
 namespace ui::interfaces
 {
@@ -21,7 +21,7 @@ namespace ui::interfaces
         QHBoxLayout* layout = new nxw::hbox_layout;
         setLayout(layout);
 
-        render_view_ = new ui::render_view(ui_core_, this);
+        render_view_ = new ui::renderer_view(ui_core_, this);
 
         layout->addWidget(render_view_);
 

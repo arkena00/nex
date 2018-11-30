@@ -1,6 +1,7 @@
-#include <ui/web_page.hpp>
+#include <ui/page/web.hpp>
 
 #include <nxi/page/web.hpp>
+#include <ui/renderer.hpp>
 
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
@@ -43,6 +44,13 @@ namespace ui
             qDebug() << "LOAD PAGE";
             native_page_->load(QUrl(page_.url()));
         });
+    }
+
+    void web_page::display(ui::renderer* renderer)
+    {
+        qDebug() << "web_page::display " << page_.url();
+        native_page_->load(QUrl(page_.url()));
+        renderer->display(this);
     }
 
     void web_page::load(const QString& url)
